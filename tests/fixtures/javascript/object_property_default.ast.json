@@ -1,0 +1,206 @@
+{
+  "type": "File",
+  "program": {
+    "type": "Program",
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "specifiers": [],
+        "source": null,
+        "declaration": {
+          "type": "ClassDeclaration",
+          "id": {
+            "type": "Identifier",
+            "name": "Test"
+          },
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "body": [
+              {
+                "type": "ClassProperty",
+                "static": false,
+                "key": {
+                  "type": "Identifier",
+                  "name": "x"
+                },
+                "computed": false,
+                "variance": null,
+                "typeAnnotation": {
+                  "type": "TypeAnnotation",
+                  "typeAnnotation": {
+                    "type": "GenericTypeAnnotation",
+                    "typeParameters": null,
+                    "id": {
+                      "type": "Identifier",
+                      "name": "Object"
+                    }
+                  }
+                },
+                "value": null
+              },
+              {
+                "type": "ClassMethod",
+                "static": false,
+                "key": {
+                  "type": "Identifier",
+                  "name": "constructor"
+                },
+                "computed": false,
+                "kind": "constructor",
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [
+                  {
+                    "type": "AssignmentPattern",
+                    "left": {
+                      "type": "Identifier",
+                      "name": "data",
+                      "typeAnnotation": {
+                        "type": "TypeAnnotation",
+                        "typeAnnotation": {
+                          "type": "GenericTypeAnnotation",
+                          "typeParameters": null,
+                          "id": {
+                            "type": "Identifier",
+                            "name": "Object"
+                          }
+                        }
+                      }
+                    },
+                    "right": {
+                      "type": "ObjectExpression",
+                      "properties": []
+                    }
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [
+                    {
+                      "type": "ExpressionStatement",
+                      "expression": {
+                        "type": "AssignmentExpression",
+                        "operator": "=",
+                        "left": {
+                          "type": "MemberExpression",
+                          "object": {
+                            "type": "ThisExpression"
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "name": "x"
+                          },
+                          "computed": false
+                        },
+                        "right": {
+                          "type": "ConditionalExpression",
+                          "test": {
+                            "type": "LogicalExpression",
+                            "left": {
+                              "type": "BinaryExpression",
+                              "left": {
+                                "type": "MemberExpression",
+                                "object": {
+                                  "type": "Identifier",
+                                  "name": "data"
+                                },
+                                "property": {
+                                  "type": "Identifier",
+                                  "name": "x"
+                                },
+                                "computed": false
+                              },
+                              "operator": "!==",
+                              "right": {
+                                "type": "NullLiteral"
+                              }
+                            },
+                            "operator": "&&",
+                            "right": {
+                              "type": "BinaryExpression",
+                              "left": {
+                                "type": "UnaryExpression",
+                                "operator": "typeof",
+                                "prefix": true,
+                                "argument": {
+                                  "type": "MemberExpression",
+                                  "object": {
+                                    "type": "Identifier",
+                                    "name": "data"
+                                  },
+                                  "property": {
+                                    "type": "Identifier",
+                                    "name": "x"
+                                  },
+                                  "computed": false
+                                },
+                                "extra": {
+                                  "parenthesizedArgument": false
+                                }
+                              },
+                              "operator": "===",
+                              "right": {
+                                "type": "StringLiteral",
+                                "extra": {
+                                  "rawValue": "object",
+                                  "raw": "\"object\""
+                                },
+                                "value": "object"
+                              }
+                            }
+                          },
+                          "consequent": {
+                            "type": "MemberExpression",
+                            "object": {
+                              "type": "Identifier",
+                              "name": "data"
+                            },
+                            "property": {
+                              "type": "Identifier",
+                              "name": "x"
+                            },
+                            "computed": false
+                          },
+                          "alternate": {
+                            "type": "ObjectExpression",
+                            "properties": [
+                              {
+                                "type": "ObjectProperty",
+                                "method": false,
+                                "key": {
+                                  "type": "Identifier",
+                                  "name": "x"
+                                },
+                                "computed": false,
+                                "shorthand": false,
+                                "value": {
+                                  "type": "NumericLiteral",
+                                  "extra": {
+                                    "rawValue": 42,
+                                    "raw": "42"
+                                  },
+                                  "value": 42
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "directives": []
+                }
+              }
+            ]
+          }
+        },
+        "exportKind": "value"
+      }
+    ],
+    "directives": []
+  },
+  "comments": []
+}

@@ -1,0 +1,29 @@
+{
+  "type": "File",
+  "program": {
+    "type": "Program",
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "specifiers": [],
+        "source": null,
+        "declaration": {
+          "type": "ClassDeclaration",
+          "id": {
+            "type": "Identifier",
+            "name": "Test"
+          },
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "body": []
+          }
+        },
+        "exportKind": "value"
+      }
+    ],
+    "directives": []
+  },
+  "comments": []
+}

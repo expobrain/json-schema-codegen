@@ -14,7 +14,7 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+# lib/
 lib64/
 parts/
 sdist/
@@ -102,3 +102,13 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# JavaScript
+node_modules
+flow-typed
+
+# OS X
+.DS_Store
+
+# VSCode
+.vscode

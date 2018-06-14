@@ -1,0 +1,168 @@
+{
+  "type": "File",
+  "program": {
+    "type": "Program",
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "specifiers": [],
+        "source": null,
+        "declaration": {
+          "type": "ClassDeclaration",
+          "id": {
+            "type": "Identifier",
+            "name": "Test"
+          },
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "body": [
+              {
+                "type": "ClassProperty",
+                "static": false,
+                "key": {
+                  "type": "Identifier",
+                  "name": "x"
+                },
+                "computed": false,
+                "variance": null,
+                "typeAnnotation": {
+                  "type": "TypeAnnotation",
+                  "typeAnnotation": {
+                    "type": "GenericTypeAnnotation",
+                    "typeParameters": {
+                      "type": "TypeParameterInstantiation",
+                      "params": [
+                        {
+                          "type": "StringTypeAnnotation"
+                        }
+                      ]
+                    },
+                    "id": {
+                      "type": "Identifier",
+                      "name": "Array"
+                    }
+                  }
+                },
+                "value": null
+              },
+              {
+                "type": "ClassMethod",
+                "static": false,
+                "key": {
+                  "type": "Identifier",
+                  "name": "constructor"
+                },
+                "computed": false,
+                "kind": "constructor",
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [
+                  {
+                    "type": "AssignmentPattern",
+                    "left": {
+                      "type": "Identifier",
+                      "name": "data",
+                      "typeAnnotation": {
+                        "type": "TypeAnnotation",
+                        "typeAnnotation": {
+                          "type": "GenericTypeAnnotation",
+                          "typeParameters": null,
+                          "id": {
+                            "type": "Identifier",
+                            "name": "Object"
+                          }
+                        }
+                      }
+                    },
+                    "right": {
+                      "type": "ObjectExpression",
+                      "properties": []
+                    }
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [
+                    {
+                      "type": "ExpressionStatement",
+                      "expression": {
+                        "type": "AssignmentExpression",
+                        "operator": "=",
+                        "left": {
+                          "type": "MemberExpression",
+                          "object": {
+                            "type": "ThisExpression"
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "name": "x"
+                          },
+                          "computed": false
+                        },
+                        "right": {
+                          "type": "ConditionalExpression",
+                          "test": {
+                            "type": "CallExpression",
+                            "callee": {
+                              "type": "MemberExpression",
+                              "object": {
+                                "type": "Identifier",
+                                "name": "Array"
+                              },
+                              "property": {
+                                "type": "Identifier",
+                                "name": "isArray"
+                              },
+                              "computed": false
+                            },
+                            "arguments": [
+                              {
+                                "type": "MemberExpression",
+                                "object": {
+                                  "type": "Identifier",
+                                  "name": "data"
+                                },
+                                "property": {
+                                  "type": "Identifier",
+                                  "name": "x"
+                                },
+                                "computed": false
+                              }
+                            ]
+                          },
+                          "consequent": {
+                            "type": "MemberExpression",
+                            "object": {
+                              "type": "Identifier",
+                              "name": "data"
+                            },
+                            "property": {
+                              "type": "Identifier",
+                              "name": "x"
+                            },
+                            "computed": false
+                          },
+                          "alternate": {
+                            "type": "ArrayExpression",
+                            "elements": []
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "directives": []
+                }
+              }
+            ]
+          }
+        },
+        "exportKind": "value"
+      }
+    ],
+    "directives": []
+  },
+  "comments": []
+}

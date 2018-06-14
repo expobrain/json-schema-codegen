@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Test",
+  "type": "object",
+  "required": ["x"],
+  "properties": {
+    "x": {
+      "type": "array",
+      "items": [{ "type": "string" }],
+      "default": []
+    }
+  }
+}

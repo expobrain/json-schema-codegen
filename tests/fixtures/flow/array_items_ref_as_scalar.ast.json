@@ -1,0 +1,94 @@
+{
+  "type": "File",
+  "program": {
+    "type": "Program",
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "DeclareTypeAlias",
+        "id": {
+          "type": "Identifier",
+          "name": "Test"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "ObjectTypeAnnotation",
+          "callProperties": [],
+          "properties": [
+            {
+              "type": "ObjectTypeProperty",
+              "key": {
+                "type": "Identifier",
+                "name": "x"
+              },
+              "static": false,
+              "kind": "init",
+              "method": false,
+              "value": {
+                "type": "GenericTypeAnnotation",
+                "typeParameters": {
+                  "type": "TypeParameterInstantiation",
+                  "params": [
+                    {
+                      "type": "StringTypeAnnotation"
+                    }
+                  ]
+                },
+                "id": {
+                  "type": "Identifier",
+                  "name": "Array"
+                }
+              },
+              "variance": null,
+              "optional": false
+            },
+            {
+              "type": "ObjectTypeProperty",
+              "key": {
+                "type": "Identifier",
+                "name": "constructor"
+              },
+              "static": false,
+              "kind": "init",
+              "method": true,
+              "value": {
+                "type": "FunctionTypeAnnotation",
+                "params": [
+                  {
+                    "type": "FunctionTypeParam",
+                    "name": {
+                      "type": "Identifier",
+                      "name": "data"
+                    },
+                    "optional": false,
+                    "typeAnnotation": {
+                      "type": "NullableTypeAnnotation",
+                      "typeAnnotation": {
+                        "type": "GenericTypeAnnotation",
+                        "typeParameters": null,
+                        "id": {
+                          "type": "Identifier",
+                          "name": "Object"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "rest": null,
+                "typeParameters": null,
+                "returnType": {
+                  "type": "VoidTypeAnnotation"
+                }
+              },
+              "optional": false
+            }
+          ],
+          "indexers": [],
+          "exact": false
+        }
+      }
+    ],
+    "directives": []
+  },
+  "comments": []
+}

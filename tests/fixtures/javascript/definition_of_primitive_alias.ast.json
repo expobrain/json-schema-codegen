@@ -1,0 +1,10 @@
+{
+  "type": "File",
+  "program": {
+    "type": "Program",
+    "sourceType": "module",
+    "body": [],
+    "directives": []
+  },
+  "comments": []
+}

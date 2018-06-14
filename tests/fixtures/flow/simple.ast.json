@@ -1,0 +1,26 @@
+{
+  "type": "File",
+  "program": {
+    "type": "Program",
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "DeclareTypeAlias",
+        "id": {
+          "type": "Identifier",
+          "name": "Test"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "ObjectTypeAnnotation",
+          "callProperties": [],
+          "properties": [],
+          "indexers": [],
+          "exact": false
+        }
+      }
+    ],
+    "directives": []
+  },
+  "comments": []
+}

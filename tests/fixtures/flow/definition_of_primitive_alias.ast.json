@@ -1,0 +1,52 @@
+{
+  "type": "File",
+  "program": {
+    "type": "Program",
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "DeclareTypeAlias",
+        "id": {
+          "type": "Identifier",
+          "name": "MyString"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "StringTypeAnnotation"
+        }
+      },
+      {
+        "type": "DeclareTypeAlias",
+        "id": {
+          "type": "Identifier",
+          "name": "MyNumber"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "NumberTypeAnnotation"
+        }
+      },
+      {
+        "type": "DeclareTypeAlias",
+        "id": {
+          "type": "Identifier",
+          "name": "MyUnion"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "UnionTypeAnnotation",
+          "types": [
+            {
+              "type": "StringTypeAnnotation"
+            },
+            {
+              "type": "BooleanTypeAnnotation"
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  },
+  "comments": []
+}

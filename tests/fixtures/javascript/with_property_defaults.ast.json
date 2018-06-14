@@ -1,0 +1,585 @@
+{
+  "type": "File",
+  "program": {
+    "type": "Program",
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "specifiers": [],
+        "source": null,
+        "declaration": {
+          "type": "ClassDeclaration",
+          "id": {
+            "type": "Identifier",
+            "name": "Test"
+          },
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "body": [
+              {
+                "type": "ClassProperty",
+                "static": false,
+                "key": {
+                  "type": "Identifier",
+                  "name": "myInteger"
+                },
+                "computed": false,
+                "variance": null,
+                "typeAnnotation": {
+                  "type": "TypeAnnotation",
+                  "typeAnnotation": {
+                    "type": "NumberTypeAnnotation"
+                  }
+                },
+                "value": null
+              },
+              {
+                "type": "ClassProperty",
+                "static": false,
+                "key": {
+                  "type": "Identifier",
+                  "name": "myString"
+                },
+                "computed": false,
+                "variance": null,
+                "typeAnnotation": {
+                  "type": "TypeAnnotation",
+                  "typeAnnotation": {
+                    "type": "StringTypeAnnotation"
+                  }
+                },
+                "value": null
+              },
+              {
+                "type": "ClassProperty",
+                "static": false,
+                "key": {
+                  "type": "Identifier",
+                  "name": "myBoolean"
+                },
+                "computed": false,
+                "variance": null,
+                "typeAnnotation": {
+                  "type": "TypeAnnotation",
+                  "typeAnnotation": {
+                    "type": "BooleanTypeAnnotation"
+                  }
+                },
+                "value": null
+              },
+              {
+                "type": "ClassProperty",
+                "static": false,
+                "key": {
+                  "type": "Identifier",
+                  "name": "myArray"
+                },
+                "computed": false,
+                "variance": null,
+                "typeAnnotation": {
+                  "type": "TypeAnnotation",
+                  "typeAnnotation": {
+                    "type": "GenericTypeAnnotation",
+                    "typeParameters": {
+                      "type": "TypeParameterInstantiation",
+                      "params": [
+                        {
+                          "type": "ExistsTypeAnnotation"
+                        }
+                      ]
+                    },
+                    "id": {
+                      "type": "Identifier",
+                      "name": "Array"
+                    }
+                  }
+                },
+                "value": null
+              },
+              {
+                "type": "ClassProperty",
+                "static": false,
+                "key": {
+                  "type": "Identifier",
+                  "name": "myObject"
+                },
+                "computed": false,
+                "variance": null,
+                "typeAnnotation": {
+                  "type": "TypeAnnotation",
+                  "typeAnnotation": {
+                    "type": "GenericTypeAnnotation",
+                    "typeParameters": null,
+                    "id": {
+                      "type": "Identifier",
+                      "name": "Object"
+                    }
+                  }
+                },
+                "value": null
+              },
+              {
+                "type": "ClassMethod",
+                "static": false,
+                "key": {
+                  "type": "Identifier",
+                  "name": "constructor"
+                },
+                "computed": false,
+                "kind": "constructor",
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [
+                  {
+                    "type": "AssignmentPattern",
+                    "left": {
+                      "type": "Identifier",
+                      "name": "data",
+                      "typeAnnotation": {
+                        "type": "TypeAnnotation",
+                        "typeAnnotation": {
+                          "type": "GenericTypeAnnotation",
+                          "typeParameters": null,
+                          "id": {
+                            "type": "Identifier",
+                            "name": "Object"
+                          }
+                        }
+                      }
+                    },
+                    "right": {
+                      "type": "ObjectExpression",
+                      "properties": []
+                    }
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [
+                    {
+                      "type": "ExpressionStatement",
+                      "expression": {
+                        "type": "AssignmentExpression",
+                        "operator": "=",
+                        "left": {
+                          "type": "MemberExpression",
+                          "object": {
+                            "type": "ThisExpression"
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "name": "myInteger"
+                          },
+                          "computed": false
+                        },
+                        "right": {
+                          "type": "ConditionalExpression",
+                          "test": {
+                            "type": "CallExpression",
+                            "callee": {
+                              "type": "MemberExpression",
+                              "object": {
+                                "type": "Identifier",
+                                "name": "Number"
+                              },
+                              "property": {
+                                "type": "Identifier",
+                                "name": "isInteger"
+                              },
+                              "computed": false
+                            },
+                            "arguments": [
+                              {
+                                "type": "MemberExpression",
+                                "object": {
+                                  "type": "Identifier",
+                                  "name": "data"
+                                },
+                                "property": {
+                                  "type": "Identifier",
+                                  "name": "myInteger"
+                                },
+                                "computed": false
+                              }
+                            ]
+                          },
+                          "consequent": {
+                            "type": "MemberExpression",
+                            "object": {
+                              "type": "Identifier",
+                              "name": "data"
+                            },
+                            "property": {
+                              "type": "Identifier",
+                              "name": "myInteger"
+                            },
+                            "computed": false
+                          },
+                          "alternate": {
+                            "type": "NumericLiteral",
+                            "extra": {
+                              "rawValue": 42,
+                              "raw": "42"
+                            },
+                            "value": 42
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "ExpressionStatement",
+                      "expression": {
+                        "type": "AssignmentExpression",
+                        "operator": "=",
+                        "left": {
+                          "type": "MemberExpression",
+                          "object": {
+                            "type": "ThisExpression"
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "name": "myString"
+                          },
+                          "computed": false
+                        },
+                        "right": {
+                          "type": "ConditionalExpression",
+                          "test": {
+                            "type": "LogicalExpression",
+                            "left": {
+                              "type": "BinaryExpression",
+                              "left": {
+                                "type": "UnaryExpression",
+                                "operator": "typeof",
+                                "prefix": true,
+                                "argument": {
+                                  "type": "MemberExpression",
+                                  "object": {
+                                    "type": "Identifier",
+                                    "name": "data"
+                                  },
+                                  "property": {
+                                    "type": "Identifier",
+                                    "name": "myString"
+                                  },
+                                  "computed": false
+                                },
+                                "extra": {
+                                  "parenthesizedArgument": false
+                                }
+                              },
+                              "operator": "===",
+                              "right": {
+                                "type": "StringLiteral",
+                                "extra": {
+                                  "rawValue": "string",
+                                  "raw": "\"string\""
+                                },
+                                "value": "string"
+                              }
+                            },
+                            "operator": "||",
+                            "right": {
+                              "type": "BinaryExpression",
+                              "left": {
+                                "type": "MemberExpression",
+                                "object": {
+                                  "type": "Identifier",
+                                  "name": "data"
+                                },
+                                "property": {
+                                  "type": "Identifier",
+                                  "name": "myString"
+                                },
+                                "computed": false
+                              },
+                              "operator": "instanceof",
+                              "right": {
+                                "type": "Identifier",
+                                "name": "String"
+                              }
+                            }
+                          },
+                          "consequent": {
+                            "type": "MemberExpression",
+                            "object": {
+                              "type": "Identifier",
+                              "name": "data"
+                            },
+                            "property": {
+                              "type": "Identifier",
+                              "name": "myString"
+                            },
+                            "computed": false
+                          },
+                          "alternate": {
+                            "type": "StringLiteral",
+                            "extra": {
+                              "rawValue": "42",
+                              "raw": "\"42\""
+                            },
+                            "value": "42"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "ExpressionStatement",
+                      "expression": {
+                        "type": "AssignmentExpression",
+                        "operator": "=",
+                        "left": {
+                          "type": "MemberExpression",
+                          "object": {
+                            "type": "ThisExpression"
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "name": "myBoolean"
+                          },
+                          "computed": false
+                        },
+                        "right": {
+                          "type": "ConditionalExpression",
+                          "test": {
+                            "type": "UnaryExpression",
+                            "operator": "typeof",
+                            "prefix": true,
+                            "argument": {
+                              "type": "MemberExpression",
+                              "object": {
+                                "type": "Identifier",
+                                "name": "data"
+                              },
+                              "property": {
+                                "type": "Identifier",
+                                "name": "myBoolean"
+                              },
+                              "computed": false
+                            },
+                            "extra": {
+                              "parenthesizedArgument": false
+                            }
+                          },
+                          "consequent": {
+                            "type": "MemberExpression",
+                            "object": {
+                              "type": "Identifier",
+                              "name": "data"
+                            },
+                            "property": {
+                              "type": "Identifier",
+                              "name": "myBoolean"
+                            },
+                            "computed": false
+                          },
+                          "alternate": {
+                            "type": "BooleanLiteral",
+                            "value": true
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "ExpressionStatement",
+                      "expression": {
+                        "type": "AssignmentExpression",
+                        "operator": "=",
+                        "left": {
+                          "type": "MemberExpression",
+                          "object": {
+                            "type": "ThisExpression"
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "name": "myArray"
+                          },
+                          "computed": false
+                        },
+                        "right": {
+                          "type": "ConditionalExpression",
+                          "test": {
+                            "type": "CallExpression",
+                            "callee": {
+                              "type": "MemberExpression",
+                              "object": {
+                                "type": "Identifier",
+                                "name": "Array"
+                              },
+                              "property": {
+                                "type": "Identifier",
+                                "name": "isArray"
+                              },
+                              "computed": false
+                            },
+                            "arguments": [
+                              {
+                                "type": "MemberExpression",
+                                "object": {
+                                  "type": "Identifier",
+                                  "name": "data"
+                                },
+                                "property": {
+                                  "type": "Identifier",
+                                  "name": "myArray"
+                                },
+                                "computed": false
+                              }
+                            ]
+                          },
+                          "consequent": {
+                            "type": "MemberExpression",
+                            "object": {
+                              "type": "Identifier",
+                              "name": "data"
+                            },
+                            "property": {
+                              "type": "Identifier",
+                              "name": "myArray"
+                            },
+                            "computed": false
+                          },
+                          "alternate": {
+                            "type": "ArrayExpression",
+                            "elements": [
+                              {
+                                "type": "NumericLiteral",
+                                "extra": {
+                                  "rawValue": 0,
+                                  "raw": "0"
+                                },
+                                "value": 0
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "ExpressionStatement",
+                      "expression": {
+                        "type": "AssignmentExpression",
+                        "operator": "=",
+                        "left": {
+                          "type": "MemberExpression",
+                          "object": {
+                            "type": "ThisExpression"
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "name": "myObject"
+                          },
+                          "computed": false
+                        },
+                        "right": {
+                          "type": "ConditionalExpression",
+                          "test": {
+                            "type": "LogicalExpression",
+                            "left": {
+                              "type": "BinaryExpression",
+                              "left": {
+                                "type": "MemberExpression",
+                                "object": {
+                                  "type": "Identifier",
+                                  "name": "data"
+                                },
+                                "property": {
+                                  "type": "Identifier",
+                                  "name": "myObject"
+                                },
+                                "computed": false
+                              },
+                              "operator": "!==",
+                              "right": {
+                                "type": "NullLiteral"
+                              }
+                            },
+                            "operator": "&&",
+                            "right": {
+                              "type": "BinaryExpression",
+                              "left": {
+                                "type": "UnaryExpression",
+                                "operator": "typeof",
+                                "prefix": true,
+                                "argument": {
+                                  "type": "MemberExpression",
+                                  "object": {
+                                    "type": "Identifier",
+                                    "name": "data"
+                                  },
+                                  "property": {
+                                    "type": "Identifier",
+                                    "name": "myObject"
+                                  },
+                                  "computed": false
+                                },
+                                "extra": {
+                                  "parenthesizedArgument": false
+                                }
+                              },
+                              "operator": "===",
+                              "right": {
+                                "type": "StringLiteral",
+                                "extra": {
+                                  "rawValue": "object",
+                                  "raw": "\"object\""
+                                },
+                                "value": "object"
+                              }
+                            }
+                          },
+                          "consequent": {
+                            "type": "MemberExpression",
+                            "object": {
+                              "type": "Identifier",
+                              "name": "data"
+                            },
+                            "property": {
+                              "type": "Identifier",
+                              "name": "myObject"
+                            },
+                            "computed": false
+                          },
+                          "alternate": {
+                            "type": "ObjectExpression",
+                            "properties": [
+                              {
+                                "type": "ObjectProperty",
+                                "method": false,
+                                "key": {
+                                  "type": "Identifier",
+                                  "name": "x"
+                                },
+                                "computed": false,
+                                "shorthand": false,
+                                "value": {
+                                  "type": "NumericLiteral",
+                                  "extra": {
+                                    "rawValue": 42,
+                                    "raw": "42"
+                                  },
+                                  "value": 42
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "directives": []
+                }
+              }
+            ]
+          }
+        },
+        "exportKind": "value"
+      }
+    ],
+    "directives": []
+  },
+  "comments": []
+}
