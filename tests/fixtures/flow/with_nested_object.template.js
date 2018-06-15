@@ -1,3 +1,5 @@
+// @flow
+
 declare type Nested = {
   x: ?string,
 

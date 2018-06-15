@@ -1,3 +1,5 @@
+// @flow
+
 export class Nested {
   x: ?string;
 

@@ -1,3 +1,5 @@
+// @flow
+
 export class NoTitle {
   x: ?string;
 

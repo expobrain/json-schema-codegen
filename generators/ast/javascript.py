@@ -3,7 +3,7 @@ from __future__ import unicode_literals, print_function, division
 import json
 
 
-def File(program=None, comments=[]):
+def File(program=None, comments=None):
     return {"type": "File", "program": program, "comments": comments or []}
 
 
@@ -304,3 +304,7 @@ def VoidTypeAnnotation():
 
 def UnionTypeAnnotation(types):
     return {"type": "UnionTypeAnnotation", "types": types}
+
+
+def CommentLine(value):
+    return {"type": "CommentLine", "value": " " + str(value).strip()}

@@ -1,3 +1,5 @@
+// @flow
+
 declare type MyType = {
   v: ?number,
 
