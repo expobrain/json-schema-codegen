@@ -22,7 +22,7 @@ def get_generator(language):
         raise ValueError("Language {} not supported".format(language))
 
 
-if __name__ == "__main__":
+def main():
     # Validating parameters
     parser = ArgumentParser(description="Generates code to handle PRDs from Python and Java")
     parser.add_argument("--prefix", "-p", help="Optional prefix for generated classes")
@@ -47,3 +47,7 @@ if __name__ == "__main__":
     else:
         sys.stdout.write(code)
         sys.stdout.write("\n")
+
+
+if __name__ == "__main__":
+    main()
