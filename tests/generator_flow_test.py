@@ -7,8 +7,8 @@ import pytest
 import astor
 import json
 
-from lib import load_schema
-from lib.flow import FlowGenerator
+from generators import load_schema
+from generators.flow import FlowGenerator
 
 
 SCHEMAS_DIR = Path(__file__).parent / "fixtures" / "schemas"
