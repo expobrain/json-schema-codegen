@@ -1,3 +1,5 @@
+// @flow
+
 export class MyType {
   v: ?number;
 

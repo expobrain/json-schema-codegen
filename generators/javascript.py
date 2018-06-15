@@ -19,6 +19,10 @@ class JavaScriptGenerator(SchemaParser, BaseGenerator):
         if "title" in self.schema:
             self._body.append(self.klass(self.schema))
 
+        # Add leading comments
+        if len(self._body):
+            self._body[0]["leadingComments"] = [ast.CommentLine(b"@flow")]
+
         return self
 
     def klass(self, definition):
@@ -216,7 +220,10 @@ class JavaScriptGenerator(SchemaParser, BaseGenerator):
         )
 
     def as_ast(self):
-        return ast.File(program=ast.Program(body=self._body))
+        comments = [ast.CommentLine(b"@flow")] if len(self._body) else []
+        file_ = ast.File(program=ast.Program(body=self._body), comments=comments)
+
+        return file_
 
     def as_code(self):
         return json.dumps(self.as_ast(), indent=2)

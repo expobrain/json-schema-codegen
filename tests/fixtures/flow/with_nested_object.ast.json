@@ -76,7 +76,13 @@
           ],
           "indexers": [],
           "exact": false
-        }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " @flow"
+          }
+        ]
       },
       {
         "type": "DeclareTypeAlias",
@@ -160,5 +166,10 @@
     ],
     "directives": []
   },
-  "comments": []
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " @flow"
+    }
+  ]
 }

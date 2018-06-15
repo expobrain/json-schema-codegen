@@ -76,10 +76,21 @@
           ],
           "indexers": [],
           "exact": false
-        }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " @flow"
+          }
+        ]
       }
     ],
     "directives": []
   },
-  "comments": []
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " @flow"
+    }
+  ]
 }

@@ -1,3 +1,5 @@
+// @flow
+
 declare type NoTitle = {
   x: ?string,
 

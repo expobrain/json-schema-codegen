@@ -1,3 +1,5 @@
+// @flow
+
 export class Test {
   x: Array<string>;
 

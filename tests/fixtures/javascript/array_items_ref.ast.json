@@ -114,6 +114,12 @@
             ]
           }
         },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " @flow"
+          }
+        ],
         "exportKind": "value"
       },
       {
@@ -319,5 +325,10 @@
     ],
     "directives": []
   },
-  "comments": []
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " @flow"
+    }
+  ]
 }

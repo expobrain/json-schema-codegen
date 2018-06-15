@@ -1,3 +1,5 @@
+// @flow
+
 declare type Test = {
   x: Object,
 

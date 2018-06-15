@@ -1,3 +1,5 @@
+// @flow
+
 declare type MyType = string;
 
 declare type Test = {
