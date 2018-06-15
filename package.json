@@ -14,10 +14,12 @@
     "eslint": "^4.19.1",
     "eslint-plugin-flowtype": "^2.49.3",
     "eslint-plugin-react": "^7.9.1",
-    "flow-bin": "^0.74.0"
+    "flow-bin": "^0.74.0",
+    "prettier": "^1.13.5"
   },
   "scripts": {
     "test:build:js": "babel-node tests/fixtures/build_js_ast.js",
-    "generate": "babel-node ./ast_to_js"
+    "generate": "babel-node ./ast_to_js",
+    "code:format": "prettier --write"
   }
 }
