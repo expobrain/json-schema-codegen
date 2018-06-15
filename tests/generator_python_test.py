@@ -8,8 +8,8 @@ import astor
 import json
 
 
-from lib import load_schema
-from lib.python import PythonGenerator
+from generators import load_schema
+from generators.python import PythonGenerator
 
 
 SCHEMAS_DIR = Path(__file__).parent / "fixtures" / "schemas"

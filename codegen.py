@@ -5,13 +5,13 @@ from __future__ import unicode_literals
 from argparse import ArgumentParser
 import sys
 
-import lib
+import generators
 
 
 LANGUAGES = {
-    "python": lib.PythonGenerator,
-    "javascript": lib.JavaScriptGenerator,
-    "flow": lib.FlowGenerator,
+    "python": generators.PythonGenerator,
+    "javascript": generators.JavaScriptGenerator,
+    "flow": generators.FlowGenerator,
 }
 
 
@@ -26,17 +26,15 @@ if __name__ == "__main__":
     # Validating parameters
     parser = ArgumentParser(description="Generates code to handle PRDs from Python and Java")
     parser.add_argument("--prefix", "-p", help="Optional prefix for generated classes")
-    parser.add_argument(
-        "--language", "-l", help="Output language. Default is python"
-    )
-    parser.add_argument("--output","-o", help="Output filename for the generated code")
+    parser.add_argument("--language", "-l", help="Output language. Default is python")
+    parser.add_argument("--output", "-o", help="Output filename for the generated code")
     parser.add_argument("schema", help="Definition of the PRD as JSON schema")
 
     args = parser.parse_args()
 
     # Load schema
     with open(args.schema) as f:
-        schema = lib.load_schema(f.read())
+        schema = generators.load_schema(f.read())
 
     # Generate code
     generator = get_generator(args.language)
