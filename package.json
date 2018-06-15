@@ -23,7 +23,7 @@
     "webpack-cli": "^3.0.7"
   },
   "scripts": {
-    "build:test:js": "babel-node tests/fixtures/build_js_ast.js",
+    "build:test:js": "babel-node scripts/build_js_ast.js",
     "code:format": "prettier --write",
     "build:bin": "webpack --config config/ast_to_js.webpack.config.js && chmod +x bin/ast_to_js"
   }

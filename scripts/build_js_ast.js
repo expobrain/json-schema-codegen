@@ -5,7 +5,7 @@ import fs from "fs";
 
 import * as babylon from "babylon";
 
-const BASE_AST_DIR = __dirname;
+const BASE_AST_DIR = path.join(__dirname, "..", "tests", "fixtures");
 const TEMPLATE_EXT = ".template.js";
 const PRIMITIVES = ["boolean", "string", "number"];
 const AST_LOCATION_KEYS = ["loc", "start", "end"];
