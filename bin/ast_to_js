@@ -7488,10 +7488,7 @@ function StringLiteral(node) {
     return;
   }
 
-  const opts = {
-    quotes: "double",
-    wrap: true
-  };
+  const opts = this.format.jsescOption;
 
   if (this.format.jsonCompatibleStrings) {
     opts.json = true;
@@ -9153,7 +9150,7 @@ function ExportAllDeclaration(node) {
 }
 
 function ExportNamedDeclaration(node) {
-  if (t().isClassDeclaration(node.declaration)) {
+  if (this.format.decoratorsBeforeExport && t().isClassDeclaration(node.declaration)) {
     this.printJoin(node.declaration.decorators, node);
   }
 
@@ -9163,7 +9160,7 @@ function ExportNamedDeclaration(node) {
 }
 
 function ExportDefaultDeclaration(node) {
-  if (t().isClassDeclaration(node.declaration)) {
+  if (this.format.decoratorsBeforeExport && t().isClassDeclaration(node.declaration)) {
     this.printJoin(node.declaration.decorators, node);
   }
 
@@ -12868,6 +12865,11 @@ function ObjectTypeIndexer(node) {
 }
 
 function ObjectTypeProperty(node) {
+  if (node.proto) {
+    this.word("proto");
+    this.space();
+  }
+
   if (node.static) {
     this.word("static");
     this.space();
@@ -13451,7 +13453,7 @@ function t() {
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
 function ClassDeclaration(node, parent) {
-  if (!t().isExportDefaultDeclaration(parent) && !t().isExportNamedDeclaration(parent)) {
+  if (!this.format.decoratorsBeforeExport || !t().isExportDefaultDeclaration(parent) && !t().isExportNamedDeclaration(parent)) {
     this.printJoin(node.decorators, node);
   }
 
@@ -14065,7 +14067,7 @@ function Super() {
 
 function Decorator(node) {
   this.token("@");
-  this.print(node.callee, node);
+  this.print(node.expression, node);
   this.newline();
 }
 
@@ -14838,6 +14840,9 @@ function isReferenced(node, parent) {
 
     case "MetaProperty":
       return false;
+
+    case "ObjectTypeProperty":
+      return parent.key !== node;
   }
 
   return true;
@@ -18210,14 +18215,10 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
   aliases: ["Expression"]
 });
 (0, _utils.default)("Decorator", {
-  visitor: ["callee", "arguments"],
+  visitor: ["expression"],
   fields: {
-    callee: {
+    expression: {
       validate: (0, _utils.assertNodeType)("Expression")
-    },
-    arguments: {
-      optional: true,
-      validate: (0, _utils.chain)((0, _utils.assertValueType)("array"), (0, _utils.assertEach)((0, _utils.assertNodeType)("Expression", "SpreadElement")))
     }
   }
 });
@@ -18721,6 +18722,7 @@ defineInterfaceishType("InterfaceDeclaration");
     value: (0, _utils.validateType)("FlowType"),
     kind: (0, _utils.validate)((0, _utils.assertOneOf)("init", "get", "set")),
     static: (0, _utils.validate)((0, _utils.assertValueType)("boolean")),
+    proto: (0, _utils.validate)((0, _utils.assertValueType)("boolean")),
     optional: (0, _utils.validate)((0, _utils.assertValueType)("boolean")),
     variance: (0, _utils.validateOptionalType)("Variance")
   }
@@ -24851,7 +24853,12 @@ function normalizeOptions(code, opts) {
       adjustMultilineComment: true,
       style: "  ",
       base: 0
-    }
+    },
+    decoratorsBeforeExport: !!opts.decoratorsBeforeExport,
+    jsescOption: Object.assign({
+      quotes: "double",
+      wrap: true
+    }, opts.jsescOption)
   };
 
   if (format.minified) {
