@@ -1,12 +1,19 @@
-#!/bin/sh
+#!/bin/bash
 
-jsfiles=$(git diff --cached --name-only --diff-filter=ACM "*.js*" "*.md" | tr '\n' ' ')
-[ -z "$jsfiles" ] && exit 0
+# Rebuild bins if necessary
+bin_files=$(git diff --cached --name-only --diff-filter=ACM "*ast_to_js.*" | tr '\n' ' ')
+
+if [ -n "$bin_files" ] ; then
+  npm run build:bin
+  git add bin/
+fi
 
 # Prettify all staged files
-echo "$jsfiles" | xargs npm run code:format
+js_files=$(git diff --cached --name-only --diff-filter=ACM "*.js*" "*.md" | tr '\n' ' ')
 
-# Add back the modified/prettified files to staging
-echo "$jsfiles" | xargs git add
+if [ -n "$js_files" ] ; then
+  echo "$js_files" | xargs npm run code:format
+  echo "$js_files" | xargs git add
+fi
 
 exit 0
