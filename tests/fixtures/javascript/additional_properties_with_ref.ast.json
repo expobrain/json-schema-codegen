@@ -1,0 +1,435 @@
+{
+  "type": "File",
+  "program": {
+    "type": "Program",
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "specifiers": [],
+        "source": null,
+        "declaration": {
+          "type": "ClassDeclaration",
+          "id": {
+            "type": "Identifier",
+            "name": "Value"
+          },
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "body": [
+              {
+                "type": "ClassProperty",
+                "static": false,
+                "key": {
+                  "type": "Identifier",
+                  "name": "v"
+                },
+                "computed": false,
+                "variance": null,
+                "typeAnnotation": {
+                  "type": "TypeAnnotation",
+                  "typeAnnotation": {
+                    "type": "NullableTypeAnnotation",
+                    "typeAnnotation": {
+                      "type": "NumberTypeAnnotation"
+                    }
+                  }
+                },
+                "value": null
+              },
+              {
+                "type": "ClassMethod",
+                "static": false,
+                "key": {
+                  "type": "Identifier",
+                  "name": "constructor"
+                },
+                "computed": false,
+                "kind": "constructor",
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [
+                  {
+                    "type": "AssignmentPattern",
+                    "left": {
+                      "type": "Identifier",
+                      "name": "data",
+                      "typeAnnotation": {
+                        "type": "TypeAnnotation",
+                        "typeAnnotation": {
+                          "type": "GenericTypeAnnotation",
+                          "typeParameters": null,
+                          "id": {
+                            "type": "Identifier",
+                            "name": "Object"
+                          }
+                        }
+                      }
+                    },
+                    "right": {
+                      "type": "ObjectExpression",
+                      "properties": []
+                    }
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [
+                    {
+                      "type": "ExpressionStatement",
+                      "expression": {
+                        "type": "AssignmentExpression",
+                        "operator": "=",
+                        "left": {
+                          "type": "MemberExpression",
+                          "object": {
+                            "type": "ThisExpression"
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "name": "v"
+                          },
+                          "computed": false
+                        },
+                        "right": {
+                          "type": "MemberExpression",
+                          "object": {
+                            "type": "Identifier",
+                            "name": "data"
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "name": "v"
+                          },
+                          "computed": false
+                        }
+                      }
+                    }
+                  ],
+                  "directives": []
+                }
+              }
+            ]
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " @flow"
+          }
+        ],
+        "exportKind": "value"
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "specifiers": [],
+        "source": null,
+        "declaration": {
+          "type": "ClassDeclaration",
+          "id": {
+            "type": "Identifier",
+            "name": "Test"
+          },
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "body": [
+              {
+                "type": "ClassProperty",
+                "static": false,
+                "key": {
+                  "type": "Identifier",
+                  "name": "x"
+                },
+                "computed": false,
+                "variance": null,
+                "typeAnnotation": {
+                  "type": "TypeAnnotation",
+                  "typeAnnotation": {
+                    "type": "ObjectTypeAnnotation",
+                    "callProperties": [],
+                    "properties": [],
+                    "indexers": [
+                      {
+                        "type": "ObjectTypeIndexer",
+                        "static": false,
+                        "id": {
+                          "type": "Identifier",
+                          "name": "key"
+                        },
+                        "key": {
+                          "type": "StringTypeAnnotation"
+                        },
+                        "value": {
+                          "type": "GenericTypeAnnotation",
+                          "typeParameters": null,
+                          "id": {
+                            "type": "Identifier",
+                            "name": "Value"
+                          }
+                        },
+                        "variance": null
+                      }
+                    ],
+                    "exact": false
+                  }
+                },
+                "value": null
+              },
+              {
+                "type": "ClassMethod",
+                "static": false,
+                "key": {
+                  "type": "Identifier",
+                  "name": "constructor"
+                },
+                "computed": false,
+                "kind": "constructor",
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [
+                  {
+                    "type": "AssignmentPattern",
+                    "left": {
+                      "type": "Identifier",
+                      "name": "data",
+                      "typeAnnotation": {
+                        "type": "TypeAnnotation",
+                        "typeAnnotation": {
+                          "type": "GenericTypeAnnotation",
+                          "typeParameters": null,
+                          "id": {
+                            "type": "Identifier",
+                            "name": "Object"
+                          }
+                        }
+                      }
+                    },
+                    "right": {
+                      "type": "ObjectExpression",
+                      "properties": []
+                    }
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [
+                    {
+                      "type": "ExpressionStatement",
+                      "expression": {
+                        "type": "AssignmentExpression",
+                        "operator": "=",
+                        "left": {
+                          "type": "MemberExpression",
+                          "object": {
+                            "type": "ThisExpression"
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "name": "x"
+                          },
+                          "computed": false
+                        },
+                        "right": {
+                          "type": "CallExpression",
+                          "callee": {
+                            "type": "MemberExpression",
+                            "object": {
+                              "type": "CallExpression",
+                              "callee": {
+                                "type": "MemberExpression",
+                                "object": {
+                                  "type": "Identifier",
+                                  "name": "Object"
+                                },
+                                "property": {
+                                  "type": "Identifier",
+                                  "name": "entries"
+                                },
+                                "computed": false
+                              },
+                              "arguments": [
+                                {
+                                  "type": "MemberExpression",
+                                  "object": {
+                                    "type": "Identifier",
+                                    "name": "data"
+                                  },
+                                  "property": {
+                                    "type": "Identifier",
+                                    "name": "x"
+                                  },
+                                  "computed": false
+                                }
+                              ]
+                            },
+                            "property": {
+                              "type": "Identifier",
+                              "name": "reduce"
+                            },
+                            "computed": false
+                          },
+                          "arguments": [
+                            {
+                              "type": "ArrowFunctionExpression",
+                              "id": null,
+                              "generator": false,
+                              "async": false,
+                              "params": [
+                                {
+                                  "type": "Identifier",
+                                  "name": "acc"
+                                },
+                                {
+                                  "type": "Identifier",
+                                  "name": "entry"
+                                }
+                              ],
+                              "body": {
+                                "type": "BlockStatement",
+                                "body": [
+                                  {
+                                    "type": "VariableDeclaration",
+                                    "declarations": [
+                                      {
+                                        "type": "VariableDeclarator",
+                                        "id": {
+                                          "type": "ArrayPattern",
+                                          "elements": [
+                                            {
+                                              "type": "Identifier",
+                                              "name": "key",
+                                              "typeAnnotation": {
+                                                "type": "TypeAnnotation",
+                                                "typeAnnotation": {
+                                                  "type": "StringTypeAnnotation"
+                                                }
+                                              }
+                                            },
+                                            {
+                                              "type": "Identifier",
+                                              "name": "value",
+                                              "typeAnnotation": {
+                                                "type": "TypeAnnotation",
+                                                "typeAnnotation": {
+                                                  "type": "GenericTypeAnnotation",
+                                                  "typeParameters": null,
+                                                  "id": {
+                                                    "type": "Identifier",
+                                                    "name": "Object"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          ]
+                                        },
+                                        "init": {
+                                          "type": "TypeCastExpression",
+                                          "expression": {
+                                            "type": "Identifier",
+                                            "name": "entry"
+                                          },
+                                          "typeAnnotation": {
+                                            "type": "TypeAnnotation",
+                                            "typeAnnotation": {
+                                              "type": "AnyTypeAnnotation"
+                                            }
+                                          },
+                                          "extra": {
+                                            "parenthesized": true
+                                          }
+                                        }
+                                      }
+                                    ],
+                                    "kind": "const"
+                                  },
+                                  {
+                                    "type": "VariableDeclaration",
+                                    "declarations": [
+                                      {
+                                        "type": "VariableDeclarator",
+                                        "id": {
+                                          "type": "Identifier",
+                                          "name": "newValue"
+                                        },
+                                        "init": {
+                                          "type": "NewExpression",
+                                          "callee": {
+                                            "type": "Identifier",
+                                            "name": "Value"
+                                          },
+                                          "arguments": [
+                                            {
+                                              "type": "Identifier",
+                                              "name": "value"
+                                            }
+                                          ]
+                                        }
+                                      }
+                                    ],
+                                    "kind": "const"
+                                  },
+                                  {
+                                    "type": "ExpressionStatement",
+                                    "expression": {
+                                      "type": "AssignmentExpression",
+                                      "operator": "=",
+                                      "left": {
+                                        "type": "MemberExpression",
+                                        "object": {
+                                          "type": "Identifier",
+                                          "name": "acc"
+                                        },
+                                        "property": {
+                                          "type": "Identifier",
+                                          "name": "key"
+                                        },
+                                        "computed": true
+                                      },
+                                      "right": {
+                                        "type": "Identifier",
+                                        "name": "newValue"
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "type": "ReturnStatement",
+                                    "argument": {
+                                      "type": "Identifier",
+                                      "name": "acc"
+                                    }
+                                  }
+                                ],
+                                "directives": []
+                              }
+                            },
+                            {
+                              "type": "ObjectExpression",
+                              "properties": []
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ],
+                  "directives": []
+                }
+              }
+            ]
+          }
+        },
+        "exportKind": "value"
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " @flow"
+    }
+  ]
+}

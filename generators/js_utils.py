@@ -3,8 +3,25 @@ from __future__ import unicode_literals, print_function, division
 from .ast import javascript as ast
 
 
-def get_single_type_annotation(definitions, property_):
+def get_object_type_annotation(definitions, property_):
+    additionalProperties = property_.get("additionalProperties")
 
+    if additionalProperties:
+        return ast.ObjectTypeAnnotation(
+            properties=[],
+            indexers=[
+                ast.ObjectTypeIndexer(
+                    id_=ast.Identifier("key"),
+                    key=ast.StringTypeAnnotation(),
+                    value=get_type_annotation(definitions, additionalProperties, required=True),
+                )
+            ],
+        )
+
+    return ast.GenericTypeAnnotation(ast.Identifier("Object"))
+
+
+def get_single_type_annotation(definitions, property_):
     # Parse type
     type_name = property_.get("type")
     ref_key = property_.get("$ref")
@@ -18,7 +35,7 @@ def get_single_type_annotation(definitions, property_):
     elif type_name == "boolean":
         return ast.BooleanTypeAnnotation()
     elif type_name == "object":
-        return ast.GenericTypeAnnotation(ast.Identifier("Object"))
+        return get_object_type_annotation(definitions, property_)
     elif type_name == "array":
         parameters = get_union_type_annotation(definitions, property_.get("items", []))
 
@@ -42,7 +59,7 @@ def get_union_type_annotation(definitions, types):
 
 
 def get_type_annotation(definitions, property_, required=False):
-    # Check for oneOfs
+    # Check for oneOf
     if "oneOf" in property_:
         annotations = get_union_type_annotation(definitions, property_["oneOf"])
 
