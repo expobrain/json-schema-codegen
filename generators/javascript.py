@@ -181,6 +181,99 @@ class JavaScriptGenerator(SchemaParser, BaseGenerator):
         else:
             raise NotImplementedError("{}: {} => {}".format(self, name, definition))
 
+    def _get_reducer_for_property(self, key, property_):
+        # Object.entries()
+        object_entries = ast.CallExpression(
+            ast.MemberExpression(ast.Identifier("Object"), ast.Identifier("entries")),
+            [ast.MemberExpression(ast.Identifier("data"), ast.Identifier(key))],
+        )
+
+        # reduce()
+        # ...deconstruct `entry`...
+        deconstruct_entry = ast.VariableDeclaration(
+            [
+                ast.VariableDeclarator(
+                    id_=ast.ArrayPattern(
+                        [
+                            ast.Identifier(
+                                "key",
+                                type_annotation=ast.TypeAnnotation(ast.StringTypeAnnotation()),
+                            ),
+                            ast.Identifier(
+                                "value",
+                                type_annotation=ast.TypeAnnotation(
+                                    ast.GenericTypeAnnotation(ast.Identifier("Object"))
+                                ),
+                            ),
+                        ]
+                    ),
+                    init=ast.TypeCastExpression(
+                        ast.Identifier("entry"), ast.TypeAnnotation(ast.AnyTypeAnnotation())
+                    ),
+                )
+            ]
+        )
+
+        # ...assign newValue...
+        ref_title = self.definitions[property_["$ref"]]["title"]
+
+        new_value = ast.VariableDeclaration(
+            [
+                ast.VariableDeclarator(
+                    ast.Identifier("newValue"),
+                    ast.NewExpression(
+                        ast.Identifier(ref_title), arguments=[ast.Identifier("value")]
+                    ),
+                )
+            ]
+        )
+
+        # ...update acc...
+        update_acc = ast.ExpressionStatement(
+            ast.AssignmentExpression(
+                left=ast.MemberExpression(
+                    ast.Identifier("acc"), ast.Identifier("key"), computed=True
+                ),
+                right=ast.Identifier("newValue"),
+            )
+        )
+
+        # ...return acc...
+        return_acc = ast.ReturnStatement(ast.Identifier("acc"))
+
+        # ...bound together
+        reduce = ast.CallExpression(
+            callee=ast.MemberExpression(object_entries, ast.Identifier("reduce")),
+            arguments=[
+                ast.ArrowFunctionExpression(
+                    params=[ast.Identifier("acc"), ast.Identifier("entry")],
+                    body=ast.BlockStatement(
+                        [deconstruct_entry, new_value, update_acc, return_acc]
+                    ),
+                ),
+                ast.ObjectExpression(),
+            ],
+        )
+
+        # Return reduce
+        return reduce
+
+    def _get_member_right_assignment(self, key, property_):
+        additional_properties = property_.get("additionalProperties")
+
+        if additional_properties is not None:
+            if "$ref" not in additional_properties:
+                raise NotImplementedError(
+                    "Scalar types for additionalProperties not supported yet"
+                )
+
+            return self._get_reducer_for_property(key, additional_properties)
+
+        if "default" in property_:
+            return self._get_default_for_property(key, property_)
+        else:
+            return ast.MemberExpression(ast.Identifier("data"), ast.Identifier(key))
+
     def klass_constructor(self, properties):
         # Build constructor body
         body = []
@@ -192,10 +285,7 @@ class JavaScriptGenerator(SchemaParser, BaseGenerator):
             assign_left = ast.MemberExpression(ast.ThisExpression(), ast.Identifier(key))
 
             # Right assignment
-            if "default" in property_:
-                assign_right = self._get_default_for_property(key, property_)
-            else:
-                assign_right = ast.MemberExpression(ast.Identifier("data"), ast.Identifier(key))
+            assign_right = self._get_member_right_assignment(key, property_)
 
             # Add property assignment
             klass_property = ast.ExpressionStatement(

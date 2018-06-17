@@ -5,7 +5,6 @@ import ast
 from pathlib2 import Path
 import pytest
 import astor
-import json
 
 
 from generators import load_schema
@@ -39,6 +38,6 @@ def test_generate(schema_filename):
     result_ast = astor.dump_tree(result)
     expected = astor.dump_tree(fixture)
 
-    print(result_ast)
+    print(expected)
 
     assert result_ast == expected

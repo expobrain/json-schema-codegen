@@ -308,3 +308,43 @@ def UnionTypeAnnotation(types):
 
 def CommentLine(value):
     return {"type": "CommentLine", "value": " " + str(value).strip()}
+
+
+def ObjectTypeIndexer(id_, key, value, static=False, variance=None):
+    return {
+        "type": "ObjectTypeIndexer",
+        "id": id_,
+        "key": key,
+        "value": value,
+        "static": static,
+        "variance": variance,
+    }
+
+
+def VariableDeclaration(declarations, kind="const"):
+    return {"type": "VariableDeclaration", "declarations": declarations, "kind": kind}
+
+
+def VariableDeclarator(id_, init=None):
+    return {"type": "VariableDeclarator", "id": id_, "init": init}
+
+
+def ArrayPattern(elements):
+    return {"type": "ArrayPattern", "elements": elements}
+
+
+def TypeCastExpression(expression, type_annotation, extra=None):
+    return {
+        "type": "TypeCastExpression",
+        "expression": expression,
+        "typeAnnotation": type_annotation,
+        "extra": dict({"parenthesized": True}, **(extra or {})),
+    }
+
+
+def NewExpression(callee, arguments=None):
+    return {"type": "NewExpression", "callee": callee, "arguments": arguments or []}
+
+
+def ReturnStatement(argument):
+    return {"type": "ReturnStatement", "argument": argument}

@@ -85,16 +85,17 @@ class PythonGenerator(SchemaParser, BaseGenerator):
             return ast.Dict(keys=keys, values=values)
 
         # Get compare's body
-        if definition.get("type") == "integer":
-            body = ast.Num(n=definition["default"])
+        type_ = definition.get("type")
 
-        elif definition.get("type") == "array":
+        if type_ == "integer":
+            body = ast.Num(n=definition["default"])
+        elif type_ == "array":
             body = ast.List(elts=[ast.Num(n=n) for n in definition["default"]])
-        elif definition.get("type") == "boolean":
+        elif type_ == "boolean":
             body = ast.Name(id=str(definition["default"]))
-        elif definition.get("type") == "string":
+        elif type_ == "string":
             body = ast.Str(s=definition["default"])
-        elif definition.get("type") == "object":
+        elif type_ == "object":
             body = ast_from_dict(definition["default"])
         else:
             raise NotImplementedError("{}: {} => {}".format(self, name, definition))
@@ -145,6 +146,60 @@ class PythonGenerator(SchemaParser, BaseGenerator):
             generators=[ast.comprehension(target=ast.Name(id=b"v"), iter=value, ifs=[])],
         )
 
+    def _get_dict_comprehension_for_property(self, key, property_):
+        # key, value
+        comp_key = ast.Name(id=b"k")
+        comp_value = ast.Call(
+            func=ast.Name(id=b"Value"),
+            args=[ast.Name(id=b"v")],
+            keywords=[],
+            starargs=None,
+            kwargs=None,
+        )
+
+        # Generator
+        # ref = self.definitions[property_["$ref"]]
+
+        generator = ast.comprehension(
+            target=ast.Tuple(elts=[ast.Name(id=b"k"), ast.Name(id=b"v")]),
+            iter=ast.Call(
+                func=ast.Attribute(
+                    value=self._get_default_for_property(key, property_), attr=b"iteritems"
+                ),
+                args=[],
+                keywords=[],
+                starargs=None,
+                kwargs=None,
+            ),
+            ifs=[],
+        )
+
+        # Dit comprehension
+        dict_comp = ast.DictComp(key=comp_key, value=comp_value, generators=[generator])
+
+        # Return node
+        return dict_comp
+
+    def _get_member_value(self, key, property_):
+        additional_properties = property_.get("additionalProperties")
+
+        if additional_properties is not None:
+            if "$ref" not in additional_properties:
+                raise NotImplementedError(
+                    "Scalar types for additionalProperties not supported yet"
+                )
+
+            return self._get_dict_comprehension_for_property(key, property_)
+
+        if "default" in property_:
+            value = self._get_default_for_property(key, property_)
+        else:
+            value = self.get_key_from_data_object(key)
+
+        value = self._map_property_if_array(property_, value)
+
+        return value
+
     def get_klass_constructor(self, properties, required):
         # Prepare body
         fn_body = []
@@ -166,13 +221,7 @@ class PythonGenerator(SchemaParser, BaseGenerator):
 
             # Get default value
             property_ = properties[key]
-
-            if "default" in property_:
-                value = self._get_default_for_property(key, property_)
-            else:
-                value = self.get_key_from_data_object(key)
-
-            value = self._map_property_if_array(property_, value)
+            value = self._get_member_value(key, property_)
 
             # Build assign expression
             attribute = ast.Assign(

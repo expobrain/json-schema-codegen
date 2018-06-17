@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Test",
+  "type": "object",
+  "properties": {
+    "x": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/Value"
+      },
+      "default": {}
+    }
+  },
+  "definitions": {
+    "Value": {
+      "title": "Value",
+      "type": "object",
+      "properties": {
+        "v": { "type": "integer" }
+      }
+    }
+  }
+}
