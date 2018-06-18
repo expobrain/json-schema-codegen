@@ -20,8 +20,10 @@ class FlowGenerator(SchemaParser, BaseGenerator):
             self._body.append(self.klass(definition))
 
         # Generate root definition
-        if "title" in self.schema:
-            self._body.append(self.klass(self.schema))
+        root_definition = self.get_root_definition()
+
+        if "title" in root_definition:
+            self._body.append(self.klass(root_definition))
 
         # Add leading comment
         if len(self._body):

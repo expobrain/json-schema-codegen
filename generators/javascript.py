@@ -16,8 +16,10 @@ class JavaScriptGenerator(SchemaParser, BaseGenerator):
             self._body.append(self.klass(definition))
 
         # Generate root definition
+        root_definition = self.get_root_definition()
+
         if "title" in self.schema:
-            self._body.append(self.klass(self.schema))
+            self._body.append(self.klass(root_definition))
 
         # Add leading comments
         if len(self._body):

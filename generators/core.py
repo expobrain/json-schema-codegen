@@ -11,7 +11,7 @@ def load_schema(schema_str):
 class SchemaParser(object):
     def __init__(self, schema, *args, **kwds):
         self.schema = schema
-        self.prefix = kwds.get("prefix")
+        self.prefix = kwds.get("prefix") or ""
         self.definitions = OrderedDict()
 
         self.__parse_definitions()
@@ -28,18 +28,29 @@ class SchemaParser(object):
 
             self.definitions[new_key] = new_definition
 
+    def apply_prefix(self, definition):
+        title = definition.get("title")
+
+        if title is None:
+            return definition
+
+        new_title = "{}{}".format(self.prefix, definition["title"])
+        new_definition = dict(definition, title=new_title)
+
+        return new_definition
+
     def definition_is_primitive_alias(self, definition):
         return definition.get("type") != "object" or len(definition.get("properties", {})) == 0
 
+    def get_root_definition(self):
+        return self.apply_prefix(self.schema)
+
     def get_klass_definitions(self):
-        prefix = self.prefix or ""
-
-        for definition in self.definitions.itervalues():
-            if not self.definition_is_primitive_alias(definition):
-                new_title = "{}{}".format(prefix, definition["title"])
-                definition = dict(definition, title=new_title)
-
-                yield definition
+        return (
+            self.apply_prefix(d)
+            for d in self.definitions.itervalues()
+            if not self.definition_is_primitive_alias(d)
+        )
 
     def get_type_aliases(self):
         return (d for d in self.definitions.itervalues() if self.definition_is_primitive_alias(d))
