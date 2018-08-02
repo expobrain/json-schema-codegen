@@ -1,5 +1,3 @@
-from __future__ import unicode_literals, print_function, division
-
 import json
 
 from .core import SchemaParser, BaseGenerator
@@ -23,7 +21,7 @@ class JavaScriptGenerator(SchemaParser, BaseGenerator):
 
         # Add leading comments
         if len(self._body):
-            self._body[0]["leadingComments"] = [ast.CommentLine(b"@flow")]
+            self._body[0]["leadingComments"] = [ast.CommentLine("@flow")]
 
         return self
 
@@ -33,7 +31,7 @@ class JavaScriptGenerator(SchemaParser, BaseGenerator):
         required = definition.get("required", ())
         properties = definition.get("properties", {})
 
-        for key in sorted(properties.iterkeys()):
+        for key in sorted(properties.keys()):
             # Add property type definition
             property_ = properties[key]
             is_required = key in required
@@ -77,10 +75,10 @@ class JavaScriptGenerator(SchemaParser, BaseGenerator):
 
             if not self.definition_is_primitive_alias(ref):
                 consequent = ast.CallExpression(
-                    callee=ast.MemberExpression(consequent, ast.Identifier(b"map")),
+                    callee=ast.MemberExpression(consequent, ast.Identifier("map")),
                     arguments=[
                         ast.ArrowFunctionExpression(
-                            params=[ast.Identifier(b"v")],
+                            params=[ast.Identifier("v")],
                             body=ast.CallExpression(
                                 ast.Identifier(ref["title"]), [ast.Identifier("v")]
                             ),
@@ -139,7 +137,7 @@ class JavaScriptGenerator(SchemaParser, BaseGenerator):
         def ast_from_dict(d):
             properties = []
 
-            for k, v in d.iteritems():
+            for k, v in d.items():
                 key = ast.Identifier(k)
                 value = ast.NumericLiteral(v)
 
@@ -158,7 +156,7 @@ class JavaScriptGenerator(SchemaParser, BaseGenerator):
                     operator="typeof",
                     argument=ast.MemberExpression(ast.Identifier("data"), ast.Identifier(name)),
                 ),
-                right=ast.StringLiteral(b"object"),
+                right=ast.StringLiteral("object"),
             ),
         )
 
@@ -280,7 +278,7 @@ class JavaScriptGenerator(SchemaParser, BaseGenerator):
         # Build constructor body
         body = []
 
-        for key in sorted(properties.iterkeys()):
+        for key in sorted(properties.keys()):
             property_ = properties[key]
 
             # Left assignment
@@ -312,7 +310,7 @@ class JavaScriptGenerator(SchemaParser, BaseGenerator):
         )
 
     def as_ast(self):
-        comments = [ast.CommentLine(b"@flow")] if len(self._body) else []
+        comments = [ast.CommentLine("@flow")] if len(self._body) else []
         file_ = ast.File(program=ast.Program(body=self._body), comments=comments)
 
         return file_

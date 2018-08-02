@@ -1,14 +1,10 @@
-from __future__ import unicode_literals, print_function, division
-
-
-import six
 import astor
 
 from .ast import python as ast
 from .core import SchemaParser, BaseGenerator
 
 
-class PythonGenerator(SchemaParser, BaseGenerator):
+class Python2Generator(SchemaParser, BaseGenerator):
     def generate(self):
         # Add module imports
         self._body = []
@@ -30,12 +26,12 @@ class PythonGenerator(SchemaParser, BaseGenerator):
     def module_imports(self):
         return [
             ast.ImportFrom(
-                module=b"__future__",
+                module="__future__",
                 level=0,
                 names=[
-                    ast.alias(name=b"unicode_literals", asname=None),
-                    ast.alias(name=b"print_function", asname=None),
-                    ast.alias(name=b"division", asname=None),
+                    ast.alias(name="unicode_literals", asname=None),
+                    ast.alias(name="print_function", asname=None),
+                    ast.alias(name="division", asname=None),
                 ],
             )
         ]
@@ -54,21 +50,19 @@ class PythonGenerator(SchemaParser, BaseGenerator):
 
         # Create class definition
         class_def = ast.ClassDef(
-            name=definition["title"].encode("ascii"),
-            bases=[ast.Name(id=b"object")],
+            name=definition["title"],
+            bases=[ast.Name(id="object")],
             body=class_body,
             decorator_list=[],
+            keywords=[],
         )
 
         # Add to module's body
         return class_def
 
     def get_key_from_data_object(self, k):
-        if six.PY2:
-            k = unicode(k)
-
         return ast.Call(
-            func=ast.Attribute(value=ast.Name(id=b"data"), attr=b"get"),
+            func=ast.Attribute(value=ast.Name(id="data"), attr="get"),
             args=[ast.Str(s=k)],
             keywords=[],
             starargs=None,
@@ -80,7 +74,7 @@ class PythonGenerator(SchemaParser, BaseGenerator):
             keys = []
             values = []
 
-            for k, v in d.iteritems():
+            for k, v in d.items():
                 keys.append(ast.Str(s=k))
                 values.append(ast.Num(n=v))
 
@@ -94,7 +88,7 @@ class PythonGenerator(SchemaParser, BaseGenerator):
         elif type_ == "array":
             body = ast.List(elts=[ast.Num(n=n) for n in definition["default"]])
         elif type_ == "boolean":
-            body = ast.Name(id=str(definition["default"]))
+            body = ast.NameConstant(value=definition["default"])
         elif type_ == "string":
             body = ast.Str(s=definition["default"])
         elif type_ == "object":
@@ -106,7 +100,7 @@ class PythonGenerator(SchemaParser, BaseGenerator):
         test = ast.Compare(
             left=self.get_key_from_data_object(name),
             ops=[ast.Is()],
-            comparators=[ast.Name(id=b"None")],
+            comparators=[ast.NameConstant(value=None)],
         )
 
         return ast.IfExp(test=test, body=body, orelse=self.get_key_from_data_object(name))
@@ -134,26 +128,25 @@ class PythonGenerator(SchemaParser, BaseGenerator):
         # Wrap value
         ref_title = ref["title"]
 
-        if six.PY2:
-            ref_title = ref_title.encode("ascii")
-
         return ast.ListComp(
             elt=ast.Call(
                 func=ast.Name(id=ref_title),
-                args=[ast.Name(id=b"v")],
+                args=[ast.Name(id="v")],
                 keywords=[],
                 starargs=None,
                 kwargs=None,
             ),
-            generators=[ast.comprehension(target=ast.Name(id=b"v"), iter=value, ifs=[])],
+            generators=[
+                ast.comprehension(target=ast.Name(id="v"), iter=value, ifs=[], is_async=0)
+            ],
         )
 
     def _get_dict_comprehension_for_property(self, key, property_):
         # key, value
-        comp_key = ast.Name(id=b"k")
+        comp_key = ast.Name(id="k")
         comp_value = ast.Call(
-            func=ast.Name(id=b"Value"),
-            args=[ast.Name(id=b"v")],
+            func=ast.Name(id="Value"),
+            args=[ast.Name(id="v")],
             keywords=[],
             starargs=None,
             kwargs=None,
@@ -163,10 +156,10 @@ class PythonGenerator(SchemaParser, BaseGenerator):
         # ref = self.definitions[property_["$ref"]]
 
         generator = ast.comprehension(
-            target=ast.Tuple(elts=[ast.Name(id=b"k"), ast.Name(id=b"v")]),
+            target=ast.Tuple(elts=[ast.Name(id="k"), ast.Name(id="v")]),
             iter=ast.Call(
                 func=ast.Attribute(
-                    value=self._get_default_for_property(key, property_), attr=b"iteritems"
+                    value=self._get_default_for_property(key, property_), attr="iteritems"
                 ),
                 args=[],
                 keywords=[],
@@ -174,6 +167,7 @@ class PythonGenerator(SchemaParser, BaseGenerator):
                 kwargs=None,
             ),
             ifs=[],
+            is_async=0,
         )
 
         # Dit comprehension
@@ -210,24 +204,21 @@ class PythonGenerator(SchemaParser, BaseGenerator):
         if len(properties) > 0:
             fn_body.append(
                 ast.Assign(
-                    targets=[ast.Name(id=b"data")],
+                    targets=[ast.Name(id="data")],
                     value=ast.BoolOp(
-                        op=ast.Or(), values=[ast.Name(id=b"data"), ast.Dict(keys=[], values=[])]
+                        op=ast.Or(), values=[ast.Name(id="data"), ast.Dict(keys=[], values=[])]
                     ),
                 )
             )
 
-        for key in sorted(properties.iterkeys()):
-            if six.PY2:
-                key = key.encode("ascii")
-
+        for key in sorted(properties.keys()):
             # Get default value
             property_ = properties[key]
             value = self._get_member_value(key, property_)
 
             # Build assign expression
             attribute = ast.Assign(
-                targets=[ast.Attribute(value=ast.Name(id=b"self"), attr=key)], value=value
+                targets=[ast.Attribute(value=ast.Name(id="self"), attr=key)], value=value
             )
 
             # Add to body
@@ -235,15 +226,17 @@ class PythonGenerator(SchemaParser, BaseGenerator):
 
         # Bundle function arguments and keywords
         fn_arguments = ast.arguments(
-            args=[ast.Name(id=b"self"), ast.Name(id=b"data")],
+            args=[ast.arg(arg="self", annotation=None), ast.arg(arg="data", annotation=None)],
             vararg=None,
             kwarg=None,
-            defaults=[ast.Name(id=b"None")],
+            kwonlyargs=[],
+            kw_defaults=[],
+            defaults=[ast.NameConstant(value=None)],
         )
 
         # Generate class constructor
         fn_init = ast.FunctionDef(
-            name=b"__init__", args=fn_arguments, body=fn_body, decorator_list=[]
+            name="__init__", args=fn_arguments, body=fn_body, decorator_list=[], returns=None
         )
 
         # Return constructor

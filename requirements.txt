@@ -1,2 +1,2 @@
-astor==0.6.2
+astor==0.7.1
 pathlib2==2.3.0

@@ -1,5 +1,3 @@
-from __future__ import unicode_literals, print_function, division
-
 import ast
 
 from pathlib2 import Path

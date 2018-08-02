@@ -1,6 +1,4 @@
-#!/usr/bin/env python2
-
-from __future__ import unicode_literals
+#!/usr/bin/env python3
 
 from argparse import ArgumentParser
 import sys
@@ -9,7 +7,7 @@ import generators
 
 
 LANGUAGES = {
-    "python": generators.PythonGenerator,
+    "python2": generators.Python2Generator,
     "javascript": generators.JavaScriptGenerator,
     "flow": generators.FlowGenerator,
 }
@@ -24,9 +22,9 @@ def get_generator(language):
 
 def main():
     # Validating parameters
-    parser = ArgumentParser(description="Generates code to handle PRDs from Python and Java")
+    parser = ArgumentParser(description="Generates code from a JSON-schema definition")
     parser.add_argument("--prefix", "-p", help="Optional prefix for generated classes")
-    parser.add_argument("--language", "-l", help="Output language. Default is python")
+    parser.add_argument("--language", "-l", help="Output language. Default is python2")
     parser.add_argument("--output", "-o", help="Output filename for the generated code")
     parser.add_argument("schema", help="Definition of the PRD as JSON schema")
 

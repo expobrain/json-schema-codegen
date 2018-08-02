@@ -1,5 +1,3 @@
-from __future__ import unicode_literals, print_function, division
-
 import json
 
 
@@ -221,14 +219,14 @@ def ObjectProperty(key, value, method=False, computed=False, shorthand=False):
     }
 
 
-def ArrowFunctionExpression(params=None, body=None, id=None, generator=False, async=False):
+def ArrowFunctionExpression(params=None, body=None, id=None, generator=False, async_=False):
     return {
         "type": "ArrowFunctionExpression",
         "params": params or [],
         "body": body or [],
         "id": id,
         "generator": generator,
-        "async": async,
+        "async": async_,
     }
 
 
@@ -307,6 +305,7 @@ def UnionTypeAnnotation(types):
 
 
 def CommentLine(value):
+    # if type(value) == "bytes": import pdb; pdb.set_trace()
     return {"type": "CommentLine", "value": " " + str(value).strip()}
 
 
