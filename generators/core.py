@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 from collections import OrderedDict
 import json
 
@@ -19,7 +17,7 @@ class SchemaParser(object):
     def __parse_definitions(self):
         definitions = self.schema.get("definitions", {})
 
-        for key, definition in definitions.iteritems():
+        for key, definition in definitions.items():
             new_key = "#/definitions/{}".format(key)
             new_definition = dict(definition)
 
@@ -48,12 +46,12 @@ class SchemaParser(object):
     def get_klass_definitions(self):
         return (
             self.apply_prefix(d)
-            for d in self.definitions.itervalues()
+            for d in self.definitions.values()
             if not self.definition_is_primitive_alias(d)
         )
 
     def get_type_aliases(self):
-        return (d for d in self.definitions.itervalues() if self.definition_is_primitive_alias(d))
+        return (d for d in self.definitions.values() if self.definition_is_primitive_alias(d))
 
 
 class BaseGenerator(object):

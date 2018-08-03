@@ -1,5 +1,3 @@
-from __future__ import unicode_literals, print_function, division
-
 import json
 
 from .core import SchemaParser, BaseGenerator
@@ -27,7 +25,7 @@ class FlowGenerator(SchemaParser, BaseGenerator):
 
         # Add leading comment
         if len(self._body):
-            self._body[0]["leadingComments"] = [ast.CommentLine(b"@flow")]
+            self._body[0]["leadingComments"] = [ast.CommentLine("@flow")]
 
         return self
 
@@ -45,7 +43,7 @@ class FlowGenerator(SchemaParser, BaseGenerator):
         required = definition.get("required", ())
         properties = definition.get("properties", {})
 
-        for key in sorted(properties.iterkeys()):
+        for key in sorted(properties.keys()):
             # Add property type definition
             property_ = properties[key]
             is_required = key in required
@@ -90,7 +88,7 @@ class FlowGenerator(SchemaParser, BaseGenerator):
         )
 
     def as_ast(self):
-        return ast.File(program=ast.Program(body=self._body), comments=[ast.CommentLine(b"@flow")])
+        return ast.File(program=ast.Program(body=self._body), comments=[ast.CommentLine("@flow")])
 
     def as_code(self):
         return json.dumps(self.as_ast(), indent=2)

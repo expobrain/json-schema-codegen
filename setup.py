@@ -10,9 +10,9 @@ setup(
     url="https://github.com/expobrain/json-schema-codegen",
     packages=find_packages(),
     entry_points={"console_scripts": ["json_codegen = json_codegen:main"]},
-    python_requires="<=3",
+    python_requires=">=3",
     license="MIT",
-    install_requires=["astor==0.6.2", "pathlib2==2.3.0"],
+    install_requires=["astor==0.7.1", "pathlib2==2.3.0"],
     # Disable because of https://github.com/pypa/setuptools/issues/761
     # scripts=["bin/ast_to_js"],
 )
