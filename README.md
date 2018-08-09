@@ -120,7 +120,7 @@ json-codegen.py --language python --output <output_py_file> <json-schema>
 Generating JavaScript+Flow and Flow code involves two steps, generating the AST:
 
 ```
-json-codegen.py --language [javascript|flow] --output <output_ast_json> <json-schema>
+json-codegen.py --language [javascript+flow|flow] --output <output_ast_json> <json-schema>
 ```
 
 and generating the code from the AST:

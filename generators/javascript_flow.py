@@ -5,7 +5,7 @@ from .ast import javascript as ast
 from .js_utils import get_type_annotation
 
 
-class JavaScriptGenerator(SchemaParser, BaseGenerator):
+class JavaScriptFlowGenerator(SchemaParser, BaseGenerator):
     def generate(self):
         # Generates definitions first
         self._body = []
