@@ -8,7 +8,7 @@ import generators
 
 LANGUAGES = {
     "python2": generators.Python2Generator,
-    "javascript": generators.JavaScriptGenerator,
+    "javascript+flow": generators.JavaScriptFlowGenerator,
     "flow": generators.FlowGenerator,
 }
 
@@ -24,9 +24,11 @@ def main():
     # Validating parameters
     parser = ArgumentParser(description="Generates code from a JSON-schema definition")
     parser.add_argument("--prefix", "-p", help="Optional prefix for generated classes")
-    parser.add_argument("--language", "-l", help="Output language. Default is python2")
     parser.add_argument("--output", "-o", help="Output filename for the generated code")
     parser.add_argument("schema", help="Definition of the PRD as JSON schema")
+    parser.add_argument(
+        "--language", "-l", choices=LANGUAGES, help="Output language. Default is python2"
+    )
 
     args = parser.parse_args()
 
