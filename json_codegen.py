@@ -24,10 +24,27 @@ def main():
     # Validating parameters
     parser = ArgumentParser(description="Generates code from a JSON-schema definition")
     parser.add_argument("--prefix", "-p", help="Optional prefix for generated classes")
-    parser.add_argument("--output", "-o", help="Output filename for the generated code")
+    parser.add_argument(
+        "--output", "-o", help="Output filename for the generated code. Default is stdout"
+    )
+    parser.add_argument(
+        "--generator",
+        "-g",
+        help=(
+            "Path to an external custom code generator. "
+            "When used the option --language will be ignored."
+        ),
+    )
     parser.add_argument("schema", help="Definition of the PRD as JSON schema")
     parser.add_argument(
-        "--language", "-l", choices=LANGUAGES, help="Output language. Default is python2"
+        "--language",
+        "-l",
+        choices=LANGUAGES,
+        help=(
+            "Output language. "
+            "This option will be ignored if the --generator option is used. "
+            "Default is python2"
+        ),
     )
 
     args = parser.parse_args()
@@ -37,7 +54,11 @@ def main():
         schema = generators.load_schema(f.read())
 
     # Generate code
-    generator = get_generator(args.language)
+    if args.generator:
+        generator = generators.load_external_generator(args.generator)
+    else:
+        generator = get_generator(args.language)
+
     code = generator(schema, prefix=args.prefix).generate().as_code()
 
     # Output code

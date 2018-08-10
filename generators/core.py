@@ -1,5 +1,26 @@
+from pathlib import Path
 from collections import OrderedDict
+import importlib.util
 import json
+
+
+class GeneratorNotFoundException(Exception):
+    pass
+
+
+def load_external_generator(filename: Path):
+    module_name = filename.stem
+    klass_name = "".join(s.capitalize() for s in module_name.split("_"))
+    filename_str = str(filename)
+
+    spec = importlib.util.spec_from_file_location(module_name, filename_str)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+
+    try:
+        return getattr(module, klass_name)
+    except AttributeError:
+        raise GeneratorNotFoundException("Class {} not found in {}".format(klass_name, filename))
 
 
 def load_schema(schema_str):
