@@ -1,3 +1,2 @@
--r requirements.txt
 black>=18.6b4
 pytest>=3.6.1
