@@ -68,13 +68,13 @@ This allows the tool to be language agnostic, that is it just needs to generate 
 
 List of currently supported languages:
 
-- Python 2.7
+- Python 2.7+
 - JavaScript ES7+ with Flow annotations
 - pure Flow annotations
 
 # Requirements
 
-- Python 2.7
+- Python 3.x
 - Node v8.4+
 
 # Installation
