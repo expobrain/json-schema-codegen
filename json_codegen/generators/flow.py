@@ -1,8 +1,8 @@
 import json
 
-from .core import SchemaParser, BaseGenerator
-from .ast import javascript as ast
-from .js_utils import get_type_annotation
+from json_codegen.core import SchemaParser, BaseGenerator
+from json_codegen.ast import javascript as ast
+from json_codegen.js_utils import get_type_annotation
 
 
 class FlowGenerator(SchemaParser, BaseGenerator):

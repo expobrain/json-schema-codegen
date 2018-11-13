@@ -9,14 +9,14 @@ if parse_version(setuptools.__version__) < parse_version(SETUPTOOLS_MIN_VER):
 from setuptools import setup, find_packages
 
 setup(
-    name="json-schema-codegen",
+    name="json_codegen",
     version="0.1",
     keywords="python javascript json-schema codegen",
     author="Daniele Esposti",
     author_email="daniele.esposti@gmail.com",
     url="https://github.com/expobrain/json-schema-codegen",
     packages=find_packages(),
-    entry_points={"console_scripts": ["json_codegen = json_codegen:main"]},
+    entry_points={"console_scripts": ["json_codegen = json_codegen:cli.main"]},
     python_requires=">=3",
     license="MIT",
     install_requires=[

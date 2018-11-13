@@ -5,8 +5,8 @@ import pytest
 import astor
 
 
-from generators import load_schema
-from generators.python import Python2Generator
+from json_codegen import load_schema
+from json_codegen.generators.python import Python2Generator
 
 
 SCHEMAS_DIR = Path(__file__).parent / "fixtures" / "schemas"

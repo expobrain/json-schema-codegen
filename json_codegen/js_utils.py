@@ -1,4 +1,4 @@
-from .ast import javascript as ast
+from json_codegen.ast import javascript as ast
 
 
 def get_object_type_annotation(definitions, property_):

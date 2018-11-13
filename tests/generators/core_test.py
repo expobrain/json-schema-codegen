@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from generators.core import BaseGenerator, GeneratorNotFoundException, load_external_generator
+from json_codegen.core import BaseGenerator, GeneratorNotFoundException, load_external_generator
 
 
 fixture_dir = Path(__file__).parent / "fixtures"

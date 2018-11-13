@@ -1,4 +1,4 @@
-from generators.core import BaseGenerator
+from json_codegen.core import BaseGenerator
 
 
 class CustomGenerator(BaseGenerator):

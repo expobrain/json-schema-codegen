@@ -5,8 +5,8 @@ import pytest
 import astor
 import json
 
-from generators import load_schema
-from generators.javascript_flow import JavaScriptFlowGenerator
+from json_codegen import load_schema
+from json_codegen.generators.javascript_flow import JavaScriptFlowGenerator
 
 
 SCHEMAS_DIR = Path(__file__).parent / "fixtures" / "schemas"

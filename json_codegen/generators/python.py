@@ -1,7 +1,7 @@
 import astor
 
-from .ast import python as ast
-from .core import SchemaParser, BaseGenerator
+from json_codegen.ast import python as ast
+from json_codegen.core import SchemaParser, BaseGenerator
 
 
 class Python2Generator(SchemaParser, BaseGenerator):
