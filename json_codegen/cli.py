@@ -4,7 +4,7 @@
 from argparse import ArgumentParser
 import sys
 
-import generators
+from json_codegen import generators
 
 
 LANGUAGES = {
