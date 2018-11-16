@@ -5,6 +5,7 @@ from argparse import ArgumentParser
 import sys
 
 from json_codegen import generators
+from json_codegen.core import load_schema, load_external_generator
 
 
 LANGUAGES = {
@@ -52,11 +53,11 @@ def main():
 
     # Load schema
     with open(args.schema) as f:
-        schema = generators.load_schema(f.read())
+        schema = load_schema(f.read())
 
     # Generate code
     if args.generator:
-        generator = generators.load_external_generator(args.generator)
+        generator = load_external_generator(args.generator)
     else:
         generator = get_generator(args.language)
 
