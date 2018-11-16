@@ -16,7 +16,7 @@ setup(
     author_email="daniele.esposti@gmail.com",
     url="https://github.com/expobrain/json-schema-codegen",
     packages=find_packages(),
-    entry_points={"console_scripts": ["json_codegen = json_codegen:cli.main"]},
+    entry_points={"console_scripts": ["json_codegen = json_codegen.cli:main"]},
     python_requires=">=3",
     license="MIT",
     install_requires=[
