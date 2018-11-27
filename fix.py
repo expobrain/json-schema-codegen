@@ -1,32 +1,5 @@
-from __future__ import unicode_literals, print_function, division
-from typing import List
-
-
-class Table(object):
-    def __init__(self, data=None):
-        data = data or {}
-        self.access: List[str] = [0] if data.get("access") is None else data.get("access")
-        self.description = data.get("description")
-        self.disabled = False if data.get("disabled") is None else data.get("disabled")
-        self.fields = data.get("fields")
-        self.name = data.get("name")
-        self.source = data.get("source")
-        self.transforms = data.get("transforms")
-
-
 import astor
 import ast
-
-
-# def from_dict(d: dict):
-#     out = Transform()
-#     if not d:
-#         return out
-#     if "name" not in d:
-#         raise Exception("Missing mandatory field mandatory str Transform->name in Transform")
-#     out.name = d.get("name", "")
-#     out.params = d.get("params")
-#     return out
 
 
 class Fn_DictFrom(object):
@@ -45,24 +18,14 @@ class Fn_DictFrom(object):
 
     def _get_body(self):
         body = []
-        # out = Transform()
         body.append(ast.Assign(targets=[ast.Name(id="d")], value=ast.Dict(keys=[], values=[])))
-        # if not d:
-        #    return out
-        body.append(
-            ast.If(
-                test=ast.UnaryOp(op=ast.Not(), operand=ast.Name(id="d")),
-                body=[ast.Return(value=ast.Name(id="out"))],
-                orelse=[],
-            )
-        )
-        # if {required} not in d:
-        #     raise Exception("Required field {required} missing from class")
+        body.append(self._return_early_if_no_obj(check="d", ret="out"))
+
         for required in self.required:
             body.append(self._if_missing_required(required))
 
+        body.append(self._append_keys_to_out_obj(body))
         body.append(ast.Return(ast.Name(id="out")))
-
         return body
 
     def _get_function(self):
@@ -85,6 +48,38 @@ class Fn_DictFrom(object):
             left=ast.Str(s=required), ops=[ast.NotIn()], comparators=[ast.Name(id="d")]
         )
         return ast.If(test=test, body=[ast.Raise(exc=exception, cause=None)], orelse=[])
+
+    def _append_keys_to_out_obj(self, body):
+        body.append(
+            ast.For(
+                target=ast.Name(id="k"),
+                iter=ast.Call(
+                    func=ast.Attribute(value=ast.Name(id="d"), attr="keys"), args=[], keywords=[]
+                ),
+                body=[
+                    ast.Assign(
+                        targets=[
+                            ast.Subscript(
+                                value=ast.Name(id="out"), slice=ast.Index(value=ast.Name(id="k"))
+                            )
+                        ],
+                        value=ast.Call(
+                            func=ast.Attribute(value=ast.Name(id="d"), attr="get"),
+                            args=[ast.Name(id="k")],
+                            keywords=[],
+                        ),
+                    )
+                ],
+                orelse=[],
+            )
+        )
+
+    def _return_early_if_no_obj(self, check, ret):
+        ast.If(
+            test=ast.UnaryOp(op=ast.Not(), operand=ast.Name(id=check)),
+            body=[ast.Return(value=ast.Name(id=ret))],
+            orelse=[],
+        )
 
     def print(self):
         print(astor.to_source(ast.Module(body=self.built_fn)))
