@@ -2,4 +2,4 @@ from marshmallow import Schema, fields
 
 
 class TestSchema(Schema):
-    pass
+    id = fields.Integer(required=True)

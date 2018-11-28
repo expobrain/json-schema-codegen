@@ -1,8 +1,5 @@
-from __future__ import unicode_literals, print_function, division
+from marshmallow import Schema, fields
 
 
-class Test(object):
-    def __init__(self, data=None):
-        data = data or {}
-
-        self.id = data.get("id")
+class TestSchema(Schema):
+    id = fields.Integer()
