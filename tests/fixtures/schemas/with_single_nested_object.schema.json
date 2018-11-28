@@ -3,8 +3,7 @@
   "title": "Test",
   "properties": {
     "nested": {
-      "type": "object",
-      "oneOf": [{ "$ref": "#/definitions/Nested" }]
+      "$ref": "#/definitions/Nested"
     }
   },
   "definitions": {
@@ -12,7 +11,9 @@
       "title": "Nested",
       "type": "object",
       "properties": {
-        "x": { "type": "string" }
+        "x": {
+          "type": "string"
+        }
       }
     }
   }

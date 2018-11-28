@@ -1,4 +1,5 @@
 import astor
+import re
 
 from json_codegen.ast import python as ast
 from json_codegen.core import SchemaParser, BaseGenerator
@@ -51,7 +52,6 @@ class Python3Generator(SchemaParser, BaseGenerator):
 
         if properties:
             required = definition.get("required", ())
-
             class_body.extend(self.get_klass_constructor(properties, required))
         else:
             class_body.append(ast.Pass())
@@ -74,7 +74,21 @@ class Python3Generator(SchemaParser, BaseGenerator):
     def get_default_arg(self, d):
         return ast.keyword(arg="default", value=d)
 
+    def get_normal_type(self, prop):
+        return type_map[prop["type"]], []
+
+    def get_nested_type(self, prop):
+        nested_schema_name = re.search("#/definitions/(.*)$", prop["$ref"])
+        attr_type = nested_schema_name.group(1)
+        attr_args = [ast.Name(id=attr_type + "Schema")]
+        return attr_type, attr_args
+
     def get_key_from_data_object(self, k, prop, required, default=None):
+
+        if "$ref" in prop:
+            attr_type, attr_args = self.get_nested_type(prop)
+        else:
+            attr_type, attr_args = self.get_normal_type(prop)
 
         req = []
         if k in required:
@@ -84,8 +98,8 @@ class Python3Generator(SchemaParser, BaseGenerator):
             req.append(self.get_default_arg(default))
 
         return ast.Call(
-            func=ast.Attribute(value=ast.Name(id="fields"), attr=type_map[prop["type"]]),
-            args=[],
+            func=ast.Attribute(value=ast.Name(id="fields"), attr=attr_type),
+            args=attr_args,
             keywords=req,
             starargs=None,
             kwargs=None,
