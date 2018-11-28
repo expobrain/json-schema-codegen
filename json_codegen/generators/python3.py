@@ -3,7 +3,7 @@ import astor
 from json_codegen.ast import python as ast
 from json_codegen.core import SchemaParser, BaseGenerator
 
-type_map = {"integer": "Integer", "string": "String", "boolean": "Boolean"}
+type_map = {"integer": "Integer", "string": "String", "boolean": "Boolean", "array": "List"}
 
 
 class Python3Generator(SchemaParser, BaseGenerator):
