@@ -3,7 +3,7 @@ import astor
 from json_codegen.ast import python as ast
 from json_codegen.core import SchemaParser, BaseGenerator
 
-type_map = {"integer": "Integer"}
+type_map = {"integer": "Integer", "string": "String"}
 
 
 class Python3Generator(SchemaParser, BaseGenerator):
@@ -64,11 +64,17 @@ class Python3Generator(SchemaParser, BaseGenerator):
     def get_required_arg(self):
         return ast.keyword(arg="required", value=ast.NameConstant(value=True))
 
-    def get_key_from_data_object(self, k, prop, required):
+    def get_default_arg(self, d):
+        return ast.keyword(arg="default", value=d)
+
+    def get_key_from_data_object(self, k, prop, required, default=None):
 
         req = []
         if k in required:
             req.append(self.get_required_arg())
+
+        if default is not None:
+            req.append(self.get_default_arg(default))
 
         return ast.Call(
             func=ast.Attribute(value=ast.Name(id="fields"), attr=type_map[prop["type"]]),
@@ -78,7 +84,7 @@ class Python3Generator(SchemaParser, BaseGenerator):
             kwargs=None,
         )
 
-    def _get_default_for_property(self, name, definition):
+    def _get_default_for_property(self, name, definition, required):
         def ast_from_dict(d):
             keys = []
             values = []
@@ -105,14 +111,15 @@ class Python3Generator(SchemaParser, BaseGenerator):
         else:
             raise NotImplementedError("{}: {} => {}".format(self, name, definition))
 
-        # Return ternary expression
-        test = ast.Compare(
-            left=self.get_key_from_data_object(name),
-            ops=[ast.Is()],
-            comparators=[ast.NameConstant(value=None)],
-        )
+        # # Return ternary expression
+        # test = ast.Compare(
+        #     left=self.get_key_from_data_object(name, definition, required),
+        #     ops=[ast.Is()],
+        #     comparators=[ast.NameConstant(value=None)],
+        # )
 
-        return ast.IfExp(test=test, body=body, orelse=self.get_key_from_data_object(name))
+        # return ast.IfExp(test=test, body=body, orelse=self.get_key_from_data_object(name))
+        return self.get_key_from_data_object(name, definition, required, default=body)
 
     def _map_property_if_array(self, property_, value):
         """
@@ -197,7 +204,7 @@ class Python3Generator(SchemaParser, BaseGenerator):
             return self._get_dict_comprehension_for_property(key, property_)
 
         if "default" in property_:
-            value = self._get_default_for_property(key, property_)
+            value = self._get_default_for_property(key, property_, required)
         else:
             value = self.get_key_from_data_object(key, property_, required)
 
