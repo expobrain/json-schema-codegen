@@ -3,8 +3,10 @@ import astor
 from json_codegen.ast import python as ast
 from json_codegen.core import SchemaParser, BaseGenerator
 
+type_map = {"integer": "Integer"}
 
-class Python32Generator(SchemaParser, BaseGenerator):
+
+class Python3Generator(SchemaParser, BaseGenerator):
     def generate(self):
         # Add module imports
         self._body = []
@@ -43,7 +45,7 @@ class Python32Generator(SchemaParser, BaseGenerator):
         if properties:
             required = definition.get("required", ())
 
-            class_body.append(self.get_klass_constructor(properties, required))
+            class_body.extend(self.get_klass_constructor(properties, required))
         else:
             class_body.append(ast.Pass())
 
@@ -59,11 +61,19 @@ class Python32Generator(SchemaParser, BaseGenerator):
         # Add to module's body
         return class_def
 
-    def get_key_from_data_object(self, k):
+    def get_required_arg(self):
+        return ast.keyword(arg="required", value=ast.NameConstant(value=True))
+
+    def get_key_from_data_object(self, k, prop, required):
+
+        req = []
+        if k in required:
+            req.append(self.get_required_arg())
+
         return ast.Call(
-            func=ast.Attribute(value=ast.Name(id="data"), attr="get"),
-            args=[ast.Str(s=k)],
-            keywords=[],
+            func=ast.Attribute(value=ast.Name(id="fields"), attr=type_map[prop["type"]]),
+            args=[],
+            keywords=req,
             starargs=None,
             kwargs=None,
         )
@@ -175,7 +185,7 @@ class Python32Generator(SchemaParser, BaseGenerator):
         # Return node
         return dict_comp
 
-    def _get_member_value(self, key, property_):
+    def _get_member_value(self, key, property_, required):
         additional_properties = property_.get("additionalProperties")
 
         if additional_properties is not None:
@@ -189,7 +199,7 @@ class Python32Generator(SchemaParser, BaseGenerator):
         if "default" in property_:
             value = self._get_default_for_property(key, property_)
         else:
-            value = self.get_key_from_data_object(key)
+            value = self.get_key_from_data_object(key, property_, required)
 
         value = self._map_property_if_array(property_, value)
 
@@ -197,49 +207,21 @@ class Python32Generator(SchemaParser, BaseGenerator):
 
     def get_klass_constructor(self, properties, required):
         # Prepare body
-        fn_body = []
-
-        # Default value for `data` argument
-        if len(properties) > 0:
-            fn_body.append(
-                ast.Assign(
-                    targets=[ast.Name(id="data")],
-                    value=ast.BoolOp(
-                        op=ast.Or(), values=[ast.Name(id="data"), ast.Dict(keys=[], values=[])]
-                    ),
-                )
-            )
+        body = []
 
         for key in sorted(properties.keys()):
             # Get default value
             property_ = properties[key]
-            value = self._get_member_value(key, property_)
+            value = self._get_member_value(key, property_, required)
 
             # Build assign expression
-            attribute = ast.Assign(
-                targets=[ast.Attribute(value=ast.Name(id="self"), attr=key)], value=value
-            )
+            attribute = ast.Assign(targets=[ast.Name(id=key)], value=value)
 
             # Add to body
-            fn_body.append(attribute)
-
-        # Bundle function arguments and keywords
-        fn_arguments = ast.arguments(
-            args=[ast.arg(arg="self", annotation=None), ast.arg(arg="data", annotation=None)],
-            vararg=None,
-            kwarg=None,
-            kwonlyargs=[],
-            kw_defaults=[],
-            defaults=[ast.NameConstant(value=None)],
-        )
-
-        # Generate class constructor
-        fn_init = ast.FunctionDef(
-            name="__init__", args=fn_arguments, body=fn_body, decorator_list=[], returns=None
-        )
+            body.append(attribute)
 
         # Return constructor
-        return fn_init
+        return body
 
     def as_ast(self):
         return ast.Module(body=self._body)
