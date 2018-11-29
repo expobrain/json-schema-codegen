@@ -14,6 +14,10 @@ type_map = {
 }
 
 
+def print_as_code(x):
+    print(astor.to_source(ast.Module(body=[x])))
+
+
 class Python3Generator(SchemaParser, BaseGenerator):
     def generate(self):
         # Add module imports
@@ -142,6 +146,15 @@ class Python3Generator(SchemaParser, BaseGenerator):
         # return ast.IfExp(test=test, body=body, orelse=self.get_key_from_data_object(name))
         return self.get_key_from_data_object(name, definition, required, default=body)
 
+    def _set_item_type_scalar(self, property_, value):
+        for node in ast.walk(value):
+            if isinstance(node, ast.Call):
+                item_properties = property_.get("items", {})
+                if item_properties != {}:
+                    x = self.get_key_from_data_object(None, property_["items"][0], required=[])
+                    node.args = [x] + node.args
+        return value
+
     def _map_property_if_array(self, property_, value):
         """
         If array and `items` has `$ref` wrap it into a list comprehension and map array's elements
@@ -149,8 +162,11 @@ class Python3Generator(SchemaParser, BaseGenerator):
         # Exit early if doesn't needs to wrap
         refs = [i["$ref"] for i in property_.get("items", ()) if "$ref" in i]
 
-        if property_.get("type") != "array" or len(refs) == 0:
+        if property_.get("type") != "array":  # or len(refs) == 0:
             return value
+
+        if len(refs) == 0:
+            return self._set_item_type_scalar(property_, value)
 
         # Only support one custom type for now
         if len(refs) > 1:
