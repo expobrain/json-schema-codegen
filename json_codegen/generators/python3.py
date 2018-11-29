@@ -101,10 +101,13 @@ class Python3Generator(SchemaParser, BaseGenerator):
         if default is not None:
             req.append(self.get_default_arg(default))
 
+        return self._make_nested_field(attr_type, attr_args, req)
+
+    def _make_nested_field(self, field, args, keywords):
         return ast.Call(
-            func=ast.Attribute(value=ast.Name(id="fields"), attr=attr_type),
-            args=attr_args,
-            keywords=req,
+            func=ast.Attribute(value=ast.Name(id="fields"), attr=field),
+            args=args,
+            keywords=keywords,
             starargs=None,
             kwargs=None,
         )
@@ -181,18 +184,12 @@ class Python3Generator(SchemaParser, BaseGenerator):
         # Wrap value
         ref_title = ref["title"]
 
-        return ast.ListComp(
-            elt=ast.Call(
-                func=ast.Name(id=ref_title),
-                args=[ast.Name(id="v")],
-                keywords=[],
-                starargs=None,
-                kwargs=None,
-            ),
-            generators=[
-                ast.comprehension(target=ast.Name(id="v"), iter=value, ifs=[], is_async=0)
-            ],
-        )
+        for node in ast.walk(value):
+            if isinstance(node, ast.Call):
+                x = self._make_nested_field("Nested", [ast.Name(id=ref_title + "Schema")], [])
+                node.args = [x] + node.args
+
+        return value
 
     def _get_dict_comprehension_for_property(self, key, property_):
         # key, value
