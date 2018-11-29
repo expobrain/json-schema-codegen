@@ -62,7 +62,7 @@ class Python3Generator(SchemaParser, BaseGenerator):
 
         # Create class definition
         class_def = ast.ClassDef(
-            name=definition["title"] + "Schema",
+            name=definition["title"].capitalize() + "Schema",
             bases=[ast.Name(id="Schema")],
             body=class_body,
             decorator_list=[],
@@ -139,14 +139,6 @@ class Python3Generator(SchemaParser, BaseGenerator):
         else:
             raise NotImplementedError("{}: {} => {}".format(self, name, definition))
 
-        # # Return ternary expression
-        # test = ast.Compare(
-        #     left=self.get_key_from_data_object(name, definition, required),
-        #     ops=[ast.Is()],
-        #     comparators=[ast.NameConstant(value=None)],
-        # )
-
-        # return ast.IfExp(test=test, body=body, orelse=self.get_key_from_data_object(name))
         return self.get_key_from_data_object(name, definition, required, default=body)
 
     def _set_item_type_scalar(self, property_, value):
@@ -182,7 +174,7 @@ class Python3Generator(SchemaParser, BaseGenerator):
             return value
 
         # Wrap value
-        ref_title = ref["title"]
+        ref_title = ref["title"].capitalize()
 
         for node in ast.walk(value):
             if isinstance(node, ast.Call):

@@ -2,11 +2,17 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Test",
   "type": "object",
-  "required": ["x"],
+  "required": [
+    "x"
+  ],
   "properties": {
     "x": {
       "type": "array",
-      "items": [{ "$ref": "#/definitions/MyType" }],
+      "items": [
+        {
+          "$ref": "#/definitions/MyType"
+        }
+      ],
       "default": []
     }
   },
@@ -14,7 +20,9 @@
     "MyType": {
       "type": "object",
       "properties": {
-        "v": { "type": "number" }
+        "v": {
+          "type": "number"
+        }
       }
     }
   }
