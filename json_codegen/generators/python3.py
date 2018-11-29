@@ -1,5 +1,5 @@
 import astor
-import re
+from re import search
 
 from json_codegen.ast import python as ast
 from json_codegen.core import SchemaParser, BaseGenerator
@@ -12,6 +12,14 @@ type_map = {
     "number": "Number",
     "object": "Dict",
 }
+
+
+def upper_first_letter(s):
+    """
+    Assumes custom types of two words are defined as customType
+    such that the class name is CustomTypeSchema
+    """
+    return s[0].upper() + s[1:]
 
 
 def print_as_code(x):
@@ -44,7 +52,7 @@ class Python3Generator(SchemaParser, BaseGenerator):
                 level=0,
                 names=[
                     ast.alias(name="Schema", asname=None),
-                    ast.alias(name="fields", asname=None),
+                    ast.alias(name="fields", asname="fields_"),
                 ],
             )
         ]
@@ -62,7 +70,7 @@ class Python3Generator(SchemaParser, BaseGenerator):
 
         # Create class definition
         class_def = ast.ClassDef(
-            name=definition["title"].capitalize() + "Schema",
+            name=upper_first_letter(definition["title"]) + "Schema",
             bases=[ast.Name(id="Schema")],
             body=class_body,
             decorator_list=[],
@@ -82,13 +90,18 @@ class Python3Generator(SchemaParser, BaseGenerator):
         return type_map[prop["type"]], []
 
     def get_nested_type(self, prop):
-        nested_schema_name = re.search("#/definitions/(.*)$", prop["$ref"])
+        """
+        Scrap the definition from the reference string
+        """
+        nested_schema_name = search("#/definitions/(.*)$", prop["$ref"])
         attr_type = nested_schema_name.group(1)
         attr_args = [ast.Name(id=attr_type + "Schema")]
         return attr_type, attr_args
 
     def get_key_from_data_object(self, k, prop, required, default=None):
 
+        # If the property references a definition, the resulting field
+        #  should be typed as the nesting schema
         if "$ref" in prop:
             attr_type, attr_args = self.get_nested_type(prop)
         else:
@@ -101,11 +114,11 @@ class Python3Generator(SchemaParser, BaseGenerator):
         if default is not None:
             req.append(self.get_default_arg(default))
 
-        return self._make_nested_field(attr_type, attr_args, req)
+        return self._make_field(attr_type, attr_args, req)
 
-    def _make_nested_field(self, field, args, keywords):
+    def _make_field(self, field, args, keywords):
         return ast.Call(
-            func=ast.Attribute(value=ast.Name(id="fields"), attr=field),
+            func=ast.Attribute(value=ast.Name(id="fields_"), attr=field),
             args=args,
             keywords=keywords,
             starargs=None,
@@ -142,6 +155,10 @@ class Python3Generator(SchemaParser, BaseGenerator):
         return self.get_key_from_data_object(name, definition, required, default=body)
 
     def _set_item_type_scalar(self, property_, value):
+        """
+        If the property is a primitive array, type the field.List with
+        the correct field type
+        """
         for node in ast.walk(value):
             if isinstance(node, ast.Call):
                 item_properties = property_.get("items", {})
@@ -173,12 +190,12 @@ class Python3Generator(SchemaParser, BaseGenerator):
         if self.definition_is_primitive_alias(ref):
             return value
 
-        # Wrap value
-        ref_title = ref["title"].capitalize()
-
+        # Where the array type references a definition, make a nested field with
+        # the type of the item schema
+        ref_title = upper_first_letter(ref["title"])
         for node in ast.walk(value):
             if isinstance(node, ast.Call):
-                x = self._make_nested_field("Nested", [ast.Name(id=ref_title + "Schema")], [])
+                x = self._make_field("Nested", [ast.Name(id=ref_title + "Schema")], [])
                 node.args = [x] + node.args
 
         return value
