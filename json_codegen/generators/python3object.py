@@ -1,7 +1,7 @@
 import ast
 import astor
 from re import search
-from . import python_type_map, upper_first_letter
+from . import python_type_map
 
 
 class Python3ObjectGenerator(object):
@@ -36,7 +36,9 @@ class Python3ObjectGenerator(object):
     def _type_annotation(node_assign):
         for node in ast.walk(node_assign):
             if isinstance(node, ast.Attribute):
-                type_annotation = python_type_map.get(node.attr, upper_first_letter(node.attr))
+                type_annotation = python_type_map.get(
+                    node.attr, Python3ObjectGenerator.upper_first_letter(node.attr)
+                )
                 if type_annotation != "List":
                     return type_annotation
             if isinstance(node, ast.Call) and node.func.attr == "Nested":
@@ -191,4 +193,12 @@ class Python3ObjectGenerator(object):
             )
 
         return _construct_to_helper
+
+    @staticmethod
+    def upper_first_letter(s):
+        """
+        Assumes custom types of two words are defined as customType
+        such that the class name is CustomTypeSchema
+        """
+        return s[0].upper() + s[1:]
 

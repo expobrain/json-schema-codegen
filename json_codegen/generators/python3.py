@@ -4,7 +4,7 @@ from re import search
 from json_codegen.ast import python as ast
 from json_codegen.core import SchemaParser, BaseGenerator
 from json_codegen.generators.python3object import Python3ObjectGenerator
-from . import marshmallow_type_map, upper_first_letter
+from . import marshmallow_type_map
 
 
 class Python3Generator(SchemaParser, BaseGenerator):
@@ -61,7 +61,7 @@ class Python3Generator(SchemaParser, BaseGenerator):
 
         # Create class definition
         class_def = ast.ClassDef(
-            name=upper_first_letter(definition["title"]) + "Schema",
+            name=Python3Generator.upper_first_letter(definition["title"]) + "Schema",
             bases=[ast.Name(id="Schema")],
             body=class_body,
             decorator_list=[],
@@ -89,7 +89,7 @@ class Python3Generator(SchemaParser, BaseGenerator):
         """
         nested_schema_name = search("#/definitions/(.*)$", prop["$ref"])
         attr_type = nested_schema_name.group(1)
-        attr_args = [ast.Name(id=upper_first_letter(attr_type) + "Schema")]
+        attr_args = [ast.Name(id=Python3Generator.upper_first_letter(attr_type) + "Schema")]
         return "Dict", attr_args
 
     def get_key_from_data_object(self, k, prop, required, default=None):
@@ -188,7 +188,7 @@ class Python3Generator(SchemaParser, BaseGenerator):
 
         # Where the array type references a definition, make a nested field with
         # the type of the item schema
-        ref_title = upper_first_letter(ref["title"])
+        ref_title = Python3Generator.upper_first_letter(ref["title"])
         for node in ast.walk(value):
             if isinstance(node, ast.Call):
                 x = self._make_field("Nested", [ast.Name(id=ref_title + "Schema")], [])
@@ -205,7 +205,7 @@ class Python3Generator(SchemaParser, BaseGenerator):
                     "Scalar types for additionalProperties not supported yet"
                 )
 
-            return self._get_dict_comprehension_for_property(key, property_)
+            raise NotImplementedError("additionalProperties definitions not supported yet")
 
         if "default" in property_:
             value = self._get_default_for_property(key, property_, required)
@@ -262,6 +262,14 @@ class Python3Generator(SchemaParser, BaseGenerator):
             decorator_list=[ast.Name(id="post_load")],
             returns=None,
         )
+
+    @staticmethod
+    def upper_first_letter(s):
+        """
+        Assumes custom types of two words are defined as customType
+        such that the class name is CustomTypeSchema
+        """
+        return s[0].upper() + s[1:]
 
     def as_ast(self):
         return ast.Module(body=self._body)
