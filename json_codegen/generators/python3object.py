@@ -263,7 +263,11 @@ class Python3ObjectGenerator(object):
         ]
 
         return ast.FunctionDef(
-            name="from_json", args=fn_args, body=fn_body, decorator_list=[], returns=None
+            name="from_json",
+            args=fn_args,
+            body=fn_body,
+            decorator_list=[ast.Name(id="staticmethod")],
+            returns=None,
         )
 
     @staticmethod
