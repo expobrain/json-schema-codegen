@@ -165,6 +165,7 @@ class Python3ObjectGenerator(object):
             ),
             Python3ObjectGenerator._construct_to_("json")(schema),
             Python3ObjectGenerator._construct_to_("dict")(schema),
+            Python3ObjectGenerator.construct_from_json(schema),
         ]
 
         return ast.ClassDef(
@@ -225,6 +226,45 @@ class Python3ObjectGenerator(object):
             )
 
         return _construct_to_helper
+
+    @staticmethod
+    def construct_from_json(schema):
+
+        fn_args = ast.arguments(
+            args=[ast.arg(arg="json", annotation="str"), ast.arg(arg="only", annotation=None)],
+            vararg=None,
+            kwonlyargs=[],
+            kw_defaults=[],
+            kwarg=None,
+            defaults=[ast.NameConstant(value=None)],
+        )
+
+        fn_body = [
+            ast.Return(
+                ast.Attribute(
+                    ast.Call(
+                        func=ast.Attribute(
+                            value=ast.Call(
+                                func=ast.Name(id=schema.name),
+                                args=[],
+                                keywords=[
+                                    ast.keyword(arg="strict", value=ast.NameConstant(value=True)),
+                                    ast.keyword(arg="only", value=ast.Name(id="only")),
+                                ],
+                            ),
+                            attr="loads",
+                        ),
+                        args=[ast.Name(id="json")],
+                        keywords=[],
+                    ),
+                    attr="data",
+                )
+            )
+        ]
+
+        return ast.FunctionDef(
+            name="from_json", args=fn_args, body=fn_body, decorator_list=[], returns=None
+        )
 
     @staticmethod
     def upper_first_letter(s):
