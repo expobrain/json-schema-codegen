@@ -50,7 +50,7 @@ class Python3ObjectGenerator(object):
                         target=ast.Name(id="el"),
                         iter=ast.Call(
                             func=ast.Attribute(value=ast.Name(id=object_), attr="get"),
-                            args=[ast.Str(s=prop)],
+                            args=[ast.Str(s=prop), ast.Dict(keys=[], values=[])],
                             keywords=[],
                         ),
                         ifs=[],
@@ -102,7 +102,9 @@ class Python3ObjectGenerator(object):
             name="__init__",
             args=fn_arguments,
             body=[
-                Python3ObjectGenerator.assign_property(node, name_lower) for node in schema.body
+                Python3ObjectGenerator.assign_property(node, name_lower)
+                for node in schema.body
+                if isinstance(node, ast.Assign)
             ],
             decorator_list=[],
             returns=None,
@@ -139,6 +141,6 @@ class Python3ObjectGenerator(object):
             args=fn_args,
             body=[fn_body],
             decorator_list=[ast.Name(id="post_load")],
-            returns=name,
+            returns=None,
         )
 

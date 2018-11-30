@@ -44,9 +44,14 @@ class Python3Generator(SchemaParser, BaseGenerator):
 
         if "title" in root_definition:
             root_schema = self.klass(root_definition)
+            post_load_helper = Python3ObjectGenerator.construct_class_post_load_helper(root_schema)
+
+            for node in ast.walk(root_schema):
+                if isinstance(node, ast.ClassDef):
+                    node.body.append(post_load_helper)
+
             self._body.append(root_schema)
             self._body.append(Python3ObjectGenerator.construct_class(root_schema))
-            self._body.append(Python3ObjectGenerator.construct_class_post_load_helper(root_schema))
 
         return self
 
