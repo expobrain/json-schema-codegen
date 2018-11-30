@@ -1,5 +1,21 @@
-from marshmallow import Schema, fields
+from marshmallow import Schema, fields as fields_, post_load
+from typing import Optional, List
 
 
 class TestSchema(Schema):
-    id = fields.Integer()
+    id = fields_.Integer()
+
+    @post_load
+    def make_test(self, test):
+        return Test(test)
+
+
+class Test(object):
+    def __init__(self, test: dict):
+        self.id: Optional[int] = test.get("id")
+
+    def to_json(self):
+        return TestSchema(strict=True).dumps(self).data
+
+    def to_dict(self):
+        return TestSchema(strict=True).dump(self).data

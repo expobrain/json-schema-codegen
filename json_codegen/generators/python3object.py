@@ -51,10 +51,10 @@ class Python3ObjectGenerator(object):
         # If the keyword required has been supplied, wrap the type hint
         # in `Optional`. As the class is generated, `required=False` does
         # not occur
-        optional = False
+        optional = True
         for node in ast.walk(node_assign):
             if isinstance(node, ast.keyword) and node.arg == "required":
-                optional = True
+                optional = False
 
         for node in ast.walk(node_assign):
 
