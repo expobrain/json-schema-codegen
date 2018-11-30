@@ -98,10 +98,8 @@ class Python3Generator(SchemaParser, BaseGenerator):
         #  should be typed as the nesting schema
         if "$ref" in prop:
             attr_type, attr_args = self.get_nested_type(prop)
-            print("ref:", attr_type, attr_args)
         else:
             attr_type, attr_args = self.get_normal_type(prop)
-            print("normal:", attr_type)
 
         req = []
         if k in required:
