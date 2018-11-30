@@ -71,9 +71,6 @@ class Python3Generator(SchemaParser, BaseGenerator):
         # Add to module's body
         return class_def
 
-    def generate_object(self, schema):
-        pass
-
     def get_required_arg(self):
         return ast.keyword(arg="required", value=ast.NameConstant(value=True))
 

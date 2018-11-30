@@ -126,6 +126,10 @@ class Python3ObjectGenerator(object):
             if isinstance(node, ast.Assign)
         ]
 
+        # pass if no Assign nodes
+        if len(fn_body) == 0:
+            fn_body = [ast.Pass()]
+
         # Generate class constructor
         class_body = [
             ast.FunctionDef(
