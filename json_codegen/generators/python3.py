@@ -24,7 +24,7 @@ class Python3Generator(SchemaParser, BaseGenerator):
 
         if "title" in root_definition:
             root_schema = self.klass(root_definition)
-            post_load_helper = Python3ObjectGenerator.construct_class_post_load_helper(root_schema)
+            post_load_helper = Python3Generator.construct_dec_post_load(root_schema)
 
             for node in ast.walk(root_schema):
                 if isinstance(node, ast.ClassDef):
@@ -235,6 +235,35 @@ class Python3Generator(SchemaParser, BaseGenerator):
 
         # Return constructor
         return body
+
+    @staticmethod
+    def construct_dec_post_load(schema):
+        name = Python3ObjectGenerator.class_name(schema.name)
+        name_lower = name.lower()
+
+        fn_args = ast.arguments(
+            args=[ast.arg(arg="self", annotation=None), ast.arg(arg="table", annotation=None)],
+            vararg=None,
+            kwonlyargs=[],
+            kw_defaults=[],
+            kwarg=None,
+            defaults=[],
+        )
+
+        fn_body = [
+            ast.Return(
+                value=ast.Call(func=ast.Name(id=name), args=[ast.Name(id=name_lower)], keywords=[])
+            )
+        ]
+
+        # By convention, the helper loading function is called make_class
+        return ast.FunctionDef(
+            name="make_" + name_lower,
+            args=fn_args,
+            body=fn_body,
+            decorator_list=[ast.Name(id="post_load")],
+            returns=None,
+        )
 
     def as_ast(self):
         return ast.Module(body=self._body)

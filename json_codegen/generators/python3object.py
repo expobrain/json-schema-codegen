@@ -118,51 +118,77 @@ class Python3ObjectGenerator(object):
             defaults=[ast.NameConstant(value=None)],
         )
 
+        fn_body = [
+            Python3ObjectGenerator.assign_property(node, name_lower)
+            for node in schema.body
+            if isinstance(node, ast.Assign)
+        ]
+
         # Generate class constructor
-        fn_init = ast.FunctionDef(
-            name="__init__",
-            args=fn_arguments,
-            body=[
-                Python3ObjectGenerator.assign_property(node, name_lower)
-                for node in schema.body
-                if isinstance(node, ast.Assign)
-            ],
-            decorator_list=[],
-            returns=None,
-        )
+        class_body = [
+            ast.FunctionDef(
+                name="__init__", args=fn_arguments, body=fn_body, decorator_list=[], returns=None
+            ),
+            Python3ObjectGenerator._construct_to_("json")(schema),
+            Python3ObjectGenerator._construct_to_("dict")(schema),
+        ]
 
         return ast.ClassDef(
             name=name,
             bases=[ast.Name(id="object")],
-            body=[fn_init],
+            body=class_body,
             decorator_list=[],
             keywords=[],
         )
 
     @staticmethod
-    def construct_class_post_load_helper(schema):
-        name = Python3ObjectGenerator.class_name(schema.name)
-        name_lower = name.lower()
+    def _construct_to_(output):
 
-        fn_args = ast.arguments(
-            args=[ast.arg(arg="self", annotation=None), ast.arg(arg="table", annotation=None)],
-            vararg=None,
-            kwonlyargs=[],
-            kw_defaults=[],
-            kwarg=None,
-            defaults=[],
-        )
+        if output == "json":
+            method = "dumps"
+        elif output == "dict":
+            method = "dump"
+        else:
+            raise NotImplementedError("Only deserialisation to json or dict supported")
 
-        fn_body = ast.Return(
-            value=ast.Call(func=ast.Name(id=name), args=[ast.Name(id=name_lower)], keywords=[])
-        )
+        def _construct_to_helper(schema):
 
-        # By convention, the helper loading function is called make_class
-        return ast.FunctionDef(
-            name="make_" + name_lower,
-            args=fn_args,
-            body=[fn_body],
-            decorator_list=[ast.Name(id="post_load")],
-            returns=None,
-        )
+            fn_args = ast.arguments(
+                args=[ast.arg(arg="self", annotation=None)],
+                vararg=None,
+                kwonlyargs=[],
+                kw_defaults=[],
+                kwarg=None,
+                defaults=[],
+            )
+
+            fn_body = [
+                ast.Return(
+                    value=ast.Attribute(
+                        value=ast.Call(
+                            func=ast.Attribute(
+                                value=ast.Call(
+                                    func=ast.Name(id=schema.name),
+                                    args=[],
+                                    keywords=[
+                                        ast.keyword(
+                                            arg="strict", value=ast.NameConstant(value=True)
+                                        )
+                                    ],
+                                ),
+                                attr=method,
+                            ),
+                            args=[ast.Name(id="self")],
+                            keywords=[],
+                        ),
+                        attr="data",
+                    )
+                )
+            ]
+
+            return ast.FunctionDef(
+                name="to_json", args=fn_args, body=fn_body, decorator_list=[], returns=None
+            )
+
+        return _construct_to_helper
 

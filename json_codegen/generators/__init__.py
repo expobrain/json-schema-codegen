@@ -28,3 +28,17 @@ python_type_map = {
     "Number": "float",
     "Dict": "dict",
 }
+
+from marshmallow import Schema, fields
+
+
+class B(Schema):
+    nest_prop = fields.Integer()
+
+
+class A(Schema):
+    my_prop = fields.Dict(B)
+
+
+A().load({"my_prop": {"nest_prop": 3}})
+
