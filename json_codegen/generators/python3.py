@@ -3,6 +3,7 @@ from re import search
 
 from json_codegen.ast import python as ast
 from json_codegen.core import SchemaParser, BaseGenerator
+from json_codegen.generators.python3object import Python3ObjectGenerator
 
 type_map = {
     "integer": "Integer",
@@ -30,18 +31,24 @@ class Python3Generator(SchemaParser, BaseGenerator):
     def generate(self):
         # Add module imports
         self._body = []
-
         self._body.extend(self.module_imports())
 
         # Generates definitions first
         for definition in self.get_klass_definitions():
-            self._body.append(self.klass(definition))
+            schema = self.klass(definition)
+            self._body.append(schema)
+            self._body.append(Python3ObjectGenerator.construct_object(schema))
 
         # Generate root definition
         root_definition = self.get_root_definition()
 
         if "title" in root_definition:
-            self._body.append(self.klass(root_definition))
+            root_schema = self.klass(root_definition)
+
+            # print(ast.dump(root_schema))
+
+            self._body.append(root_schema)
+            self._body.append(Python3ObjectGenerator.construct_object(root_schema))
 
         return self
 
@@ -79,6 +86,9 @@ class Python3Generator(SchemaParser, BaseGenerator):
 
         # Add to module's body
         return class_def
+
+    def generate_object(self, schema):
+        pass
 
     def get_required_arg(self):
         return ast.keyword(arg="required", value=ast.NameConstant(value=True))
@@ -199,41 +209,6 @@ class Python3Generator(SchemaParser, BaseGenerator):
                 node.args = [x] + node.args
 
         return value
-
-    def _get_dict_comprehension_for_property(self, key, property_):
-        # key, value
-        comp_key = ast.Name(id="k")
-        comp_value = ast.Call(
-            func=ast.Name(id="Value"),
-            args=[ast.Name(id="v")],
-            keywords=[],
-            starargs=None,
-            kwargs=None,
-        )
-
-        # Generator
-        # ref = self.definitions[property_["$ref"]]
-
-        generator = ast.comprehension(
-            target=ast.Tuple(elts=[ast.Name(id="k"), ast.Name(id="v")]),
-            iter=ast.Call(
-                func=ast.Attribute(
-                    value=self._get_default_for_property(key, property_), attr="iteritems"
-                ),
-                args=[],
-                keywords=[],
-                starargs=None,
-                kwargs=None,
-            ),
-            ifs=[],
-            is_async=0,
-        )
-
-        # Dit comprehension
-        dict_comp = ast.DictComp(key=comp_key, value=comp_value, generators=[generator])
-
-        # Return node
-        return dict_comp
 
     def _get_member_value(self, key, property_, required):
         additional_properties = property_.get("additionalProperties")
