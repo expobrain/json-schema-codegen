@@ -4,27 +4,7 @@ from re import search
 from json_codegen.ast import python as ast
 from json_codegen.core import SchemaParser, BaseGenerator
 from json_codegen.generators.python3object import Python3ObjectGenerator
-
-type_map = {
-    "integer": "Integer",
-    "string": "String",
-    "boolean": "Boolean",
-    "array": "List",
-    "number": "Number",
-    "object": "Dict",
-}
-
-
-def upper_first_letter(s):
-    """
-    Assumes custom types of two words are defined as customType
-    such that the class name is CustomTypeSchema
-    """
-    return s[0].upper() + s[1:]
-
-
-def print_as_code(x):
-    print(astor.to_source(ast.Module(body=[x])))
+from . import marshmallow_type_map, upper_first_letter
 
 
 class Python3Generator(SchemaParser, BaseGenerator):
@@ -101,7 +81,7 @@ class Python3Generator(SchemaParser, BaseGenerator):
         return ast.keyword(arg="default", value=d)
 
     def get_normal_type(self, prop):
-        return type_map[prop["type"]], []
+        return marshmallow_type_map[prop["type"]], []
 
     def get_nested_type(self, prop):
         """

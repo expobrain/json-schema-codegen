@@ -1,15 +1,7 @@
 import ast
 import astor
 from re import search
-
-type_map = {
-    "integer": "Integer",
-    "string": "String",
-    "boolean": "Boolean",
-    "array": "List",
-    "number": "Number",
-    "object": "Dict",
-}
+from . import python_type_map, upper_first_letter
 
 
 class Python3ObjectGenerator(object):
@@ -39,6 +31,20 @@ class Python3ObjectGenerator(object):
             node_assign.value.func.attr == "List"
             and node_assign.value.args[0].func.attr == "Nested"
         )
+
+    @staticmethod
+    def _type_annotation(node_assign):
+        for node in ast.walk(node_assign):
+            if isinstance(node, ast.Attribute):
+                type_annotation = python_type_map.get(node.attr, upper_first_letter(node.attr))
+                if type_annotation != "List":
+                    return type_annotation
+            if isinstance(node, ast.Call) and node.func.attr == "Nested":
+                subtype = [Python3ObjectGenerator.class_name(n.id) for n in node.args]
+                print(subtype)
+                if len(subtype) != 1:
+                    raise ValueError("Nested Schema called with more than 1 type")
+                return type_annotation + "[" + subtype[0] + "]"
 
     @staticmethod
     def assign_property(node_assign, object_):
@@ -92,7 +98,7 @@ class Python3ObjectGenerator(object):
         return ast.AnnAssign(
             target=ast.Attribute(value=ast.Name(id="self"), attr=prop),
             value=value,
-            annotation=ast.Name(id="annotation"),
+            annotation=ast.Name(id=Python3ObjectGenerator._type_annotation(node_assign)),
         )
 
     @staticmethod
