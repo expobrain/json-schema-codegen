@@ -45,7 +45,15 @@ class Python3Generator(SchemaParser, BaseGenerator):
                     ast.alias(name="fields", asname="fields_"),
                     ast.alias(name="post_load", asname=None),
                 ],
-            )
+            ),
+            ast.ImportFrom(
+                module="typing",
+                level=0,
+                names=[
+                    ast.alias(name="Optional", asname=None),
+                    ast.alias(name="List", asname=None),
+                ],
+            ),
         ]
 
     def klass(self, definition):
@@ -237,7 +245,7 @@ class Python3Generator(SchemaParser, BaseGenerator):
         name_lower = name.lower()
 
         fn_args = ast.arguments(
-            args=[ast.arg(arg="self", annotation=None), ast.arg(arg="table", annotation=None)],
+            args=[ast.arg(arg="self", annotation=None), ast.arg(arg=name_lower, annotation=None)],
             vararg=None,
             kwonlyargs=[],
             kw_defaults=[],
