@@ -2,6 +2,15 @@ import ast
 import astor
 from re import search
 
+type_map = {
+    "integer": "Integer",
+    "string": "String",
+    "boolean": "Boolean",
+    "array": "List",
+    "number": "Number",
+    "object": "Dict",
+}
+
 
 class Python3ObjectGenerator(object):
     @staticmethod
@@ -33,6 +42,12 @@ class Python3ObjectGenerator(object):
 
     @staticmethod
     def assign_property(node_assign, object_):
+        """
+        Required property         -> self.prop  = parent_dict["prop"]
+        Optional property         -> self.prop  = parent_dict.get("prop")
+        Primative nested list     -> self.prop  = parent_dict.get("prop") 
+        Non-primative nested list -> self.props = [PropertyClass(el) for el in parent_dict.get('props', {})]
+        """
         prop = Python3ObjectGenerator._get_property_name(node_assign)
 
         if Python3ObjectGenerator._non_primitive_nested_list(node_assign):
@@ -60,7 +75,6 @@ class Python3ObjectGenerator(object):
             )
 
         else:
-            # TODO: Add type annotations
             # Assign the property as self.prop = table.get("prop")
             value = ast.Call(
                 func=ast.Attribute(value=ast.Name(id=object_), attr="get"),
@@ -75,8 +89,10 @@ class Python3ObjectGenerator(object):
                             value=ast.Name(id=object_), slice=ast.Index(value=ast.Str(s=prop))
                         )
 
-        return ast.Assign(
-            targets=[ast.Attribute(value=ast.Name(id="self"), attr=prop)], value=value
+        return ast.AnnAssign(
+            target=ast.Attribute(value=ast.Name(id="self"), attr=prop),
+            value=value,
+            annotation=ast.Name(id="annotation"),
         )
 
     @staticmethod
@@ -136,6 +152,7 @@ class Python3ObjectGenerator(object):
             value=ast.Call(func=ast.Name(id=name), args=[ast.Name(id=name_lower)], keywords=[])
         )
 
+        # By convention, the helper loading function is called make_class
         return ast.FunctionDef(
             name="make_" + name_lower,
             args=fn_args,

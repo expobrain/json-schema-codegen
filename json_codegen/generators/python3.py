@@ -177,7 +177,9 @@ class Python3Generator(SchemaParser, BaseGenerator):
             if isinstance(node, ast.Call):
                 item_properties = property_.get("items", {})
                 if item_properties != {}:
-                    x = self.get_key_from_data_object(None, property_["items"][0], required=[])
+                    if isinstance(item_properties, list):
+                        raise NotImplementedError("Multiple valid types not implemented")
+                    x = self.get_key_from_data_object(None, property_["items"], required=[])
                     node.args = [x] + node.args
         return value
 
@@ -186,7 +188,7 @@ class Python3Generator(SchemaParser, BaseGenerator):
         If array and `items` has `$ref` wrap it into a list comprehension and map array's elements
         """
         # Exit early if doesn't needs to wrap
-        refs = [i["$ref"] for i in property_.get("items", ()) if "$ref" in i]
+        refs = [v for k, v in property_.get("items", {}).items() if "$ref" in k]
 
         if property_.get("type") != "array":  # or len(refs) == 0:
             return value
