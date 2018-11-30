@@ -41,7 +41,6 @@ class Python3ObjectGenerator(object):
                     return type_annotation
             if isinstance(node, ast.Call) and node.func.attr == "Nested":
                 subtype = [Python3ObjectGenerator.class_name(n.id) for n in node.args]
-                print(subtype)
                 if len(subtype) != 1:
                     raise ValueError("Nested Schema called with more than 1 type")
                 return type_annotation + "[" + subtype[0] + "]"

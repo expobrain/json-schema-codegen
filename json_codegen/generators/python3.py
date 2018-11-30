@@ -89,8 +89,8 @@ class Python3Generator(SchemaParser, BaseGenerator):
         """
         nested_schema_name = search("#/definitions/(.*)$", prop["$ref"])
         attr_type = nested_schema_name.group(1)
-        attr_args = [ast.Name(id=attr_type + "Schema")]
-        return attr_type, attr_args
+        attr_args = [ast.Name(id=upper_first_letter(attr_type) + "Schema")]
+        return "Dict", attr_args
 
     def get_key_from_data_object(self, k, prop, required, default=None):
 
@@ -98,8 +98,10 @@ class Python3Generator(SchemaParser, BaseGenerator):
         #  should be typed as the nesting schema
         if "$ref" in prop:
             attr_type, attr_args = self.get_nested_type(prop)
+            print("ref:", attr_type, attr_args)
         else:
             attr_type, attr_args = self.get_normal_type(prop)
+            print("normal:", attr_type)
 
         req = []
         if k in required:
