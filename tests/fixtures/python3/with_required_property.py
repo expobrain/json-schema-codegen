@@ -12,7 +12,7 @@ class TestSchema(Schema):
 
 class Test(object):
     def __init__(self, test: dict):
-        self.id: Optional[int] = test["id"]
+        self.id: int = test["id"]
 
     def to_json(self):
         return TestSchema(strict=True).dumps(self).data
