@@ -37,18 +37,16 @@ class Python3Generator(SchemaParser, BaseGenerator):
         for definition in self.get_klass_definitions():
             schema = self.klass(definition)
             self._body.append(schema)
-            self._body.append(Python3ObjectGenerator.construct_object(schema))
+            self._body.append(Python3ObjectGenerator.construct_class(schema))
 
         # Generate root definition
         root_definition = self.get_root_definition()
 
         if "title" in root_definition:
             root_schema = self.klass(root_definition)
-
-            # print(ast.dump(root_schema))
-
             self._body.append(root_schema)
-            self._body.append(Python3ObjectGenerator.construct_object(root_schema))
+            self._body.append(Python3ObjectGenerator.construct_class(root_schema))
+            self._body.append(Python3ObjectGenerator.construct_class_post_load_helper(root_schema))
 
         return self
 
@@ -60,6 +58,7 @@ class Python3Generator(SchemaParser, BaseGenerator):
                 names=[
                     ast.alias(name="Schema", asname=None),
                     ast.alias(name="fields", asname="fields_"),
+                    ast.alias(name="post_load", asname=None),
                 ],
             )
         ]
