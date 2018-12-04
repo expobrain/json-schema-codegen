@@ -35,9 +35,11 @@ class Python3ObjectGenerator(object):
     @staticmethod
     def _annotation_optional(type_, optional=False):
         if optional:
-            return "Optional[" + type_ + "]"
+            return ast.Subscript(
+                value=ast.Name(id="Optional"), slice=ast.Index(value=ast.Name(id=type_))
+            )
         else:
-            return type_
+            return ast.Name(id=type_)
 
     @staticmethod
     def _annotation_list(subtype):
@@ -128,7 +130,8 @@ class Python3ObjectGenerator(object):
             target=ast.Attribute(value=ast.Name(id="self"), attr=prop),
             value=value,
             simple=0,
-            annotation=ast.Name(id=Python3ObjectGenerator._type_annotation(node_assign)),
+            # annotation=ast.Name(id=Python3ObjectGenerator._type_annotation(node_assign)),
+            annotation=Python3ObjectGenerator._type_annotation(node_assign),
         )
 
     @staticmethod
