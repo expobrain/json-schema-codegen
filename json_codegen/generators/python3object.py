@@ -127,6 +127,7 @@ class Python3ObjectGenerator(object):
         return ast.AnnAssign(
             target=ast.Attribute(value=ast.Name(id="self"), attr=prop),
             value=value,
+            simple=0,
             annotation=ast.Name(id=Python3ObjectGenerator._type_annotation(node_assign)),
         )
 
@@ -231,7 +232,10 @@ class Python3ObjectGenerator(object):
     def construct_from_json(schema):
 
         fn_args = ast.arguments(
-            args=[ast.arg(arg="json", annotation="str"), ast.arg(arg="only", annotation=None)],
+            args=[
+                ast.arg(arg="json", annotation=ast.Name(id="str")),
+                ast.arg(arg="only", annotation=None),
+            ],
             vararg=None,
             kwonlyargs=[],
             kw_defaults=[],

@@ -11,11 +11,17 @@ class TestSchema(Schema):
 
 
 class Test(object):
+
     def __init__(self, test: dict):
-        self.id: Optional[int] = test.get("id")
+        self.id: Optional[int] = test.get('id')
 
     def to_json(self):
         return TestSchema(strict=True).dumps(self).data
 
     def to_dict(self):
         return TestSchema(strict=True).dump(self).data
+
+    @staticmethod
+    def from_json(json: str, only=None):
+        return TestSchema(strict=True, only=only).loads(json).data
+

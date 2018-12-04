@@ -11,6 +11,7 @@ class TestSchema(Schema):
 
 
 class Test(object):
+
     def __init__(self, test: dict):
         pass
 
@@ -19,3 +20,8 @@ class Test(object):
 
     def to_dict(self):
         return TestSchema(strict=True).dump(self).data
+
+    @staticmethod
+    def from_json(json: str, only=None):
+        return TestSchema(strict=True, only=only).loads(json).data
+
