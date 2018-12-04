@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Test",
+  "properties": {
+    "nested": {
+      "type": "object",
+      "oneOf": [{ "$ref": "#/definitions/Nested" }]
+    }
+  },
+  "definitions": {
+    "Nested": {
+      "title": "Nested",
+      "type": "object",
+      "properties": {
+        "x": { "type": "string" }
+      }
+    }
+  }
+}

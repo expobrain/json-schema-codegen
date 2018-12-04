@@ -2,12 +2,8 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Test",
   "type": "object",
-  "required": [
-    "id"
-  ],
+  "required": ["id"],
   "properties": {
-    "id": {
-      "type": "integer"
-    }
+    "id": { "type": "integer" }
   }
 }
