@@ -27,10 +27,12 @@ class Python3ObjectGenerator(object):
 
     @staticmethod
     def _non_primitive_nested_list(node_assign):
-        return (
-            node_assign.value.func.attr == "List"
-            and node_assign.value.args[0].func.attr == "Nested"
-        )
+        if node_assign.value.func.attr == "List":
+            return (
+                len(node_assign.value.args) > 0 and node_assign.value.args[0].func.attr == "Nested"
+            )
+        else:
+            return False
 
     @staticmethod
     def _init_non_primitive_nested_class(node_assign, object_, prop):
@@ -78,6 +80,23 @@ class Python3ObjectGenerator(object):
         return value
 
     @staticmethod
+    def _get_default_for_property(node_assign, value, object_, prop):
+
+        for node in ast.walk(node_assign):
+            if isinstance(node, ast.keyword) and node.arg == "default":
+                body = node_assign.value.keywords[0].value
+                break
+        else:
+            return value
+
+        # Return ternary expression
+        test = ast.Compare(left=value, ops=[ast.Is()], comparators=[ast.NameConstant(value=None)])
+
+        return ast.IfExp(
+            test=test, body=body, orelse=Python3ObjectGenerator._get_key_from_object(object_, prop)
+        )
+
+    @staticmethod
     def assign_property(node_assign, object_):
         """
         Required property         -> self.prop  = parent_dict["prop"]
@@ -97,6 +116,10 @@ class Python3ObjectGenerator(object):
 
             # If the property is required, assign as self.prop = table["prop"]
             value = Python3ObjectGenerator._hint_required_property(
+                node_assign, value, object_, prop
+            )
+
+            value = Python3ObjectGenerator._get_default_for_property(
                 node_assign, value, object_, prop
             )
 
@@ -272,7 +295,7 @@ class Annotations:
         # in `Optional`. As the class is generated, `required=False` does
         # not occur
         for node in ast.walk(self.node):
-            if isinstance(node, ast.keyword) and node.arg == "required":
+            if isinstance(node, ast.keyword) and (node.arg == "required" or node.arg == "default"):
                 optional = False
                 break
         else:
