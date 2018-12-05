@@ -84,7 +84,11 @@ class Python3ObjectGenerator(object):
 
         for node in ast.walk(node_assign):
             if isinstance(node, ast.keyword) and node.arg == "default":
-                body = node_assign.value.keywords[0].value
+                body = [
+                    keyword.value
+                    for keyword in node_assign.value.keywords
+                    if keyword.arg == "default"
+                ][0]
                 break
         else:
             return value
