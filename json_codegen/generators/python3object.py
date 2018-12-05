@@ -83,22 +83,20 @@ class Python3ObjectGenerator(object):
     def _get_default_for_property(node_assign, value, object_, prop):
 
         for node in ast.walk(node_assign):
+            if isinstance(node, ast.keyword) and node.arg == "required":
+                return value
+
+        for node in ast.walk(node_assign):
             if isinstance(node, ast.keyword) and node.arg == "default":
-                body = [
+                default_value = [
                     keyword.value
                     for keyword in node_assign.value.keywords
                     if keyword.arg == "default"
                 ][0]
-                break
+                value.args.append(default_value)
+                return value
         else:
             return value
-
-        # Return ternary expression
-        test = ast.Compare(left=value, ops=[ast.Is()], comparators=[ast.NameConstant(value=None)])
-
-        return ast.IfExp(
-            test=test, body=body, orelse=Python3ObjectGenerator._get_key_from_object(object_, prop)
-        )
 
     @staticmethod
     def assign_property(node_assign, object_):
