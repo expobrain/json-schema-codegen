@@ -2,8 +2,28 @@ from marshmallow import Schema, fields as fields_, post_load
 from typing import Optional, List, Any
 
 
+class NestedSchema(Schema):
+    x = fields_.String()
+
+
+class Nested(object):
+
+    def __init__(self, nested: dict):
+        self.x: Optional[str] = nested.get('x')
+
+    def to_json(self):
+        return NestedSchema(strict=True).dumps(self).data
+
+    def to_dict(self):
+        return NestedSchema(strict=True).dump(self).data
+
+    @staticmethod
+    def from_json(json: str, only=None):
+        return NestedSchema(strict=True, only=only).loads(json).data
+
+
 class TestSchema(Schema):
-    x = fields_.Integer(default=42)
+    nested = fields_.Dict()
 
     @post_load
     def make_test(self, test):
@@ -13,7 +33,7 @@ class TestSchema(Schema):
 class Test(object):
 
     def __init__(self, test: dict):
-        self.x: int = test.get('x', 42)
+        self.nested: Optional[dict] = test.get('nested')
 
     def to_json(self):
         return TestSchema(strict=True).dumps(self).data

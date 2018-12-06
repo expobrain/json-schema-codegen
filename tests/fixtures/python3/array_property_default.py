@@ -3,7 +3,7 @@ from typing import Optional, List, Any
 
 
 class TestSchema(Schema):
-    x = fields_.Integer(default=42)
+    x = fields_.List(fields_.Field(), default=[42])
 
     @post_load
     def make_test(self, test):
@@ -11,9 +11,8 @@ class TestSchema(Schema):
 
 
 class Test(object):
-
     def __init__(self, test: dict):
-        self.x: int = test.get('x', 42)
+        self.x: List[Any] = test.get("x", [42])
 
     def to_json(self):
         return TestSchema(strict=True).dumps(self).data
@@ -24,3 +23,4 @@ class Test(object):
     @staticmethod
     def from_json(json: str, only=None):
         return TestSchema(strict=True, only=only).loads(json).data
+
