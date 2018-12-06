@@ -49,7 +49,7 @@ class Annotations:
         # in `Optional`. As the class is generated, `required=False` does
         # not occur
         for node in ast.walk(self.node):
-            if isinstance(node, ast.keyword) and (node.arg == "required" or node.arg == "default"):
+            if isinstance(node, ast.keyword) and node.arg in ["required", "default"]:
                 optional = False
                 break
         else:
@@ -92,5 +92,9 @@ class Annotations:
         if list:
             type_ = self._annotation_list(type_)
         if optional:
-            type_ = self._annotation_optional(type_)
-        return ast.Name(id=type_)
+            type_ = self._annotation_optional(type_, optional)
+
+        if not (list or optional):
+            return ast.Name(id=type_)
+        else:
+            return type_
