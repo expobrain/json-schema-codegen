@@ -52,6 +52,7 @@ class Python3Generator(SchemaParser, BaseGenerator):
                 names=[
                     ast.alias(name="Optional", asname=None),
                     ast.alias(name="List", asname=None),
+                    ast.alias(name="Any", asname=None),
                 ],
             ),
         ]
@@ -94,7 +95,7 @@ class Python3Generator(SchemaParser, BaseGenerator):
         """
         nested_schema_name = search("#/definitions/(.*)$", prop["$ref"])
         attr_type = nested_schema_name.group(1)
-        attr_args = [ast.Name(id=Python3Generator.upper_first_letter(attr_type) + "Schema")]
+        attr_args = [ast.Name(id=upper_first_letter(attr_type) + "Schema")]
         return "Dict", attr_args
 
     def get_key_from_data_object(self, k, prop, required, default=None):
@@ -160,12 +161,16 @@ class Python3Generator(SchemaParser, BaseGenerator):
         """
         for node in ast.walk(value):
             if isinstance(node, ast.Call):
-                item_properties = property_.get("items", {})
-                if item_properties != {}:
+                item_properties = property_.get("items")
+                if item_properties is not None:
                     if isinstance(item_properties, list):
                         raise NotImplementedError("Multiple valid types not implemented")
                     x = self.get_key_from_data_object(None, property_["items"], required=[])
                     node.args = [x] + node.args
+                else:
+                    x = self._make_field(field="Field", args=[], keywords=[])
+                    node.args = [x] + node.args
+
         return value
 
     def _map_property_if_array(self, property_, value):
@@ -174,6 +179,8 @@ class Python3Generator(SchemaParser, BaseGenerator):
         """
         # Exit early if doesn't needs to wrap
         refs = [v for k, v in property_.get("items", {}).items() if "$ref" in k]
+
+        from ast import dump
 
         if property_.get("type") != "array":  # or len(refs) == 0:
             return value

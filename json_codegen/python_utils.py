@@ -59,16 +59,21 @@ class Annotations:
 
             if isinstance(node, ast.Attribute) and node.value.id == "fields_":
                 # If the type is not a `List`, return either the type (primitive or custom)
-                type_annotation = python_type_map.get(node.attr, upper_first_letter(node.attr))
-                if type_annotation != "List":
-                    return self._annotation_optional(type_annotation, optional)
+                type_ = python_type_map.get(node.attr, upper_first_letter(node.attr))
+                if type_ != "List":
+                    return self.annotation(type_, list=False, optional=optional)
+                else:
+                    return self.annotation(["Any"], list=True, optional=optional)
 
             if isinstance(node, ast.Call) and node.func.attr == "Nested":
                 # If the type is a List, wrap the subtype with `List`
                 subtype = [class_name(n.id) for n in node.args]
                 if len(subtype) != 1:
                     raise ValueError("Nested Schema called with more than 1 type")
-                return self._annotation_optional(self._annotation_list(subtype), optional)
+                return self.annotation(subtype, list=True, optional=optional)
+
+        else:
+            raise NotImplementedError("Unexpected node type")
 
     def _annotation_optional(self, type_, optional=False):
         if optional:
@@ -78,5 +83,14 @@ class Annotations:
         else:
             return ast.Name(id=type_)
 
-    def _annotation_list(self, subtype):
-        return "List[" + subtype[0] + "]"
+    def _annotation_list(self, type_):
+        return ast.Subscript(
+            value=ast.Name(id="List"), slice=ast.Index(value=ast.Name(id=type_[0]))
+        )
+
+    def annotation(self, type_, list, optional):
+        if list:
+            type_ = self._annotation_list(type_)
+        if optional:
+            type_ = self._annotation_optional(type_)
+        return ast.Name(id=type_)
