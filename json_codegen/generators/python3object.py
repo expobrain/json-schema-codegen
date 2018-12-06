@@ -1,18 +1,10 @@
 import ast
 import astor
 from re import search
-from . import python_type_map
+from json_codegen.python_utils import Annotations, class_name, python_type_map
 
 
 class Python3ObjectGenerator(object):
-    @staticmethod
-    def class_name(s) -> str:
-        name = search("^(.*)Schema$", s)
-        if name is not None:
-            return name.group(1)
-        else:
-            raise ValueError("Cannot form class name from schema")
-
     @staticmethod
     def _get_property_name(node_assign):
         name = node_assign.targets[0]
@@ -23,7 +15,7 @@ class Python3ObjectGenerator(object):
         for node in ast.walk(node_assign):
             if isinstance(node, ast.Call):
                 if node.func.attr == "Nested":
-                    return Python3ObjectGenerator.class_name(node.args[0].id)
+                    return class_name(node.args[0].id)
 
     @staticmethod
     def _non_primitive_nested_list(node_assign):
@@ -134,7 +126,7 @@ class Python3ObjectGenerator(object):
 
     @staticmethod
     def construct_class(schema):
-        name = Python3ObjectGenerator.class_name(schema.name)
+        name = class_name(schema.name)
         name_lower = name.lower()
 
         # Bundle function arguments and keywords
@@ -274,59 +266,3 @@ class Python3ObjectGenerator(object):
             decorator_list=[ast.Name(id="staticmethod")],
             returns=None,
         )
-
-    @staticmethod
-    def upper_first_letter(s):
-        """
-        Assumes custom types of two words are defined as customType
-        such that the class name is CustomTypeSchema
-        """
-        return s[0].upper() + s[1:]
-
-
-class Annotations:
-    def __init__(self, node):
-        self.node = node
-        self.type = self.type_annotation()
-
-    def type_annotation(self):
-        """
-        Gets the type hint for a marshmallow field
-        """
-        # If the keyword required has been supplied, wrap the type hint
-        # in `Optional`. As the class is generated, `required=False` does
-        # not occur
-        for node in ast.walk(self.node):
-            if isinstance(node, ast.keyword) and (node.arg == "required" or node.arg == "default"):
-                optional = False
-                break
-        else:
-            optional = True
-
-        for node in ast.walk(self.node):
-
-            if isinstance(node, ast.Attribute) and node.value.id == "fields_":
-                # If the type is not a `List`, return either the type (primitive or custom)
-                type_annotation = python_type_map.get(
-                    node.attr, Python3ObjectGenerator.upper_first_letter(node.attr)
-                )
-                if type_annotation != "List":
-                    return self._annotation_optional(type_annotation, optional)
-
-            if isinstance(node, ast.Call) and node.func.attr == "Nested":
-                # If the type is a List, wrap the subtype with `List`
-                subtype = [Python3ObjectGenerator.class_name(n.id) for n in node.args]
-                if len(subtype) != 1:
-                    raise ValueError("Nested Schema called with more than 1 type")
-                return self._annotation_optional(self._annotation_list(subtype), optional)
-
-    def _annotation_optional(self, type_, optional=False):
-        if optional:
-            return ast.Subscript(
-                value=ast.Name(id="Optional"), slice=ast.Index(value=ast.Name(id=type_))
-            )
-        else:
-            return ast.Name(id=type_)
-
-    def _annotation_list(self, subtype):
-        return "List[" + subtype[0] + "]"
