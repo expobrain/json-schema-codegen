@@ -195,9 +195,13 @@ class Python3Generator(SchemaParser, BaseGenerator):
         If array and `items` has `$ref` wrap it into a list comprehension and map array's elements
         """
         # Exit early if doesn't needs to wrap
-        refs = [v for k, v in property_.get("items", {}).items() if "$ref" in k]
-
-        from ast import dump
+        property_items = property_.get("items", {})
+        if isinstance(property_items, dict):
+            refs = [v for k, v in property_items.items() if "$ref" in k]
+        elif isinstance(property_items, list):
+            refs = [i["$ref"] for i in property_.get("items", ()) if "$ref" in i]
+        else:
+            raise ValueError("Items must be array or object")
 
         if property_.get("type") != "array":  # or len(refs) == 0:
             return value
@@ -213,7 +217,7 @@ class Python3Generator(SchemaParser, BaseGenerator):
         ref = self.definitions[refs[0]]
 
         if self.definition_is_primitive_alias(ref):
-            return value
+            return self._set_item_type_scalar(property_, value)
 
         # Where the array type references a definition, make a nested field with
         # the type of the item schema

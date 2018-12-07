@@ -1,5 +1,6 @@
 import ast
 from re import search
+from typing import List
 
 marshmallow_type_map = {
     "integer": "Integer",
@@ -28,18 +29,22 @@ def upper_first_letter(s):
     return s[0].upper() + s[1:]
 
 
-def class_name(s) -> str:
+def class_name(s, strict=True) -> str:
     name = search("^(.*)Schema$", s)
     if name is not None:
         return name.group(1)
     else:
-        raise ValueError("Cannot form class name from schema")
+        if strict:
+            raise ValueError("Cannot form class name from schema")
+        else:
+            return None
 
 
 class Annotations:
     def __init__(self, node):
-        self.node = node
-        self.type = self.type_annotation()
+        self.node: List[ast.stmt] = node
+        self.nested_type: bool = self._is_nested_type()
+        self.type: str = self.type_annotation()
 
     def type_annotation(self):
         """
@@ -62,6 +67,8 @@ class Annotations:
                 type_ = python_type_map.get(node.attr, upper_first_letter(node.attr))
                 if type_ != "List":
                     return self.annotation(type_, list=False, optional=optional)
+                elif self.nested_type is not None:
+                    return self.annotation([self.nested_type], list=True, optional=optional)
                 else:
                     return self.annotation(["Any"], list=True, optional=optional)
 
@@ -74,6 +81,11 @@ class Annotations:
 
         else:
             raise NotImplementedError("Unexpected node type")
+
+    def _is_nested_type(self):
+        for node in ast.walk(self.node):
+            if isinstance(node, ast.Call) and node.func.attr == "Nested" and len(node.args) > 0:
+                return class_name(node.args[0].id)
 
     def _annotation_optional(self, type_, optional=False):
         if optional:
