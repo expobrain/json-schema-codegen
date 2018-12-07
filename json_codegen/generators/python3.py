@@ -126,31 +126,48 @@ class Python3Generator(SchemaParser, BaseGenerator):
         )
 
     def _get_default_for_property(self, name, definition, required):
-        def ast_from_dict(d):
+        def _default_helper(el):
+            if isinstance(el, bool):
+                return ast.NameConstant(value=el)
+            elif isinstance(el, int):
+                return ast.Num(n=el)
+            elif isinstance(el, list):
+                return ast.List(elts=[_default_helper(subel) for subel in el])
+            elif isinstance(el, str):
+                return ast.Str(s=el)
+            else:
+                raise NotImplementedError("Default type not handled (List)")
+
+        def _dict_default_helper(d):
+
             keys = []
             values = []
 
             for k, v in d.items():
                 keys.append(ast.Str(s=k))
-                values.append(ast.Num(n=v))
+
+                if isinstance(v, bool):
+                    values.append(ast.NameConstant(value=v))
+                elif isinstance(v, int):
+                    values.append(ast.Num(n=v))
+                elif isinstance(v, list):
+                    values.append(ast.List(elts=[_default_helper(el) for el in v]))
+                elif isinstance(v, str):
+                    values.append(ast.Str(s=v))
+                elif isinstance(v, dict):
+                    values.append(_dict_default_helper(v))
+                else:
+                    raise NotImplementedError("Default type not handled (Dict)")
 
             return ast.Dict(keys=keys, values=values)
 
-        # Get compare's body
-        type_ = definition.get("type")
+        default = definition["default"]
 
-        if type_ == "integer":
-            body = ast.Num(n=definition["default"])
-        elif type_ == "array":
-            body = ast.List(elts=[ast.Num(n=n) for n in definition["default"]])
-        elif type_ == "boolean":
-            body = ast.NameConstant(value=definition["default"])
-        elif type_ == "string":
-            body = ast.Str(s=definition["default"])
-        elif type_ == "object":
-            body = ast_from_dict(definition["default"])
-        else:
-            raise NotImplementedError("{}: {} => {}".format(self, name, definition))
+        body = (
+            _dict_default_helper(default)
+            if isinstance(default, dict)
+            else _default_helper(default)
+        )
 
         return self.get_key_from_data_object(name, definition, required, default=body)
 
