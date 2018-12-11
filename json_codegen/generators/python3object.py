@@ -239,7 +239,7 @@ class Python3ObjectGenerator(object):
         fn_body = [
             ast.Return(
                 ast.Attribute(
-                    ast.Call(
+                    value=ast.Call(
                         func=ast.Attribute(
                             value=ast.Call(
                                 func=ast.Name(id=schema.name),
