@@ -10,7 +10,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="json_codegen",
-    version="0.1",
+    version="0.2.0",
     keywords="python javascript json-schema codegen",
     author="Daniele Esposti",
     author_email="daniele.esposti@gmail.com",
@@ -20,8 +20,8 @@ setup(
     python_requires=">=3",
     license="MIT",
     install_requires=[
-        "astor==0.7.1",
-        "pathlib2==2.3.0",
+        "astor>=0.7.1",
+        "pathlib2>=2.3.0",
         "setuptools>={}".format(SETUPTOOLS_MIN_VER),
     ],
     scripts=["bin/ast_to_js"],
