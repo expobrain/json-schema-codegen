@@ -19,7 +19,7 @@ test_params = sorted(pytest.param(f, id=f.name) for f in SCHEMAS_DIR.glob("*.sch
 def load_fixture(name):
     filename = FIXTURES_DIR / (name + ".py")
 
-    return astor.parse_file(str(filename))
+    return astor.parse_file(filename)
 
 
 @pytest.mark.parametrize("schema_filename", (test_params))
@@ -27,7 +27,7 @@ def test_generate(schema_filename):
     fixture_filename = FIXTURES_DIR / (schema_filename.name.split(".")[0] + ".py")
 
     schema = load_schema(schema_filename.read_text())
-    fixture = astor.parse_file(str(fixture_filename))
+    fixture = astor.parse_file(fixture_filename)
 
     generator = Python2Generator(schema)
     result = generator.generate().as_ast()

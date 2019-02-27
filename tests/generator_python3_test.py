@@ -21,7 +21,7 @@ test_params = sorted(pytest.param(f, id=f.name) for f in SCHEMAS_DIR.glob("*.sch
 def load_fixture(name):
     filename = FIXTURES_DIR / (name + ".py")
 
-    return astor.parse_file(str(filename))
+    return astor.parse_file(filename)
 
 
 @pytest.mark.parametrize("schema_filename", (test_params))
@@ -31,7 +31,7 @@ def test_generate(schema_filename):
     schema = load_schema(schema_filename.read_text())
 
     try:
-        fixture = astor.parse_file(str(fixture_filename))
+        fixture = astor.parse_file(fixture_filename)
     except FileNotFoundError:
         warnings.warn(f"Fixture not implemented yet {os.path.basename(fixture_filename)}")
         return

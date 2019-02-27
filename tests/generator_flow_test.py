@@ -20,7 +20,7 @@ test_params = sorted(pytest.param(f, id=f.name) for f in SCHEMAS_DIR.glob("*.sch
 def load_fixture(name):
     filename = FIXTURES_DIR / (name + ".ast.json")
 
-    return astor.parse_file(str(filename))
+    return astor.parse_file(filename)
 
 
 @pytest.mark.parametrize("schema_filename", (test_params))

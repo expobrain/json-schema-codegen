@@ -1,5 +1,7 @@
-import astor
 from re import search
+from typing import List
+
+import astor
 
 from json_codegen.astlib import python as ast
 from json_codegen.core import SchemaParser, BaseGenerator
@@ -99,9 +101,10 @@ class Python3Generator(SchemaParser, BaseGenerator):
         return "Dict", attr_args
 
     def get_key_from_data_object(self, k, prop, required, default=None):
-
-        # If the property references a definition, the resulting field
-        #  should be typed as the nesting schema
+        """
+        If the property references a definition, the resulting field
+        should be typed as the nesting schema
+        """
         if "$ref" in prop:
             attr_type, attr_args = self.get_nested_type(prop)
         else:
@@ -116,7 +119,7 @@ class Python3Generator(SchemaParser, BaseGenerator):
 
         return self._make_field(attr_type, attr_args, req)
 
-    def _make_field(self, field, args, keywords):
+    def _make_field(self, field: str, args: List, keywords: List):
         return ast.Call(
             func=ast.Attribute(value=ast.Name(id="fields_"), attr=field),
             args=args,
@@ -179,14 +182,14 @@ class Python3Generator(SchemaParser, BaseGenerator):
         for node in ast.walk(value):
             if isinstance(node, ast.Call):
                 item_properties = property_.get("items")
-                if item_properties is not None:
-                    if isinstance(item_properties, list):
-                        raise NotImplementedError("Multiple valid types not implemented")
-                    x = self.get_key_from_data_object(None, property_["items"], required=[])
-                    node.args = [x] + node.args
-                else:
+                if item_properties is None:
                     x = self._make_field(field="Field", args=[], keywords=[])
-                    node.args = [x] + node.args
+                else:
+                    attr_type, attr_args = self.get_normal_type(item_properties[0])
+
+                    x = self._make_field(attr_type, args=attr_args, keywords=[])
+
+                node.args = [x] + node.args
 
         return value
 

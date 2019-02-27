@@ -1,6 +1,8 @@
-import ast
-import astor
 from re import search
+import ast
+
+import astor
+
 from json_codegen.python_utils import Annotations, class_name, python_type_map
 
 
@@ -95,7 +97,7 @@ class Python3ObjectGenerator(object):
         """
         Required property         -> self.prop  = parent_dict["prop"]
         Optional property         -> self.prop  = parent_dict.get("prop")
-        Primative nested list     -> self.prop  = parent_dict.get("prop") 
+        Primative nested list     -> self.prop  = parent_dict.get("prop")
         Non-primative nested list -> self.props = [PropertyClass(el) for el in parent_dict.get('props', {})]
         """
         prop = Python3ObjectGenerator._get_property_name(node_assign)
