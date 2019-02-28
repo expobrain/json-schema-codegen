@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 
 from argparse import ArgumentParser
+from pathlib import Path
 import sys
+
+sys.path.append((Path(__file__).parent.resolve() / '..').as_posix())
 
 from json_codegen import generators
 from json_codegen.core import load_schema, load_external_generator

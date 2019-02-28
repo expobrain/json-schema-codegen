@@ -7,9 +7,8 @@ class NoTitleSchema(Schema):
 
 
 class NoTitle(object):
-
     def __init__(self, notitle: dict):
-        self.x: Optional[str] = notitle.get('x')
+        self.x: Optional[str] = notitle.get("x")
 
     def to_json(self):
         return NoTitleSchema(strict=True).dumps(self).data
@@ -20,4 +19,3 @@ class NoTitle(object):
     @staticmethod
     def from_json(json: str, only=None):
         return NoTitleSchema(strict=True, only=only).loads(json).data
-

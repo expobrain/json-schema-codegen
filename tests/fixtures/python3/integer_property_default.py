@@ -11,9 +11,8 @@ class TestSchema(Schema):
 
 
 class Test(object):
-
     def __init__(self, test: dict):
-        self.x: int = test.get('x', 42)
+        self.x: int = test.get("x", 42)
 
     def to_json(self):
         return TestSchema(strict=True).dumps(self).data

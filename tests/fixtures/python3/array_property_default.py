@@ -23,4 +23,3 @@ class Test(object):
     @staticmethod
     def from_json(json: str, only=None):
         return TestSchema(strict=True, only=only).loads(json).data
-

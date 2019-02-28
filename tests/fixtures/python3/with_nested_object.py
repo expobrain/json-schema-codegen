@@ -7,9 +7,8 @@ class NestedSchema(Schema):
 
 
 class Nested(object):
-
     def __init__(self, nested: dict):
-        self.x: Optional[str] = nested.get('x')
+        self.x: Optional[str] = nested.get("x")
 
     def to_json(self):
         return NestedSchema(strict=True).dumps(self).data
@@ -31,9 +30,8 @@ class TestSchema(Schema):
 
 
 class Test(object):
-
     def __init__(self, test: dict):
-        self.nested: Optional[dict] = test.get('nested')
+        self.nested: Optional[dict] = test.get("nested")
 
     def to_json(self):
         return TestSchema(strict=True).dumps(self).data

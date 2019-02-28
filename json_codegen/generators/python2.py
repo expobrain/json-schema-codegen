@@ -1,6 +1,6 @@
 import astor
 
-from json_codegen.ast import python as ast
+from json_codegen.astlib import python as ast
 from json_codegen.core import SchemaParser, BaseGenerator
 
 

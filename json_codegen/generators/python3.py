@@ -1,7 +1,7 @@
 import astor
 from re import search
 
-from json_codegen.ast import python as ast
+from json_codegen.astlib import python as ast
 from json_codegen.core import SchemaParser, BaseGenerator
 from json_codegen.generators.python3object import Python3ObjectGenerator
 from json_codegen.python_utils import class_name, marshmallow_type_map, upper_first_letter
