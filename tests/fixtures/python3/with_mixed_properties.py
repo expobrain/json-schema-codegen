@@ -12,10 +12,9 @@ class TestSchema(Schema):
 
 
 class Test(object):
-
     def __init__(self, test: dict):
-        self.id: int = test['id']
-        self.name: Optional[str] = test.get('name')
+        self.id: int = test["id"]
+        self.name: Optional[str] = test.get("name")
 
     def to_json(self):
         return TestSchema(strict=True).dumps(self).data
@@ -26,4 +25,3 @@ class Test(object):
     @staticmethod
     def from_json(json: str, only=None):
         return TestSchema(strict=True, only=only).loads(json).data
-
