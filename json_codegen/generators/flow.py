@@ -1,7 +1,7 @@
 import json
 
 from json_codegen.core import SchemaParser, BaseGenerator
-from json_codegen.ast import javascript as ast
+from json_codegen.astlib import javascript as ast
 from json_codegen.js_utils import get_type_annotation
 
 
