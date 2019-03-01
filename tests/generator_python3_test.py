@@ -1,6 +1,6 @@
+from pathlib import Path
 import ast
 
-from pathlib2 import Path
 import pytest
 import astor
 import warnings
