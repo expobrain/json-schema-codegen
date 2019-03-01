@@ -21,4 +21,6 @@ setup(
     license="MIT",
     install_requires=["astor>=0.7.1", "setuptools>={}".format(SETUPTOOLS_MIN_VER)],
     scripts=["bin/ast_to_js"],
+    long_description=open("README.md").read(),
+    long_description_content_type="text/markdown",
 )
