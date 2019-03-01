@@ -1,3 +1,5 @@
+from typing import Iterable
+
 from pathlib import Path
 from collections import OrderedDict
 import importlib.util
@@ -64,7 +66,7 @@ class SchemaParser(object):
     def get_root_definition(self):
         return self.apply_prefix(self.schema)
 
-    def get_klass_definitions(self):
+    def get_klass_definitions(self) -> Iterable:
         return (
             self.apply_prefix(d)
             for d in self.definitions.values()
