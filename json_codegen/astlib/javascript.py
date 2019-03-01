@@ -305,7 +305,6 @@ def UnionTypeAnnotation(types):
 
 
 def CommentLine(value):
-    # if type(value) == "bytes": import pdb; pdb.set_trace()
     return {"type": "CommentLine", "value": " " + str(value).strip()}
 
 

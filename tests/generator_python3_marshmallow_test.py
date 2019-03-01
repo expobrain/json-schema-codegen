@@ -7,11 +7,11 @@ import warnings
 import os
 
 from json_codegen import load_schema
-from json_codegen.generators.python3 import Python3Generator
+from json_codegen.generators.python3_marshmallow import Python3MarshmallowGenerator
 
 
 SCHEMAS_DIR = Path(__file__).parent / "fixtures" / "schemas"
-FIXTURES_DIR = Path(__file__).parent / "fixtures" / "python3"
+FIXTURES_DIR = Path(__file__).parent / "fixtures" / "python3_marshmallow"
 
 expected_init_py = astor.dump_tree(ast.Module(body=[]))
 
@@ -21,7 +21,7 @@ test_params = sorted(pytest.param(f, id=f.name) for f in SCHEMAS_DIR.glob("*.sch
 def load_fixture(name):
     filename = FIXTURES_DIR / (name + ".py")
 
-    return astor.parse_file(str(filename))
+    return astor.parse_file(filename)
 
 
 @pytest.mark.parametrize("schema_filename", (test_params))
@@ -31,12 +31,12 @@ def test_generate(schema_filename):
     schema = load_schema(schema_filename.read_text())
 
     try:
-        fixture = astor.parse_file(str(fixture_filename))
+        fixture = astor.parse_file(fixture_filename)
     except FileNotFoundError:
-        warnings.warn(f"Fixture not implemented yet {os.path.basename(fixture_filename)}")
+        warnings.warn(f"Fixture not implemented yet: {os.path.basename(fixture_filename)}")
         return
 
-    generator = Python3Generator(schema)
+    generator = Python3MarshmallowGenerator(schema)
     result = generator.generate().as_ast()
 
     result_ast = astor.dump_tree(result)

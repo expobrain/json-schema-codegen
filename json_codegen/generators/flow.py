@@ -60,7 +60,6 @@ class FlowGenerator(SchemaParser, BaseGenerator):
         # Add class constructor
         if len(properties):
             klass_annotations.append(self.klass_constructor())
-            # import pdb; pdb.set_trace()
 
         # Return class definition
         klass = ast.DeclareTypeAlias(

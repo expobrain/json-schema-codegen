@@ -61,23 +61,25 @@ class Annotations:
             optional = True
 
         for node in ast.walk(self.node):
-
             if isinstance(node, ast.Attribute) and node.value.id == "fields_":
                 # If the type is not a `List`, return either the type (primitive or custom)
                 type_ = python_type_map.get(node.attr, upper_first_letter(node.attr))
+
                 if type_ != "List":
-                    return self.annotation(type_, list=False, optional=optional)
+                    return self.annotation(type_, list_=False, optional=optional)
                 elif self.nested_type is not None:
-                    return self.annotation([self.nested_type], list=True, optional=optional)
+                    return self.annotation([self.nested_type], list_=True, optional=optional)
                 else:
-                    return self.annotation(["Any"], list=True, optional=optional)
+                    return self.annotation(["Any"], list_=True, optional=optional)
 
             if isinstance(node, ast.Call) and node.func.attr == "Nested":
                 # If the type is a List, wrap the subtype with `List`
                 subtype = [class_name(n.id) for n in node.args]
+
                 if len(subtype) != 1:
                     raise ValueError("Nested Schema called with more than 1 type")
-                return self.annotation(subtype, list=True, optional=optional)
+
+                return self.annotation(subtype, list_=True, optional=optional)
 
         else:
             raise NotImplementedError("Unexpected node type")
@@ -100,13 +102,13 @@ class Annotations:
             value=ast.Name(id="List"), slice=ast.Index(value=ast.Name(id=type_[0]))
         )
 
-    def annotation(self, type_, list, optional):
-        if list:
+    def annotation(self, type_, list_, optional):
+        if list_:
             type_ = self._annotation_list(type_)
         if optional:
             type_ = self._annotation_optional(type_, optional)
 
-        if not (list or optional):
+        if not (list_ or optional):
             return ast.Name(id=type_)
         else:
             return type_

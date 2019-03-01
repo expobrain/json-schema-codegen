@@ -1,13 +1,19 @@
-import astor
 from re import search
+from typing import List
+
+import astor
 
 from json_codegen.astlib import python as ast
 from json_codegen.core import SchemaParser, BaseGenerator
-from json_codegen.generators.python3object import Python3ObjectGenerator
-from json_codegen.python_utils import class_name, marshmallow_type_map, upper_first_letter
+from json_codegen.generators.python3_marshmallow.object_generator import ObjectGenerator
+from json_codegen.generators.python3_marshmallow.utils import (
+    class_name,
+    marshmallow_type_map,
+    upper_first_letter,
+)
 
 
-class Python3Generator(SchemaParser, BaseGenerator):
+class Python3MarshmallowGenerator(SchemaParser, BaseGenerator):
     def generate(self):
         # Add module imports
         self._body = []
@@ -17,21 +23,21 @@ class Python3Generator(SchemaParser, BaseGenerator):
         for definition in self.get_klass_definitions():
             schema = self.klass(definition)
             self._body.append(schema)
-            self._body.append(Python3ObjectGenerator.construct_class(schema))
+            self._body.append(ObjectGenerator.construct_class(schema))
 
         # Generate root definition
         root_definition = self.get_root_definition()
 
         if "title" in root_definition:
             root_schema = self.klass(root_definition)
-            post_load_helper = Python3Generator.construct_dec_post_load(root_schema)
+            post_load_helper = Python3MarshmallowGenerator.construct_dec_post_load(root_schema)
 
             for node in ast.walk(root_schema):
                 if isinstance(node, ast.ClassDef):
                     node.body.append(post_load_helper)
 
             self._body.append(root_schema)
-            self._body.append(Python3ObjectGenerator.construct_class(root_schema))
+            self._body.append(ObjectGenerator.construct_class(root_schema))
 
         return self
 
@@ -99,9 +105,10 @@ class Python3Generator(SchemaParser, BaseGenerator):
         return "Dict", attr_args
 
     def get_key_from_data_object(self, k, prop, required, default=None):
-
-        # If the property references a definition, the resulting field
-        #  should be typed as the nesting schema
+        """
+        If the property references a definition, the resulting field
+        should be typed as the nesting schema
+        """
         if "$ref" in prop:
             attr_type, attr_args = self.get_nested_type(prop)
         else:
@@ -116,7 +123,7 @@ class Python3Generator(SchemaParser, BaseGenerator):
 
         return self._make_field(attr_type, attr_args, req)
 
-    def _make_field(self, field, args, keywords):
+    def _make_field(self, field: str, args: List, keywords: List):
         return ast.Call(
             func=ast.Attribute(value=ast.Name(id="fields_"), attr=field),
             args=args,
@@ -179,14 +186,14 @@ class Python3Generator(SchemaParser, BaseGenerator):
         for node in ast.walk(value):
             if isinstance(node, ast.Call):
                 item_properties = property_.get("items")
-                if item_properties is not None:
-                    if isinstance(item_properties, list):
-                        raise NotImplementedError("Multiple valid types not implemented")
-                    x = self.get_key_from_data_object(None, property_["items"], required=[])
-                    node.args = [x] + node.args
-                else:
+                if item_properties is None:
                     x = self._make_field(field="Field", args=[], keywords=[])
-                    node.args = [x] + node.args
+                else:
+                    attr_type, attr_args = self.get_normal_type(item_properties[0])
+
+                    x = self._make_field(attr_type, args=attr_args, keywords=[])
+
+                node.args = [x] + node.args
 
         return value
 
