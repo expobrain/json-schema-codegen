@@ -13,7 +13,7 @@ Generate code from JSON schema files.
 - [Usage](#usage)
 - [Code generation](#code-generation)
   - [Python2](#python-2)
-  - [Python3+Marshmallow](#python-3-marshmallow)
+  - [Python3+Marshmallow](#python-3marshmallow)
   - [JavaScript+Flow and Flow](#javascriptflow-and-flow)
 - [Contribute](#contribute)
 
