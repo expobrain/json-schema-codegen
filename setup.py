@@ -10,7 +10,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="json_codegen",
-    version="0.3.0",
+    version="0.3.1",
     keywords="python javascript json-schema codegen",
     author="Daniele Esposti",
     author_email="daniele.esposti@gmail.com",
