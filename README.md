@@ -13,7 +13,7 @@ Generate code from JSON schema files.
 - [Usage](#usage)
 - [Code generation](#code-generation)
   - [Python2](#python-2)
-  - [Python3](#python-3)
+  - [Python3+Marshmallow](#python-3-marshmallow)
   - [JavaScript+Flow and Flow](#javascriptflow-and-flow)
 - [Contribute](#contribute)
 
@@ -113,15 +113,15 @@ optional arguments:
 The generation of Python's code is integrated into the tool so it needs just a single invocation:
 
 ```shell
-json-codegen.py --language python --output <output_py_file> <json-schema>
+json_codegen --language python --output <output_py_file> <json-schema>
 ```
 
-## Python 3
+## Python 3+Marshmallow
 
-The generation of Python 3's code is integrated into the tool so it needs just a single invocation:
+The generation of Python 3's code with [Marshmallow](https://marshmallow.readthedocs.io/en/2.x-line/) support is integrated into the tool so it needs just a single invocation:
 
 ```shell
-json-codegen.py --language python3 --output <output_py_file> <json-schema>
+json_codegen --language python3+marshmallow --output <output_py_file> <json-schema>
 ```
 
 ## JavaScript+Flow and Flow
@@ -129,7 +129,7 @@ json-codegen.py --language python3 --output <output_py_file> <json-schema>
 Generating JavaScript+Flow and Flow code involves two steps, generating the AST:
 
 ```shell
-json-codegen.py --language [javascript+flow|flow] --output <output_ast_json> <json-schema>
+json_codegen --language [javascript+flow|flow] --output <output_ast_json> <json-schema>
 ```
 
 and generating the code from the AST:

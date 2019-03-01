@@ -5,11 +5,15 @@ import astor
 
 from json_codegen.astlib import python as ast
 from json_codegen.core import SchemaParser, BaseGenerator
-from json_codegen.generators.python3object import Python3ObjectGenerator
-from json_codegen.python_utils import class_name, marshmallow_type_map, upper_first_letter
+from json_codegen.generators.python3_marshmallow.object_generator import ObjectGenerator
+from json_codegen.generators.python3_marshmallow.utils import (
+    class_name,
+    marshmallow_type_map,
+    upper_first_letter,
+)
 
 
-class Python3Generator(SchemaParser, BaseGenerator):
+class Python3MarshmallowGenerator(SchemaParser, BaseGenerator):
     def generate(self):
         # Add module imports
         self._body = []
@@ -19,21 +23,21 @@ class Python3Generator(SchemaParser, BaseGenerator):
         for definition in self.get_klass_definitions():
             schema = self.klass(definition)
             self._body.append(schema)
-            self._body.append(Python3ObjectGenerator.construct_class(schema))
+            self._body.append(ObjectGenerator.construct_class(schema))
 
         # Generate root definition
         root_definition = self.get_root_definition()
 
         if "title" in root_definition:
             root_schema = self.klass(root_definition)
-            post_load_helper = Python3Generator.construct_dec_post_load(root_schema)
+            post_load_helper = Python3MarshmallowGenerator.construct_dec_post_load(root_schema)
 
             for node in ast.walk(root_schema):
                 if isinstance(node, ast.ClassDef):
                     node.body.append(post_load_helper)
 
             self._body.append(root_schema)
-            self._body.append(Python3ObjectGenerator.construct_class(root_schema))
+            self._body.append(ObjectGenerator.construct_class(root_schema))
 
         return self
 

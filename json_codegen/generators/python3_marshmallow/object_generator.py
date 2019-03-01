@@ -1,12 +1,9 @@
-from re import search
 import ast
 
-import astor
-
-from json_codegen.python_utils import Annotations, class_name, python_type_map
+from json_codegen.generators.python3_marshmallow.utils import Annotations, class_name
 
 
-class Python3ObjectGenerator(object):
+class ObjectGenerator(object):
     @staticmethod
     def _get_property_name(node_assign):
         name = node_assign.targets[0]
@@ -37,7 +34,7 @@ class Python3ObjectGenerator(object):
         """
         return ast.ListComp(
             elt=ast.Call(
-                func=ast.Name(id=Python3ObjectGenerator._nesting_class(node_assign)),
+                func=ast.Name(id=ObjectGenerator._nesting_class(node_assign)),
                 args=[ast.Name(id="el")],
                 keywords=[],
             ),
@@ -100,24 +97,18 @@ class Python3ObjectGenerator(object):
         Primative nested list     -> self.prop  = parent_dict.get("prop")
         Non-primative nested list -> self.props = [PropertyClass(el) for el in parent_dict.get('props', {})]
         """
-        prop = Python3ObjectGenerator._get_property_name(node_assign)
+        prop = ObjectGenerator._get_property_name(node_assign)
 
-        if Python3ObjectGenerator._non_primitive_nested_list(node_assign):
-            value = Python3ObjectGenerator._init_non_primitive_nested_class(
-                node_assign, object_, prop
-            )
+        if ObjectGenerator._non_primitive_nested_list(node_assign):
+            value = ObjectGenerator._init_non_primitive_nested_class(node_assign, object_, prop)
         else:
             # Assign the property as self.prop = table.get("prop")
-            value = Python3ObjectGenerator._get_key_from_object(object_, prop)
+            value = ObjectGenerator._get_key_from_object(object_, prop)
 
             # If the property is required, assign as self.prop = table["prop"]
-            value = Python3ObjectGenerator._hint_required_property(
-                node_assign, value, object_, prop
-            )
+            value = ObjectGenerator._hint_required_property(node_assign, value, object_, prop)
 
-            value = Python3ObjectGenerator._get_default_for_property(
-                node_assign, value, object_, prop
-            )
+            value = ObjectGenerator._get_default_for_property(node_assign, value, object_, prop)
 
         return ast.AnnAssign(
             target=ast.Attribute(value=ast.Name(id="self"), attr=prop),
@@ -145,7 +136,7 @@ class Python3ObjectGenerator(object):
         )
 
         fn_body = [
-            Python3ObjectGenerator.assign_property(node, name_lower)
+            ObjectGenerator.assign_property(node, name_lower)
             for node in schema.body
             if isinstance(node, ast.Assign)
         ]
@@ -159,9 +150,9 @@ class Python3ObjectGenerator(object):
             ast.FunctionDef(
                 name="__init__", args=fn_arguments, body=fn_body, decorator_list=[], returns=None
             ),
-            Python3ObjectGenerator._construct_to_("json")(schema),
-            Python3ObjectGenerator._construct_to_("dict")(schema),
-            Python3ObjectGenerator.construct_from_json(schema),
+            ObjectGenerator._construct_to_("json")(schema),
+            ObjectGenerator._construct_to_("dict")(schema),
+            ObjectGenerator.construct_from_json(schema),
         ]
 
         return ast.ClassDef(
