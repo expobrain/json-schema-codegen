@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Trivial/internal changes
+
+- [#21](https://github.com/expobrain/json-schema-codegen/pull/21) Fixed anchors in README
+
 ## v0.3.0
 
 ### Backward imcompatible changes
