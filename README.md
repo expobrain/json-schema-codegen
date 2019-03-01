@@ -82,13 +82,13 @@ List of currently supported languages:
 
 Until this [pull request](https://github.com/pypa/setuptools/pull/1389) in [`setuptools`](https://pypi.org/project/setuptools/) is fixed, the only way to install `json-schema-codegen` is to clone the repo:
 
-```
+```shell
 git clone https://github.com/expobrain/json-schema-codegen.git
 ```
 
 # Usage
 
-```
+```shell
 usage: json_codegen.py [-h] [--prefix PREFIX] [--language LANGUAGE]
                        [--output OUTPUT]
                        schema
@@ -112,7 +112,7 @@ optional arguments:
 
 The generation of Python's code is integrated into the tool so it needs just a single invocation:
 
-```
+```shell
 json-codegen.py --language python --output <output_py_file> <json-schema>
 ```
 
@@ -120,7 +120,7 @@ json-codegen.py --language python --output <output_py_file> <json-schema>
 
 The generation of Python 3's code is integrated into the tool so it needs just a single invocation:
 
-```
+```shell
 json-codegen.py --language python3 --output <output_py_file> <json-schema>
 ```
 
@@ -128,13 +128,13 @@ json-codegen.py --language python3 --output <output_py_file> <json-schema>
 
 Generating JavaScript+Flow and Flow code involves two steps, generating the AST:
 
-```
+```shell
 json-codegen.py --language [javascript+flow|flow] --output <output_ast_json> <json-schema>
 ```
 
 and generating the code from the AST:
 
-```
+```shell
 bin/ast_to_js <output_ast_json> <output_js_file>
 ```
 
@@ -142,7 +142,7 @@ bin/ast_to_js <output_ast_json> <output_js_file>
 
 Clone the repository, install packages and setup git hooks:
 
-```
+```shell
 git clone https://github.com/expobrain/json-schema-codegen
 pip install -r requirements_dev.txt
 yarn install
