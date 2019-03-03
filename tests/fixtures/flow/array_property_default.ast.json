@@ -30,7 +30,7 @@
                   "type": "TypeParameterInstantiation",
                   "params": [
                     {
-                      "type": "ExistsTypeAnnotation"
+                      "type": "AnyTypeAnnotation"
                     }
                   ]
                 },

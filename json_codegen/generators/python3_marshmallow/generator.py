@@ -5,6 +5,7 @@ import astor
 
 from json_codegen.astlib import python as ast
 from json_codegen.core import SchemaParser, BaseGenerator
+from json_codegen.types import PropertyType
 from json_codegen.generators.python3_marshmallow.object_generator import ObjectGenerator
 from json_codegen.generators.python3_marshmallow.utils import (
     class_name,
@@ -92,7 +93,7 @@ class Python3MarshmallowGenerator(SchemaParser, BaseGenerator):
     def get_default_arg(self, d):
         return ast.keyword(arg="default", value=d)
 
-    def get_normal_type(self, prop):
+    def get_normal_type(self, prop: PropertyType):
         return marshmallow_type_map[prop["type"]], []
 
     def get_nested_type(self, prop):
@@ -123,7 +124,7 @@ class Python3MarshmallowGenerator(SchemaParser, BaseGenerator):
 
         return self._make_field(attr_type, attr_args, req)
 
-    def _make_field(self, field: str, args: List, keywords: List):
+    def _make_field(self, field: str, args: List, keywords: List) -> ast.Call:
         return ast.Call(
             func=ast.Attribute(value=ast.Name(id="fields_"), attr=field),
             args=args,
@@ -178,7 +179,7 @@ class Python3MarshmallowGenerator(SchemaParser, BaseGenerator):
 
         return self.get_key_from_data_object(name, definition, required, default=body)
 
-    def _set_item_type_scalar(self, property_, value):
+    def _set_item_type_scalar(self, property_: PropertyType, value: ast.AST) -> ast.AST:
         """
         If the property is a primitive array, type the field.List with
         the correct field type
@@ -189,7 +190,7 @@ class Python3MarshmallowGenerator(SchemaParser, BaseGenerator):
                 if item_properties is None:
                     x = self._make_field(field="Field", args=[], keywords=[])
                 else:
-                    attr_type, attr_args = self.get_normal_type(item_properties[0])
+                    attr_type, attr_args = self.get_normal_type(item_properties)
 
                     x = self._make_field(attr_type, args=attr_args, keywords=[])
 
@@ -197,18 +198,20 @@ class Python3MarshmallowGenerator(SchemaParser, BaseGenerator):
 
         return value
 
-    def _map_property_if_array(self, property_, value):
+    def _map_property_if_array(self, property_: PropertyType, value: ast.AST) -> ast.AST:
         """
         If array and `items` has `$ref` wrap it into a list comprehension and map array's elements
         """
         # Exit early if doesn't needs to wrap
         property_items = property_.get("items", {})
-        if isinstance(property_items, dict):
-            refs = [v for k, v in property_items.items() if "$ref" in k]
+
+        if isinstance(property_items, dict) and "oneOf" in property_items:
+            refs = (i.get("$ref") for i in property_items["oneOf"])
+            refs = [r for r in refs if r is not None]
         elif isinstance(property_items, list):
-            refs = [i["$ref"] for i in property_.get("items", ()) if "$ref" in i]
+            refs = [i["$ref"] for i in property_.get("items", []) if "$ref" in i]
         else:
-            raise ValueError("Items must be array or object")
+            refs = []
 
         if property_.get("type") != "array":  # or len(refs) == 0:
             return value

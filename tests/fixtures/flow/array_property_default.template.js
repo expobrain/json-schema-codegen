@@ -1,7 +1,7 @@
 // @flow
 
 declare type Test = {
-  x: Array<*>,
+  x: Array<any>,
 
   constructor(data: ?Object): void
 };

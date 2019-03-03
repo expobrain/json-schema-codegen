@@ -2,6 +2,7 @@ import astor
 
 from json_codegen.astlib import python as ast
 from json_codegen.core import SchemaParser, BaseGenerator
+from json_codegen.types import PropertyType
 
 
 class Python2Generator(SchemaParser, BaseGenerator):
@@ -105,41 +106,49 @@ class Python2Generator(SchemaParser, BaseGenerator):
 
         return ast.IfExp(test=test, body=body, orelse=self.get_key_from_data_object(name))
 
-    def _map_property_if_array(self, property_, value):
+    def _map_property_if_array(self, property_: PropertyType, value: ast.AST) -> ast.AST:
         """
         If array and `items` has `$ref` wrap it into a list comprehension and map array's elements
         """
         # Exit early if doesn't needs to wrap
-        refs = [i["$ref"] for i in property_.get("items", ()) if "$ref" in i]
+        items = property_.get("items")
 
-        if property_.get("type") != "array" or len(refs) == 0:
-            return value
+        if isinstance(items, list):
+            # We don't support tuple definition yet
+            raise NotImplementedError(
+                "Tuple items for type 'array' not supported: {}".format(property_)
+            )
 
-        # Only support one custom type for now
-        if len(refs) > 1:
-            raise NotImplementedError("{}: we only support one $ref per array".format(self))
+        elif isinstance(items, dict):
+            if "oneOf" in items:
+                ref = items["oneOf"][0].get("$ref")
 
-        # Don't wrap if type is a primitive
-        ref = self.definitions[refs[0]]
+                if ref is None:
+                    return value
 
-        if self.definition_is_primitive_alias(ref):
-            return value
+                # Don't wrap if type is a primitive
+                ref = self.definitions[ref]
 
-        # Wrap value
-        ref_title = ref["title"]
+                if self.definition_is_primitive_alias(ref):
+                    return value
 
-        return ast.ListComp(
-            elt=ast.Call(
-                func=ast.Name(id=ref_title),
-                args=[ast.Name(id="v")],
-                keywords=[],
-                starargs=None,
-                kwargs=None,
-            ),
-            generators=[
-                ast.comprehension(target=ast.Name(id="v"), iter=value, ifs=[], is_async=0)
-            ],
-        )
+                # Wrap value
+                ref_title = ref["title"]
+
+                return ast.ListComp(
+                    elt=ast.Call(
+                        func=ast.Name(id=ref_title),
+                        args=[ast.Name(id="v")],
+                        keywords=[],
+                        starargs=None,
+                        kwargs=None,
+                    ),
+                    generators=[
+                        ast.comprehension(target=ast.Name(id="v"), iter=value, ifs=[], is_async=0)
+                    ],
+                )
+
+        return value
 
     def _get_dict_comprehension_for_property(self, key, property_):
         # key, value
