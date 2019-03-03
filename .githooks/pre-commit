@@ -1,4 +1,10 @@
-#!/bin/bash
+#!/bin/bash -eu
+
+changes=$(git diff)
+
+if [ ! -z "$changes" ] ; then
+  git stash save --keep-index 1> /dev/null
+fi
 
 # Rebuild bins if necessary
 bin_files=$(git diff --cached --name-only --diff-filter=ACM "*ast_to_js.*" | tr '\n' ' ')
@@ -22,6 +28,10 @@ py_files=$(git diff --cached --name-only --diff-filter=ACM "*.py" | tr '\n' ' ')
 if [ -n "$py_files" ] ; then
   echo "$py_files" | xargs black
   echo "$py_files" | xargs git add
+fi
+
+if [ ! -z "$changes" ] ; then
+  git stash pop 1> /dev/null
 fi
 
 exit 0
