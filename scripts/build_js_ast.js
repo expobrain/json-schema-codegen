@@ -69,4 +69,4 @@ const buildAst = (astDir: string) => {
   });
 };
 
-["javascript", "flow"].map(v => path.join(BASE_AST_DIR, v)).forEach(buildAst);
+["javascript_flow", "flow"].map(v => path.join(BASE_AST_DIR, v)).forEach(buildAst);
