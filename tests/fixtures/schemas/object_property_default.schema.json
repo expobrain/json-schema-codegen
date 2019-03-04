@@ -3,6 +3,9 @@
   "title": "Test",
   "type": "object",
   "properties": {
-    "x": { "type": "object", "default": { "x": 42 } }
+    "x": {
+      "type": "object",
+      "default": { "x": 42 }
+    }
   }
 }

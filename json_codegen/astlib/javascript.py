@@ -1,4 +1,8 @@
+from typing import NewType, Dict
 import json
+
+
+AST = NewType("AST", Dict)
 
 
 def File(program=None, comments=None):

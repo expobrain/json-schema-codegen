@@ -1,11 +1,12 @@
+from json_codegen.types import DefinitionType, PropertyType
 from json_codegen.astlib import javascript as ast
 
 
-def get_object_type_annotation(definitions, property_):
+def get_object_type_annotation(definitions: DefinitionType, property_: PropertyType) -> ast.AST:
     additionalProperties = property_.get("additionalProperties")
 
     if additionalProperties:
-        return ast.ObjectTypeAnnotation(
+        annotation = ast.ObjectTypeAnnotation(
             properties=[],
             indexers=[
                 ast.ObjectTypeIndexer(
@@ -15,11 +16,19 @@ def get_object_type_annotation(definitions, property_):
                 )
             ],
         )
+    elif "oneOf" in property_:
+        annotation = get_oneof_type_annotion(definitions, property_)
+    else:
+        annotation = ast.GenericTypeAnnotation(ast.Identifier("Object"))
 
-    return ast.GenericTypeAnnotation(ast.Identifier("Object"))
+    return annotation
 
 
-def get_single_type_annotation(definitions, property_):
+def get_single_type_annotation(definitions: DefinitionType, property_: PropertyType) -> ast.AST:
+    # If no property definition, use any
+    if property_ is None:
+        return ast.AnyTypeAnnotation()
+
     # Parse type
     type_name = property_.get("type")
     ref_key = property_.get("$ref")
@@ -35,13 +44,11 @@ def get_single_type_annotation(definitions, property_):
     elif type_name == "object":
         return get_object_type_annotation(definitions, property_)
     elif type_name == "array":
-        parameters = get_union_type_annotation(definitions, property_.get("items", []))
-
-        if len(parameters) == 0:
-            parameters = [ast.ExistsTypeAnnotation()]
+        items_definition = property_.get("items")
+        parameter = get_single_type_annotation(definitions, items_definition)
 
         return ast.GenericTypeAnnotation(
-            ast.Identifier("Array"), type_parameters=ast.TypeParameterInstantiation(parameters)
+            ast.Identifier("Array"), type_parameters=ast.TypeParameterInstantiation([parameter])
         )
     elif ref_key is not None:
         definition = definitions[ref_key]
@@ -56,19 +63,27 @@ def get_union_type_annotation(definitions, types):
     return [get_single_type_annotation(definitions, t) for t in types]
 
 
-def get_type_annotation(definitions, property_, required=False):
+def get_type_annotation(
+    definitions: DefinitionType, property_: PropertyType, required: bool = False
+) -> ast.AST:
     # Check for oneOf
     if "oneOf" in property_:
-        annotations = get_union_type_annotation(definitions, property_["oneOf"])
-
-        if len(annotations) == 1:
-            annotation = annotations[0]
-        elif len(annotations) > 1:
-            annotation = ast.UnionTypeAnnotation(annotations)
+        annotation = get_oneof_type_annotion(definitions, property_)
     else:
         annotation = get_single_type_annotation(definitions, property_)
 
     if not required:
         annotation = ast.NullableTypeAnnotation(annotation)
+
+    return annotation
+
+
+def get_oneof_type_annotion(definitions: DefinitionType, property_: PropertyType) -> ast.AST:
+    annotations = get_union_type_annotation(definitions, property_.get("oneOf"))
+
+    if len(annotations) == 1:
+        annotation = annotations[0]
+    elif len(annotations) > 1:
+        annotation = ast.UnionTypeAnnotation(annotations)
 
     return annotation

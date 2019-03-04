@@ -35,6 +35,7 @@ def test_generate(schema_filename):
     result_ast = astor.dump_tree(result)
     expected = astor.dump_tree(fixture)
 
-    print(expected)
+    print(astor.to_source(result))
+    print(schema_filename.read_text())
 
     assert result_ast == expected

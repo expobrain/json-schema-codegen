@@ -69,8 +69,15 @@ class JavaScriptFlowGenerator(SchemaParser, BaseGenerator):
 
         consequent = ast.MemberExpression(ast.Identifier("data"), property_=ast.Identifier(name))
 
-        if len(items) == 1 and "$ref" in items[0]:
-            ref_key = items[0]["$ref"]
+        if isinstance(items, dict) and "oneOf" in items:
+            one_of = items["oneOf"][0]
+
+            if "$ref" not in one_of:
+                raise NotImplementedError(
+                    "Only 'oneOf' with '$ref's are supported: {}".format(one_of)
+                )
+
+            ref_key = one_of["$ref"]
             ref = self.definitions[ref_key]
 
             if not self.definition_is_primitive_alias(ref):
@@ -85,6 +92,8 @@ class JavaScriptFlowGenerator(SchemaParser, BaseGenerator):
                         )
                     ],
                 )
+        elif isinstance(items, list) and len(items):
+            raise NotImplementedError("Tuples not implemented yet: {}".format(items))
 
         # Alternate expression
         alternate = ast.ArrayExpression(

@@ -6,7 +6,10 @@
   "properties": {
     "x": {
       "type": "array",
-      "items": [{ "$ref": "#/definitions/MyType" }],
+      "items": {
+        "type": "object",
+        "oneOf": [{ "$ref": "#/definitions/MyType" }]
+      },
       "default": []
     }
   },
