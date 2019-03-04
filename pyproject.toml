@@ -3,6 +3,6 @@ line-length = 99
 py36 = true
 exclude = '''
 /(
-    \.git
+    \.git|node_modules
 )/
 '''
