@@ -13,6 +13,7 @@ Generate code from JSON schema files.
 - [Usage](#usage)
 - [Code generation](#code-generation)
   - [Python2](#python-2)
+  - [Python3](#python-3)
   - [Python3+Marshmallow](#python-3marshmallow)
   - [JavaScript+Flow and Flow](#javascriptflow-and-flow)
 - [Contribute](#contribute)
@@ -114,6 +115,14 @@ The generation of Python's code is integrated into the tool so it needs just a s
 
 ```shell
 json_codegen --language python --output <output_py_file> <json-schema>
+```
+
+## Python 3
+
+The egenerator of pure Python 3 compatible code:
+
+```shell
+json_codegen --language python3 --output <output_py_file> <json-schema>
 ```
 
 ## Python 3+Marshmallow
