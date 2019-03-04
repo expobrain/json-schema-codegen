@@ -6,6 +6,10 @@
 
 - [#23](https://github.com/expobrain/json-schema-codegen/pull/23) Use list validation in the schemas to generate lists instead of generating them from a tuple validation. See https://json-schema.org/understanding-json-schema/reference/array.html#items.
 
+### New features
+
+- [#24](https://github.com/expobrain/json-schema-codegen/pull/24) Added generation of pure Python 3 compatible code
+
 ### Trivial/internal changes
 
 - [#21](https://github.com/expobrain/json-schema-codegen/pull/21) Fixed anchors in README
