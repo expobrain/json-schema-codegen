@@ -5,6 +5,7 @@
 ### Trivial/internal changes
 
 - [#21](https://github.com/expobrain/json-schema-codegen/pull/21) Fixed anchors in README
+- [#22](https://github.com/expobrain/json-schema-codegen/pull/22) Various internal improvements and fixes
 
 ## v0.3.0
 
