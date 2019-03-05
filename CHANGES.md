@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.4.1
+
+### Bug fixes
+
+- [#25](https://github.com/expobrain/json-schema-codegen/pull/25) Fixed error when object type without default value
+
 ## v0.4.0
 
 ### Breaking changes
