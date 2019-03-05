@@ -12,4 +12,4 @@ class Test(object):
     def __init__(self, data=None):
         data = data or {}
 
-        self.nested = data.get("nested")
+        self.nested = None if data.get("nested") is None else Nested(data.get("nested"))

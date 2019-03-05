@@ -120,7 +120,7 @@ class Python3Generator(SchemaParser, BaseGenerator):
 
         return ast.IfExp(test=test, body=body, orelse=orelse)
 
-    def get_map_property_if_array(self, property_: PropertyType, value: ast.AST) -> ast.ListComp:
+    def map_property_as_array(self, property_: PropertyType, value: ast.AST) -> ast.ListComp:
         """
         If array has `items` as 'object' type with `$ref`
         wrap it into a list comprehension and map array's elements
@@ -199,6 +199,7 @@ class Python3Generator(SchemaParser, BaseGenerator):
     def get_data_value(
         self, key: str, property_: PropertyType, is_required: bool = False
     ) -> ast.AST:
+        # Check additionalProperty
         additional_properties = property_.get("additionalProperties")
 
         if additional_properties is not None:
@@ -209,6 +210,7 @@ class Python3Generator(SchemaParser, BaseGenerator):
 
             return self.get_dict_comprehension_for_property(key, property_)
 
+        # Check default or required
         if "default" in property_:
             value = self.get_default_for_property(key, property_)
         elif is_required:
@@ -216,7 +218,34 @@ class Python3Generator(SchemaParser, BaseGenerator):
         else:
             value = self.get_key_from_data_object(key)
 
-        value = self.get_map_property_if_array(property_, value)
+        # Wrap call to nested object
+        property_type = property_["type"]
+
+        if property_type == "array":
+            # Wrap in list comprehension if array
+            value = self.map_property_as_array(property_, value)
+        elif property_type == "object":
+            value = self.coerce_to_nested_object(property_, value)
+
+        # Return value
+        return value
+
+    def coerce_to_nested_object(self, property_: PropertyType, value: ast.AST) -> ast.AST:
+        if "oneOf" in property_:
+            ref = property_["oneOf"][0].get("$ref")
+
+            if ref is not None:
+                # Don't wrap if type is a primitive
+                ref = self.definitions[ref]
+
+                if not self.definition_is_primitive_alias(ref):
+                    value = ast.IfExp(
+                        test=ast.Compare(
+                            left=value, ops=[ast.Is()], comparators=[ast.NameConstant(value=None)]
+                        ),
+                        body=ast.NameConstant(value=None),
+                        orelse=ast.Call(func=ast.Name(id="Nested"), args=[value], keywords=[]),
+                    )
 
         return value
 
