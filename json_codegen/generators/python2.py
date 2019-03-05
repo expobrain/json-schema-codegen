@@ -2,7 +2,7 @@ import astor
 
 from json_codegen.astlib import python as ast
 from json_codegen.core import SchemaParser, BaseGenerator
-from json_codegen.types import PropertyType
+from json_codegen.types import PropertyType, PropertiesType, RequiredType
 
 
 class Python2Generator(SchemaParser, BaseGenerator):
@@ -61,10 +61,13 @@ class Python2Generator(SchemaParser, BaseGenerator):
         # Add to module's body
         return class_def
 
-    def get_key_from_data_object(self, k):
+    def slice_key_from_data_object(self, key: str) -> ast.Subscript:
+        return ast.Subscript(value=ast.Name(id="data"), slice=ast.Index(value=ast.Str(s=key)))
+
+    def get_key_from_data_object(self, key: str) -> ast.Call:
         return ast.Call(
             func=ast.Attribute(value=ast.Name(id="data"), attr="get"),
-            args=[ast.Str(s=k)],
+            args=[ast.Str(s=key)],
             keywords=[],
             starargs=None,
             kwargs=None,
@@ -185,7 +188,9 @@ class Python2Generator(SchemaParser, BaseGenerator):
         # Return node
         return dict_comp
 
-    def _get_member_value(self, key, property_):
+    def get_member_value(
+        self, key: str, property_: PropertyType, is_required: bool = False
+    ) -> ast.AST:
         additional_properties = property_.get("additionalProperties")
 
         if additional_properties is not None:
@@ -198,6 +203,8 @@ class Python2Generator(SchemaParser, BaseGenerator):
 
         if "default" in property_:
             value = self._get_default_for_property(key, property_)
+        elif is_required:
+            value = self.slice_key_from_data_object(key)
         else:
             value = self.get_key_from_data_object(key)
 
@@ -205,7 +212,9 @@ class Python2Generator(SchemaParser, BaseGenerator):
 
         return value
 
-    def get_klass_constructor(self, properties, required):
+    def get_klass_constructor(
+        self, properties: PropertiesType, requireds: RequiredType
+    ) -> ast.FunctionDef:
         # Prepare body
         fn_body = []
 
@@ -223,7 +232,9 @@ class Python2Generator(SchemaParser, BaseGenerator):
         for key in sorted(properties.keys()):
             # Get default value
             property_ = properties[key]
-            value = self._get_member_value(key, property_)
+            is_required = key in requireds
+
+            value = self.get_member_value(key, property_, is_required=is_required)
 
             # Build assign expression
             attribute = ast.Assign(

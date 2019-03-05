@@ -5,5 +5,5 @@ class Test(object):
     def __init__(self, data=None):
         data = data or {}
 
-        self.id = data.get("id")
+        self.id = data["id"]
         self.name = data.get("name")

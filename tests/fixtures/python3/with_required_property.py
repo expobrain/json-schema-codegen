@@ -5,4 +5,4 @@ class Test(object):
     def __init__(self, data: Optional[Dict] = None):
         data = data or {}
 
-        self.id: Optional[int] = data.get("id")
+        self.id: int = data["id"]
