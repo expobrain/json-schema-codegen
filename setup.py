@@ -10,12 +10,12 @@ from setuptools import setup, find_packages
 
 setup(
     name="json_codegen",
-    version="0.4.0",
+    version="0.4.1",
     keywords="python javascript json-schema codegen",
     author="Daniele Esposti",
     author_email="daniele.esposti@gmail.com",
     url="https://github.com/expobrain/json-schema-codegen",
-    packages=find_packages(),
+    packages=find_packages(exclude=["tests", "tests.*"]),
     entry_points={"console_scripts": ["json_codegen = json_codegen.cli:main"]},
     python_requires=">=3",
     license="MIT",
