@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.4.2
+
+### Bug fixes
+
+- [#26](https://github.com/expobrain/json-schema-codegen/pull/26) Required fields were not honored in Python generators
+
 ## v0.4.1
 
 ### Bug fixes
