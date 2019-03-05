@@ -73,7 +73,7 @@ class Python2Generator(SchemaParser, BaseGenerator):
             kwargs=None,
         )
 
-    def _get_default_for_property(self, name, definition):
+    def get_key_with_default_for_data_object(self, name, definition):
         def ast_from_dict(d):
             keys = []
             values = []
@@ -109,7 +109,7 @@ class Python2Generator(SchemaParser, BaseGenerator):
 
         return ast.IfExp(test=test, body=body, orelse=self.get_key_from_data_object(name))
 
-    def _map_property_if_array(self, property_: PropertyType, value: ast.AST) -> ast.AST:
+    def map_property_as_array(self, property_: PropertyType, value: ast.AST) -> ast.AST:
         """
         If array and `items` has `$ref` wrap it into a list comprehension and map array's elements
         """
@@ -164,14 +164,12 @@ class Python2Generator(SchemaParser, BaseGenerator):
             kwargs=None,
         )
 
-        # Generator
-        # ref = self.definitions[property_["$ref"]]
-
         generator = ast.comprehension(
             target=ast.Tuple(elts=[ast.Name(id="k"), ast.Name(id="v")]),
             iter=ast.Call(
                 func=ast.Attribute(
-                    value=self._get_default_for_property(key, property_), attr="iteritems"
+                    value=self.get_key_with_default_for_data_object(key, property_),
+                    attr="iteritems",
                 ),
                 args=[],
                 keywords=[],
@@ -202,13 +200,37 @@ class Python2Generator(SchemaParser, BaseGenerator):
             return self._get_dict_comprehension_for_property(key, property_)
 
         if "default" in property_:
-            value = self._get_default_for_property(key, property_)
+            value = self.get_key_with_default_for_data_object(key, property_)
         elif is_required:
             value = self.slice_key_from_data_object(key)
         else:
             value = self.get_key_from_data_object(key)
 
-        value = self._map_property_if_array(property_, value)
+        if property_["type"] == "array":
+            # Wrap in list comprehension if array
+            value = self.map_property_as_array(property_, value)
+        elif property_["type"] == "object":
+            value = self.coerce_to_nested_object(property_, value)
+
+        return value
+
+    def coerce_to_nested_object(self, property_: PropertyType, value: ast.AST) -> ast.AST:
+        if "oneOf" in property_:
+            ref = property_["oneOf"][0].get("$ref")
+
+            if ref is not None:
+                # Don't wrap if type is a primitive
+                ref = self.definitions[ref]
+
+                if not self.definition_is_primitive_alias(ref):
+
+                    value = ast.IfExp(
+                        test=ast.Compare(
+                            left=value, ops=[ast.Is()], comparators=[ast.NameConstant(value=None)]
+                        ),
+                        body=ast.NameConstant(value=None),
+                        orelse=ast.Call(func=ast.Name(id="Nested"), args=[value], keywords=[]),
+                    )
 
         return value
 

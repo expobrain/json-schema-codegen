@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.4.3
+
+### Bug fixes
+
+- [#28](https://github.com/expobrain/json-schema-codegen/pull/28) Value is not coerced to object
+
 ## v0.4.2
 
 ### Bug fixes
