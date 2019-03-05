@@ -235,12 +235,8 @@ class Python3Generator(SchemaParser, BaseGenerator):
                         value=ast.Tuple(elts=[ast.Name(id="str"), ast.Name(id=object_name)])
                     ),
                 )
-            elif "default" in property_:
-                annotation = ast.Name(id="Dict")
             else:
-                raise NotImplementedError(
-                    "Definition for type 'object' not supported".format(property_)
-                )
+                annotation = ast.Name(id="Dict")
 
         # ... map array
         elif property_type == "array":
