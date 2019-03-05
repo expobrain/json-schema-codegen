@@ -3,6 +3,7 @@ import json
 from json_codegen.astlib import javascript as ast
 from json_codegen.core import SchemaParser, BaseGenerator
 from json_codegen.js_utils import get_type_annotation
+from json_codegen.types import DefinitionType, PropertiesType, PropertyType, RequiredType
 
 
 class JavaScriptFlowGenerator(SchemaParser, BaseGenerator):
@@ -25,10 +26,10 @@ class JavaScriptFlowGenerator(SchemaParser, BaseGenerator):
 
         return self
 
-    def klass(self, definition):
+    def klass(self, definition: DefinitionType) -> ast.ExportNamedDeclaration:
         # Build class property Flow definition
         body = []
-        required = definition.get("required", ())
+        required = definition.get("required", [])
         properties = definition.get("properties", {})
 
         for key in sorted(properties.keys()):
@@ -48,7 +49,7 @@ class JavaScriptFlowGenerator(SchemaParser, BaseGenerator):
 
         # Add class constructor
         if len(properties):
-            body.append(self.klass_constructor(properties))
+            body.append(self.klass_constructor(properties, required))
 
         # Return class definition
         return ast.ExportNamedDeclaration(
@@ -267,7 +268,9 @@ class JavaScriptFlowGenerator(SchemaParser, BaseGenerator):
         # Return reduce
         return reduce
 
-    def _get_member_right_assignment(self, key, property_):
+    def get_member_right_assignment(
+        self, key: str, property_: PropertyType, required: bool = False
+    ):
         additional_properties = property_.get("additionalProperties")
 
         if additional_properties is not None:
@@ -279,22 +282,64 @@ class JavaScriptFlowGenerator(SchemaParser, BaseGenerator):
             return self._get_reducer_for_property(key, additional_properties)
 
         if "default" in property_:
-            return self._get_default_for_property(key, property_)
+            node = self._get_default_for_property(key, property_)
+        elif property_["type"] == "object":
+            node = self.get_member_as_object(key, property_, required=required)
         else:
-            return ast.MemberExpression(ast.Identifier("data"), ast.Identifier(key))
+            node = ast.MemberExpression(ast.Identifier("data"), ast.Identifier(key))
 
-    def klass_constructor(self, properties):
+        return node
+
+    def get_member_as_object(self, key: str, property_: PropertyType, required: bool = False):
+        if "oneOf" in property_:
+            ref_title = self.definitions[property_["oneOf"][0]["$ref"]]["title"]
+
+            if required:
+                # new Object(data.key)
+                node = ast.NewExpression(
+                    callee=ast.Identifier(ref_title),
+                    arguments=ast.MemberExpression(
+                        object=ast.Identifier(name="data"), property=ast.Identifier(name="x")
+                    ),
+                )
+            else:
+                # data.key ? new Object(data.key) : undefined;
+                node = ast.ConditionalExpression(
+                    test=ast.MemberExpression(
+                        object_=ast.Identifier(name="data"), property_=ast.Identifier(name=key)
+                    ),
+                    consequent=ast.NewExpression(
+                        callee=ast.Identifier(name=ref_title),
+                        arguments=[
+                            ast.MemberExpression(
+                                object_=ast.Identifier(name="data"),
+                                property_=ast.Identifier(name=key),
+                            )
+                        ],
+                    ),
+                    alternate=ast.Identifier(name="undefined"),
+                )
+        else:
+            # data.key
+            node = ast.MemberExpression(
+                object_=ast.Identifier(name="data"), property_=ast.Identifier(name=key)
+            )
+
+        return node
+
+    def klass_constructor(self, properties: PropertiesType, requireds: RequiredType):
         # Build constructor body
         body = []
 
         for key in sorted(properties.keys()):
             property_ = properties[key]
+            required = key in requireds
 
             # Left assignment
             assign_left = ast.MemberExpression(ast.ThisExpression(), ast.Identifier(key))
 
             # Right assignment
-            assign_right = self._get_member_right_assignment(key, property_)
+            assign_right = self.get_member_right_assignment(key, property_, required)
 
             # Add property assignment
             klass_property = ast.ExpressionStatement(

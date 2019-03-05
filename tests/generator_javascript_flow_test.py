@@ -1,5 +1,4 @@
 from pathlib import Path
-import ast
 
 import pytest
 import astor
@@ -11,8 +10,6 @@ from json_codegen.generators.javascript_flow import JavaScriptFlowGenerator
 
 SCHEMAS_DIR = Path(__file__).parent / "fixtures" / "schemas"
 FIXTURES_DIR = Path(__file__).parent / "fixtures" / "javascript_flow"
-
-expected_init_py = astor.dump_tree(ast.Module(body=[]))
 
 test_params = sorted(pytest.param(f, id=f.name) for f in SCHEMAS_DIR.glob("*.schema.json"))
 

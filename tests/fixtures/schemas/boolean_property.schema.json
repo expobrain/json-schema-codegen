@@ -3,9 +3,6 @@
   "title": "Test",
   "type": "object",
   "properties": {
-    "x": {
-      "type": "boolean",
-      "default": true
-    }
+    "x": { "type": "boolean" }
   }
 }
