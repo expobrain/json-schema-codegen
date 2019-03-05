@@ -71,14 +71,17 @@ class Python3Generator(SchemaParser, BaseGenerator):
         # Add to module's body
         return class_def
 
-    def get_key_from_data_object(self, k: str) -> ast.Call:
+    def get_key_from_data_object(self, key: str) -> ast.Call:
         return ast.Call(
             func=ast.Attribute(value=ast.Name(id="data"), attr="get"),
-            args=[ast.Str(s=k)],
+            args=[ast.Str(s=key)],
             keywords=[],
             starargs=None,
             kwargs=None,
         )
+
+    def slice_key_from_data_object(self, key: str) -> ast.Subscript:
+        return ast.Subscript(value=ast.Name(id="data"), slice=ast.Index(value=ast.Str(s=key)))
 
     def get_default_for_property(self, name: str, definition: DefinitionType) -> ast.IfExp:
         def ast_from_dict(d):
@@ -193,7 +196,9 @@ class Python3Generator(SchemaParser, BaseGenerator):
         # Return node
         return dict_comp
 
-    def get_data_value(self, key: str, property_: PropertyType) -> ast.AST:
+    def get_data_value(
+        self, key: str, property_: PropertyType, is_required: bool = False
+    ) -> ast.AST:
         additional_properties = property_.get("additionalProperties")
 
         if additional_properties is not None:
@@ -206,6 +211,8 @@ class Python3Generator(SchemaParser, BaseGenerator):
 
         if "default" in property_:
             value = self.get_default_for_property(key, property_)
+        elif is_required:
+            value = self.slice_key_from_data_object(key)
         else:
             value = self.get_key_from_data_object(key)
 
@@ -265,11 +272,13 @@ class Python3Generator(SchemaParser, BaseGenerator):
         # Return
         return annotation
 
-    def get_annotation_from_definition(self, property_: PropertyType) -> ast.AST:
+    def get_annotation_from_definition(
+        self, property_: PropertyType, is_required: bool = False
+    ) -> ast.AST:
         annotation = self.get_partial_annotation_from_definition(property_)
 
         # Make annotation optional if no default value
-        if "default" not in property_:
+        if not is_required and "default" not in property_:
             annotation = ast.Subscript(
                 value=ast.Name(id="Optional"), slice=ast.Index(value=annotation)
             )
@@ -278,7 +287,7 @@ class Python3Generator(SchemaParser, BaseGenerator):
         return annotation
 
     def make_klass_constructor(
-        self, properties: PropertiesType, required: RequiredType
+        self, properties: PropertiesType, requireds: RequiredType
     ) -> ast.FunctionDef:
         # Prepare body
         fn_body = []
@@ -296,9 +305,11 @@ class Python3Generator(SchemaParser, BaseGenerator):
 
         for key in sorted(properties.keys()):
             # Get default value
+            is_required = key in requireds
             property_ = properties[key]
-            annotation = self.get_annotation_from_definition(property_)
-            value = self.get_data_value(key, property_)
+
+            annotation = self.get_annotation_from_definition(property_, is_required=is_required)
+            value = self.get_data_value(key, property_, is_required=is_required)
 
             # Build assign expression
             attribute = ast.AnnAssign(

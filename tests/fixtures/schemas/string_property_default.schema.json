@@ -3,6 +3,9 @@
   "title": "Test",
   "type": "object",
   "properties": {
-    "x": { "type": "string", "default": "42" }
+    "x": {
+      "type": "string",
+      "default": "42"
+    }
   }
 }
