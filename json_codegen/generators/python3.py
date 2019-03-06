@@ -239,12 +239,14 @@ class Python3Generator(SchemaParser, BaseGenerator):
                 ref = self.definitions[ref]
 
                 if not self.definition_is_primitive_alias(ref):
+                    ref_title = ref["title"]
+
                     value = ast.IfExp(
                         test=ast.Compare(
                             left=value, ops=[ast.Is()], comparators=[ast.NameConstant(value=None)]
                         ),
                         body=ast.NameConstant(value=None),
-                        orelse=ast.Call(func=ast.Name(id="Nested"), args=[value], keywords=[]),
+                        orelse=ast.Call(func=ast.Name(id=ref_title), args=[value], keywords=[]),
                     )
 
         return value
