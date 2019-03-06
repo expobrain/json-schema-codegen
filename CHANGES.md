@@ -1,6 +1,12 @@
 # Changelog
 
-## v0.4.3
+## v0.4.4
+
+### Bug fixes
+
+- [#30](https://github.com/expobrain/json-schema-codegen/pull/30) Nested objects had an ahrdoced name instead of the reference's name
+
+## v0.4.3.1
 
 ### Bug fixes
 
