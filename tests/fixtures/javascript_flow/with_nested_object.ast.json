@@ -217,16 +217,44 @@
                           "computed": false
                         },
                         "right": {
-                          "type": "MemberExpression",
-                          "object": {
-                            "type": "Identifier",
-                            "name": "data"
+                          "type": "ConditionalExpression",
+                          "test": {
+                            "type": "MemberExpression",
+                            "object": {
+                              "type": "Identifier",
+                              "name": "data"
+                            },
+                            "property": {
+                              "type": "Identifier",
+                              "name": "nested"
+                            },
+                            "computed": false
                           },
-                          "property": {
-                            "type": "Identifier",
-                            "name": "nested"
+                          "consequent": {
+                            "type": "NewExpression",
+                            "callee": {
+                              "type": "Identifier",
+                              "name": "Nested"
+                            },
+                            "arguments": [
+                              {
+                                "type": "MemberExpression",
+                                "object": {
+                                  "type": "Identifier",
+                                  "name": "data"
+                                },
+                                "property": {
+                                  "type": "Identifier",
+                                  "name": "nested"
+                                },
+                                "computed": false
+                              }
+                            ]
                           },
-                          "computed": false
+                          "alternate": {
+                            "type": "Identifier",
+                            "name": "undefined"
+                          }
                         }
                       }
                     }

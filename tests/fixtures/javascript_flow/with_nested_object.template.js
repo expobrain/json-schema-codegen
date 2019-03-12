@@ -12,6 +12,6 @@ export class Test {
   nested: ?Nested;
 
   constructor(data: Object = {}) {
-    this.nested = new Nested(data.nested);
+    this.nested = data.nested ? new Nested(data.nested) : undefined;
   }
 }

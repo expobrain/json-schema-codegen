@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.4.5
+
+### Bug fixes
+
+- [#27](https://github.com/expobrain/json-schema-codegen/pull/27) Fixes generation of proper nullable scalars and objects
+
 ## v0.4.4
 
 ### Bug fixes
