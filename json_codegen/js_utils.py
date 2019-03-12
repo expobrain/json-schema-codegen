@@ -10,7 +10,7 @@ def get_object_type_annotation(definitions: DefinitionType, property_: PropertyT
             properties=[],
             indexers=[
                 ast.ObjectTypeIndexer(
-                    id_=ast.Identifier("key"),
+                    id=ast.Identifier("key"),
                     key=ast.StringTypeAnnotation(),
                     value=get_type_annotation(definitions, additionalProperties, required=True),
                 )

@@ -1,352 +1,448 @@
-from typing import NewType, Dict
+from typing import List, Optional, Any, Dict
+import dataclasses
 import json
 
+import strcase
 
-AST = NewType("AST", Dict)
 
+def as_dict(obj):
+    def camel_case_dict(items):
+        return {strcase.to_lower_camel(k): v for k, v in items}
 
-def File(program=None, comments=None):
-    return {"type": "File", "program": program, "comments": comments or []}
+    return dataclasses.asdict(obj, dict_factory=camel_case_dict)
 
 
-def Program(source_type="module", body=None, directives=None):
-    return {
-        "type": "Program",
-        "sourceType": source_type,
-        "body": body or [],
-        "directives": directives or [],
-    }
+@dataclasses.dataclass(frozen=True, init=False, eq=False, repr=False)
+class AST:
+    """
+    Base class to derive all other AST nodes.
 
+    Used only for typing.
+    """
 
-def ExportNamedDeclaration(specifiers=None, source=None, declaration=None, export_kind="value"):
-    return {
-        "type": "ExportNamedDeclaration",
-        "specifiers": specifiers or [],
-        "source": source,
-        "declaration": declaration,
-        "exportKind": export_kind,
-    }
+    pass
 
 
-def ClassDeclaration(id_=None, super_class=None, body=None):
-    return {"type": "ClassDeclaration", "id": id_, "superClass": super_class, "body": body}
+@dataclasses.dataclass
+class File(AST):
+    type: str = dataclasses.field(init=False, default="File")
+    program: AST = None
+    comments: List[AST] = dataclasses.field(default_factory=list)
 
 
-def Identifier(name, type_annotation=None):
-    node = {"type": "Identifier", "name": name}
+@dataclasses.dataclass
+class Program(AST):
+    type: str = dataclasses.field(init=False, default="Program")
+    source_type: str = "module"
+    body: List[AST] = dataclasses.field(default_factory=list)
+    directives: List[AST] = dataclasses.field(default_factory=list)
 
-    if type_annotation is not None:
-        node["typeAnnotation"] = type_annotation
 
-    return node
+@dataclasses.dataclass
+class ExportNamedDeclaration(AST):
+    type: str = dataclasses.field(init=False, default="ExportNamedDeclaration")
+    specifiers: List[AST] = dataclasses.field(default_factory=list)
+    source: Optional[AST] = None
+    declaration: Optional[AST] = None
+    export_kind: str = "value"
 
 
-def ClassBody(body=None):
-    return {"type": "ClassBody", "body": body or []}
+@dataclasses.dataclass
+class ClassDeclaration(AST):
+    type: str = dataclasses.field(init=False, default="ClassDeclaration")
+    id: Optional[AST] = None
+    super_class: Optional[AST] = None
+    body: Optional[AST] = None
 
 
-def BlockStatement(body=None, directives=None):
-    return {"type": "BlockStatement", "body": body or [], "directives": directives or []}
+@dataclasses.dataclass
+class Identifier(AST):
+    type: str = dataclasses.field(init=False, default="Identifier")
+    name: Optional[AST] = None
+    type_annotation_value: dataclasses.InitVar[Optional[AST]] = None
 
+    def __post_init__(self, type_annotation_value):
+        if type_annotation_value:
+            self.type_annotation = type_annotation_value
 
-def ClassMethod(
-    static=False,
-    key=None,
-    computed=False,
-    kind="method",
-    id_=None,
-    generator=False,
-    async_=False,
-    params=None,
-    body=None,
-):
-    return {
-        "type": "ClassMethod",
-        "static": static,
-        "key": key,
-        "computed": computed,
-        "kind": kind,
-        "id": id_,
-        "generator": generator,
-        "async": async_,
-        "params": params or [],
-        "body": body or [],
-    }
+    def as_dict(self):
+        d = super().as_dict()
 
+        if hasattr(self, "type_annotation"):
+            type_annotation = self.type_annotation
+            d["typeAnnotation"] = type_annotation.as_dict() if type_annotation else None
 
-def ClassProperty(
-    static=False, key=None, computed=False, variance=None, typeAnnotation=None, value=None
-):
-    return {
-        "type": "ClassProperty",
-        "static": static,
-        "key": key,
-        "computed": computed,
-        "variance": variance,
-        "typeAnnotation": typeAnnotation,
-        "value": value,
-    }
+        return d
 
 
-def TypeAnnotation(type_annotation):
-    return {"type": "TypeAnnotation", "typeAnnotation": type_annotation}
+@dataclasses.dataclass
+class ClassBody(AST):
+    type: str = dataclasses.field(init=False, default="ClassBody")
+    body: List[AST] = dataclasses.field(default_factory=list)
 
 
-def NumberTypeAnnotation():
-    return {"type": "NumberTypeAnnotation"}
+@dataclasses.dataclass
+class BlockStatement(AST):
+    type: str = dataclasses.field(init=False, default="BlockStatement")
+    body: List[AST] = dataclasses.field(default_factory=list)
+    directives: List[AST] = dataclasses.field(default_factory=list)
 
 
-def AnyTypeAnnotation():
-    return {"type": "AnyTypeAnnotation"}
+@dataclasses.dataclass
+class ClassMethod(AST):
+    type: str = dataclasses.field(init=False, default="ClassMethod")
+    static: Optional[AST] = None
+    key: Optional[AST] = None
+    computed: bool = False
+    kind: str = "method"
+    generator: bool = False
+    async_: bool = False
+    params: List[AST] = dataclasses.field(default_factory=list)
+    body: List[AST] = dataclasses.field(default_factory=list)
 
 
-def StringTypeAnnotation():
-    return {"type": "StringTypeAnnotation"}
+@dataclasses.dataclass
+class ClassProperty(AST):
+    type: str = dataclasses.field(init=False, default="ClassProperty")
+    static: Optional[AST] = None
+    key: Optional[AST] = None
+    computed: bool = False
+    variance: Optional[AST] = None
+    type_annotation: Optional[AST] = None
+    value: Optional[AST] = None
 
 
-def NullableTypeAnnotation(type_annotation):
-    return {"type": "NullableTypeAnnotation", "typeAnnotation": type_annotation}
+@dataclasses.dataclass
+class TypeAnnotation(AST):
+    type: str = dataclasses.field(init=False, default="TypeAnnotation")
+    type_annotation: Optional[AST] = None
 
 
-def GenericTypeAnnotation(id_, type_parameters=None):
-    return {"type": "GenericTypeAnnotation", "id": id_, "typeParameters": type_parameters}
+@dataclasses.dataclass
+class NumberTypeAnnotation(AST):
+    type: str = dataclasses.field(init=False, default="NumberTypeAnnotation")
 
 
-def AssignmentPattern(left, right):
-    return {"type": "AssignmentPattern", "left": left, "right": right}
+@dataclasses.dataclass
+class AnyTypeAnnotation(AST):
+    type: str = dataclasses.field(init=False, default="AnyTypeAnnotation")
 
 
-def ObjectExpression(properties=None):
-    return {"type": "ObjectExpression", "properties": properties or []}
+@dataclasses.dataclass
+class StringTypeAnnotation(AST):
+    type: str = dataclasses.field(init=False, default="StringTypeAnnotation")
 
 
-def ExpressionStatement(expression):
-    return {"type": "ExpressionStatement", "expression": expression}
+@dataclasses.dataclass
+class NullableTypeAnnotation(AST):
+    type: str = dataclasses.field(init=False, default="NullableTypeAnnotation")
+    type_annotation: AST
 
 
-def AssignmentExpression(left, right, operator="="):
-    return {"type": "AssignmentExpression", "operator": operator, "left": left, "right": right}
+@dataclasses.dataclass
+class GenericTypeAnnotation(AST):
+    type: str = dataclasses.field(init=False, default="GenericTypeAnnotation")
+    id: Optional[AST] = None
+    type_parameters: Optional[AST] = None
 
 
-def MemberExpression(object_, property_, computed=False):
-    return {
-        "type": "MemberExpression",
-        "object": object_,
-        "property": property_,
-        "computed": computed,
-    }
+@dataclasses.dataclass
+class AssignmentPattern(AST):
+    type: str = dataclasses.field(init=False, default="AssignmentPattern")
+    left: AST
+    right: AST
 
 
-def ThisExpression():
-    return {"type": "ThisExpression"}
+@dataclasses.dataclass
+class ObjectExpression(AST):
+    type: str = dataclasses.field(init=False, default="ObjectExpression")
+    properties: str = dataclasses.field(default_factory=list)
 
 
-def ConditionalExpression(test, consequent, alternate):
-    return {
-        "type": "ConditionalExpression",
-        "test": test,
-        "consequent": consequent,
-        "alternate": alternate,
-    }
+@dataclasses.dataclass
+class ExpressionStatement(AST):
+    type: str = dataclasses.field(init=False, default="ExpressionStatement")
+    expression: AST
 
 
-def NumericLiteral(value):
-    return {
-        "type": "NumericLiteral",
-        "value": value,
-        "extra": {"rawValue": value, "raw": json.dumps(value)},
-    }
+@dataclasses.dataclass
+class AssignmentExpression(AST):
+    type: str = dataclasses.field(init=False, default="AssignmentExpression")
+    left: AST
+    right: AST
+    operator: str = "="
 
 
-def CallExpression(callee, arguments):
-    return {"type": "CallExpression", "callee": callee, "arguments": arguments}
+@dataclasses.dataclass
+class MemberExpression(AST):
+    type: str = dataclasses.field(init=False, default="MemberExpression")
+    object_: AST
+    property_: AST
+    computed: bool = False
 
 
-def TypeParameterInstantiation(params):
-    return {"type": "TypeParameterInstantiation", "params": params}
+@dataclasses.dataclass
+class ThisExpression(AST):
+    type: str = dataclasses.field(init=False, default="ThisExpression")
 
 
-def ExistsTypeAnnotation():
-    return {"type": "ExistsTypeAnnotation"}
+@dataclasses.dataclass
+class ConditionalExpression(AST):
+    type: str = dataclasses.field(init=False, default="ConditionalExpression")
+    test: AST
+    consequent: AST
+    alternate: AST
 
 
-def BooleanTypeAnnotation():
-    return {"type": "BooleanTypeAnnotation"}
+@dataclasses.dataclass
+class NumericLiteral(AST):
+    type: str = dataclasses.field(init=False, default="NumericLiteral")
+    value: Any
+    extra: Dict = dataclasses.field(init=False)
 
+    def __post_init__(self):
+        self.extra = {"rawValue": self.value, "raw": json.dumps(self.value)}
 
-def ArrayExpression(elements=None):
-    return {"type": "ArrayExpression", "elements": elements or []}
+    # def __call__(self, value):
+    #     return {
+    #         "type": "NumericLiteral",
+    #         "value": value,
+    #         "extra": {"rawValue": value, "raw": json.dumps(value)},
+    #     }
 
 
-def BinaryExpression(left, right, operator="==="):
-    return {"type": "BinaryExpression", "left": left, "right": right, "operator": operator}
+@dataclasses.dataclass
+class CallExpression(AST):
+    type: str = dataclasses.field(init=False, default="CallExpression")
+    callee: AST
+    arguments: List[AST]
 
 
-def UnaryExpression(operator=None, prefix=True, argument=None, extra=None):
-    return {
-        "type": "UnaryExpression",
-        "operator": operator,
-        "prefix": prefix,
-        "argument": argument,
-        "extra": dict({"parenthesizedArgument": False}, **(extra or {})),
-    }
+@dataclasses.dataclass
+class TypeParameterInstantiation(AST):
 
+    type: str = dataclasses.field(init=False, default="TypeParameterInstantiation")
+    params: List[AST]
 
-def StringLiteral(value):
-    return {
-        "type": "StringLiteral",
-        "value": value,
-        "extra": {"rawValue": value, "raw": json.dumps(value)},
-    }
 
+@dataclasses.dataclass
+class ExistsTypeAnnotation(AST):
 
-def BooleanLiteral(value):
-    return {"type": "BooleanLiteral", "value": value}
+    type: str = dataclasses.field(init=False, default="ExistsTypeAnnotation")
 
 
-def LogicalExpression(left, right, operator="&&"):
-    return {"type": "LogicalExpression", "left": left, "right": right, "operator": operator}
+@dataclasses.dataclass
+class BooleanTypeAnnotation(AST):
+    type: str = dataclasses.field(init=False, default="BooleanTypeAnnotation")
 
 
-def NullLiteral():
-    return {"type": "NullLiteral"}
+@dataclasses.dataclass
+class ArrayExpression(AST):
+    type: str = dataclasses.field(init=False, default="ArrayExpression")
+    elements: List[AST] = dataclasses.field(default_factory=list)
 
 
-def ObjectProperty(key, value, method=False, computed=False, shorthand=False):
-    return {
-        "type": "ObjectProperty",
-        "key": key,
-        "value": value,
-        "method": method,
-        "computed": computed,
-        "shorthand": shorthand,
-    }
+@dataclasses.dataclass
+class BinaryExpression(AST):
+    type: str = dataclasses.field(init=False, default="BinaryExpression")
+    left: AST
+    right: AST
+    operator: str = "==="
 
 
-def ArrowFunctionExpression(params=None, body=None, id=None, generator=False, async_=False):
-    return {
-        "type": "ArrowFunctionExpression",
-        "params": params or [],
-        "body": body or [],
-        "id": id,
-        "generator": generator,
-        "async": async_,
-    }
+@dataclasses.dataclass
+class UnaryExpression(AST):
+    type: str = dataclasses.field(init=False, default="UnaryExpression")
+    operator: Optional[AST] = None
+    prefix: bool = True
+    argument: Optional[AST] = None
+    extra: Dict = dataclasses.field(init=False)
+    extra_value: dataclasses.InitVar[Optional[Dict]] = None
 
+    def __post_init__(self, extra_value):
+        self.extra = dict({"parenthesizedArgument": False}, **(extra_value or {}))
 
-def DeclareTypeAlias(id_, right, type_parameters=None):
-    return {
-        "type": "DeclareTypeAlias",
-        "id": id_,
-        "right": right,
-        "typeParameters": type_parameters,
-    }
 
+@dataclasses.dataclass
+class StringLiteral(AST):
+    type: str = dataclasses.field(init=False, default="StringLiteral")
+    value: str
+    extra: Dict = dataclasses.field(init=False)
 
-def ObjectTypeAnnotation(properties, call_properties=None, indexers=None, exact=False):
-    return {
-        "type": "ObjectTypeAnnotation",
-        "properties": properties,
-        "callProperties": call_properties or [],
-        "indexers": indexers or [],
-        "exact": exact,
-    }
+    def __post_init__(self):
+        self.extra = {"rawValue": self.value, "raw": json.dumps(self.value)}
 
 
-def ObjectTypeProperty(
-    key,
-    value,
-    static=False,
-    kind="init",
-    method=False,
-    variance=None,
-    optional=False,
-    force_variance=False,
-):
-    node = {
-        "type": "ObjectTypeProperty",
-        "key": key,
-        "value": value,
-        "static": static,
-        "kind": kind,
-        "method": method,
-        "optional": optional,
-    }
+@dataclasses.dataclass
+class BooleanLiteral(AST):
+    type: str = dataclasses.field(init=False, default="BooleanLiteral")
+    value: bool
 
-    # This is necessary because the generated AST from babylon
-    # includes the `variance` key only in some cases
-    if force_variance or variance:
-        node["variance"] = variance
 
-    return node
+@dataclasses.dataclass
+class LogicalExpression(AST):
+    type: str = dataclasses.field(init=False, default="LogicalExpression")
+    left: AST
+    right: AST
+    operator: str = "&&"
 
 
-def FunctionTypeAnnotation(params=None, rest=None, type_parameters=None, return_type=None):
-    return {
-        "type": "FunctionTypeAnnotation",
-        "params": params or [],
-        "rest": rest,
-        "typeParameters": type_parameters,
-        "returnType": return_type,
-    }
+@dataclasses.dataclass
+class NullLiteral(AST):
+    type: str = dataclasses.field(init=False, default="NullLiteral")
 
 
-def FunctionTypeParam(name, optional=False, type_annotation=None):
-    return {
-        "type": "FunctionTypeParam",
-        "name": name,
-        "optional": optional,
-        "typeAnnotation": type_annotation,
-    }
+@dataclasses.dataclass
+class ObjectProperty(AST):
+    type: str = dataclasses.field(init=False, default="ObjectProperty")
+    key: AST
+    value: AST
+    method: bool = False
+    computed: bool = False
+    shorthand: bool = False
 
 
-def VoidTypeAnnotation():
-    return {"type": "VoidTypeAnnotation"}
+@dataclasses.dataclass
+class ArrowFunctionExpression(AST):
+    type: str = dataclasses.field(init=False, default="ArrowFunctionExpression")
+    params: List[AST] = dataclasses.field(default_factory=list)
+    body: List[AST] = dataclasses.field(default_factory=list)
+    id: Optional[AST] = None
+    generator: bool = False
+    async_: bool = False
 
 
-def UnionTypeAnnotation(types):
-    return {"type": "UnionTypeAnnotation", "types": types}
+@dataclasses.dataclass
+class DeclareTypeAlias(AST):
+    type: str = dataclasses.field(init=False, default="DeclareTypeAlias")
+    id: AST
+    right: AST
+    type_parameters: Optional[AST] = None
+    # leadingComments: List[AST] = dataclasses.field(default_factory=list)
 
 
-def CommentLine(value):
-    return {"type": "CommentLine", "value": " " + str(value).strip()}
+@dataclasses.dataclass
+class ObjectTypeAnnotation(AST):
+    type: str = dataclasses.field(init=False, default="ObjectTypeAnnotation")
+    properties: List[AST]
+    call_properties: List[AST] = dataclasses.field(default_factory=list)
+    indexers: List[AST] = dataclasses.field(default_factory=list)
+    exact: bool = False
 
 
-def ObjectTypeIndexer(id_, key, value, static=False, variance=None):
-    return {
-        "type": "ObjectTypeIndexer",
-        "id": id_,
-        "key": key,
-        "value": value,
-        "static": static,
-        "variance": variance,
-    }
+@dataclasses.dataclass
+class ObjectTypeProperty(AST):
+    type: str = dataclasses.field(init=False, default="ObjectTypeProperty")
+    key: AST
+    value: AST
+    static: bool = False
+    kind: str = "init"
+    method: bool = False
+    optional: bool = False
+    variance_value: dataclasses.InitVar[Optional[AST]] = None
+    force_variance: dataclasses.InitVar[bool] = False
 
+    def __post_init__(self, variance_value, force_variance):
+        if variance_value or force_variance:
+            self.variance = variance_value
 
-def VariableDeclaration(declarations, kind="const"):
-    return {"type": "VariableDeclaration", "declarations": declarations, "kind": kind}
+    def as_dict(self):
+        d = super().as_dict()
 
+        if hasattr(self, "variance"):
+            variance = self.variance
+            d["variance"] = variance.as_dict() if variance else None
 
-def VariableDeclarator(id_, init=None):
-    return {"type": "VariableDeclarator", "id": id_, "init": init}
+        return d
 
 
-def ArrayPattern(elements):
-    return {"type": "ArrayPattern", "elements": elements}
+@dataclasses.dataclass
+class FunctionTypeAnnotation(AST):
+    type: str = dataclasses.field(init=False, default="FunctionTypeAnnotation")
+    params: List[AST] = dataclasses.field(default_factory=list)
+    rest: Optional[AST] = None
+    type_parameters: Optional[AST] = None
+    return_type: Optional[AST] = None
 
 
-def TypeCastExpression(expression, type_annotation, extra=None):
-    return {
-        "type": "TypeCastExpression",
-        "expression": expression,
-        "typeAnnotation": type_annotation,
-        "extra": dict({"parenthesized": True}, **(extra or {})),
-    }
+@dataclasses.dataclass
+class FunctionTypeParam(AST):
+    type: str = dataclasses.field(init=False, default="FunctionTypeParam")
+    name: AST
+    optional: bool = False
+    type_annotation: Optional[AST] = None
 
 
-def NewExpression(callee, arguments=None):
-    return {"type": "NewExpression", "callee": callee, "arguments": arguments or []}
+@dataclasses.dataclass
+class VoidTypeAnnotation(AST):
+    type: str = dataclasses.field(init=False, default="VoidTypeAnnotation")
 
 
-def ReturnStatement(argument):
-    return {"type": "ReturnStatement", "argument": argument}
+@dataclasses.dataclass
+class UnionTypeAnnotation(AST):
+    type: str = dataclasses.field(init=False, default="UnionTypeAnnotation")
+    types: AST
+
+
+@dataclasses.dataclass
+class CommentLine(AST):
+    type: str = dataclasses.field(init=False, default="CommentLine")
+    value: str
+
+    def __post_init__(self):
+        self.value = " " + str(self.value).strip()
+
+
+@dataclasses.dataclass
+class ObjectTypeIndexer(AST):
+    type: str = dataclasses.field(init=False, default="ObjectTypeIndexer")
+    id: AST
+    key: AST
+    value: AST
+    static: bool = False
+    variance: Optional[AST] = None
+
+
+@dataclasses.dataclass
+class VariableDeclaration(AST):
+    type: str = dataclasses.field(init=False, default="VariableDeclaration")
+    declarations: List[AST]
+    kind: str = "const"
+
+
+@dataclasses.dataclass
+class VariableDeclarator(AST):
+    type: str = dataclasses.field(init=False, default="VariableDeclarator")
+    id: AST
+    init: Optional[AST] = None
+
+
+@dataclasses.dataclass
+class ArrayPattern(AST):
+    type: str = dataclasses.field(init=False, default="ArrayPattern")
+    elements: List[AST]
+
+
+@dataclasses.dataclass
+class TypeCastExpression(AST):
+    type: str = dataclasses.field(init=False, default="TypeCastExpression")
+    expression: AST
+    type_annotation: AST
+    extra: Dict = dataclasses.field(init=False)
+    extra_value: dataclasses.InitVar[Dict] = None
+
+    def __post_init__(self, extra_value):
+        self.extra = dict({"parenthesized": True}, **(extra_value or {}))
+
+
+@dataclasses.dataclass
+class NewExpression(AST):
+    type: str = dataclasses.field(init=False, default="NewExpression")
+    calle: AST
+    arguments: List[AST] = dataclasses.field(default_factory=list)
+
+
+@dataclasses.dataclass
+class ReturnStatement(AST):
+    type: str = dataclasses.field(init=False, default="ReturnStatement")
+    argument: AST

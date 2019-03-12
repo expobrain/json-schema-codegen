@@ -19,7 +19,12 @@ setup(
     entry_points={"console_scripts": ["json_codegen = json_codegen.cli:main"]},
     python_requires=">=3",
     license="MIT",
-    install_requires=["astor>=0.7.1", "setuptools>={}".format(SETUPTOOLS_MIN_VER)],
+    install_requires=[
+        "astor>=0.7.1",
+        "dataclasses>=0.6",
+        "setuptools>={}".format(SETUPTOOLS_MIN_VER),
+        "strcase>=1.0.0",
+    ],
     scripts=["bin/ast_to_js"],
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",

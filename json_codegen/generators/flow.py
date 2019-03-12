@@ -1,4 +1,6 @@
+from typing import Dict
 import json
+import dataclasses
 
 from json_codegen.core import SchemaParser, BaseGenerator
 from json_codegen.astlib import javascript as ast
@@ -25,14 +27,14 @@ class FlowGenerator(SchemaParser, BaseGenerator):
 
         # Add leading comment
         if len(self._body):
-            self._body[0]["leadingComments"] = [ast.CommentLine("@flow")]
+            self._body[0].leadingComments = [ast.CommentLine("@flow")]
 
         return self
 
     def type_alias(self, definition):
         aliased_type = get_type_annotation(self.definitions, definition, required=True)
         type_alias = ast.DeclareTypeAlias(
-            id_=ast.Identifier(definition["title"]), right=aliased_type
+            id=ast.Identifier(definition["title"]), right=aliased_type
         )
 
         return type_alias
@@ -53,7 +55,7 @@ class FlowGenerator(SchemaParser, BaseGenerator):
                 self.definitions, property_, required=(is_required or has_default)
             )
             property_def = ast.ObjectTypeProperty(
-                key=ast.Identifier(key), value=property_annotation, force_variance=True
+                ast.Identifier(key), property_annotation, force_variance=True
             )
             klass_annotations.append(property_def)
 
@@ -63,7 +65,7 @@ class FlowGenerator(SchemaParser, BaseGenerator):
 
         # Return class definition
         klass = ast.DeclareTypeAlias(
-            id_=ast.Identifier(definition["title"]),
+            id=ast.Identifier(definition["title"]),
             right=ast.ObjectTypeAnnotation(klass_annotations),
         )
 
@@ -71,8 +73,8 @@ class FlowGenerator(SchemaParser, BaseGenerator):
 
     def klass_constructor(self):
         return ast.ObjectTypeProperty(
-            key=ast.Identifier("constructor"),
-            value=ast.FunctionTypeAnnotation(
+            ast.Identifier("constructor"),
+            ast.FunctionTypeAnnotation(
                 params=[
                     ast.FunctionTypeParam(
                         ast.Identifier("data"),
@@ -86,8 +88,13 @@ class FlowGenerator(SchemaParser, BaseGenerator):
             method=True,
         )
 
-    def as_ast(self):
-        return ast.File(program=ast.Program(body=self._body), comments=[ast.CommentLine("@flow")])
+    def as_ast(self) -> Dict:
+        root_node = ast.File(
+            program=ast.Program(body=self._body), comments=[ast.CommentLine("@flow")]
+        )
+        code_ast = root_node.as_dict()
+
+        return code_ast
 
     def as_code(self):
         return json.dumps(self.as_ast(), indent=2)

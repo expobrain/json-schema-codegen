@@ -13,7 +13,7 @@ from json_codegen.astlib.javascript import (
 
 
 @pytest.mark.parametrize(
-    "name, type_annotation, expected",
+    "name, type_annotation_value, expected",
     [
         ["test", None, {"type": "Identifier", "name": "test"}],
         [
@@ -27,10 +27,10 @@ from json_codegen.astlib.javascript import (
         ],
     ],
 )
-def test_Identifier(name, type_annotation, expected):
-    result = Identifier(name, type_annotation=type_annotation)
+def test_Identifier(name, type_annotation_value, expected):
+    result = Identifier(name, type_annotation_value=type_annotation_value)
 
-    assert result == expected
+    assert result.as_dict() == expected
 
 
 @pytest.mark.parametrize(
@@ -70,7 +70,7 @@ def test_Identifier(name, type_annotation, expected):
 def test_ObjectTypeProperty(key, value, force_variance, expected):
     result = ObjectTypeProperty(key, value, force_variance=force_variance)
 
-    assert result == expected
+    assert result.as_dict() == expected
 
 
 @pytest.mark.parametrize(
@@ -84,11 +84,11 @@ def test_ObjectTypeProperty(key, value, force_variance, expected):
 def test_CommentLine(value, expected):
     result = CommentLine(value)
 
-    assert result == expected
+    assert result.as_dict() == expected
 
 
 @pytest.mark.parametrize(
-    "expression, type_annotation, extra, expected",
+    "expression, type_annotation, extra_value, expected",
     [
         [
             Identifier("test"),
@@ -103,14 +103,14 @@ def test_CommentLine(value, expected):
         ]
     ],
 )
-def test_TypeCastExpression(expression, type_annotation, extra, expected):
-    result = TypeCastExpression(expression, type_annotation, extra=extra)
+def test_TypeCastExpression(expression, type_annotation, extra_value, expected):
+    result = TypeCastExpression(expression, type_annotation, extra_value=extra_value)
 
-    assert result == expected
+    assert result.as_dict() == expected
 
 
 @pytest.mark.parametrize(
-    "extra, expected",
+    "extra_value, expected",
     [
         [
             None,
@@ -124,10 +124,10 @@ def test_TypeCastExpression(expression, type_annotation, extra, expected):
         ]
     ],
 )
-def test_UnaryExpression(extra, expected):
-    result = UnaryExpression(extra=extra)
+def test_UnaryExpression(extra_value, expected):
+    result = UnaryExpression(extra_value=extra_value)
 
-    assert result == expected
+    assert result.as_dict() == expected
 
 
 @pytest.mark.parametrize(
@@ -137,7 +137,7 @@ def test_UnaryExpression(extra, expected):
 def test_NumericLiteral(value, expected):
     result = NumericLiteral(value)
 
-    assert result == expected
+    assert result.as_dict() == expected
 
 
 @pytest.mark.parametrize(
@@ -156,4 +156,4 @@ def test_NumericLiteral(value, expected):
 def test_StringLiteral(value, expected):
     result = StringLiteral(value)
 
-    assert result == expected
+    assert result.as_dict() == expected

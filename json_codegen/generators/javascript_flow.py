@@ -54,7 +54,7 @@ class JavaScriptFlowGenerator(SchemaParser, BaseGenerator):
         # Return class definition
         return ast.ExportNamedDeclaration(
             declaration=ast.ClassDeclaration(
-                id_=ast.Identifier(definition["title"]), body=ast.ClassBody(body=body)
+                id=ast.Identifier(definition["title"]), body=ast.ClassBody(body=body)
             )
         )
 
@@ -203,15 +203,17 @@ class JavaScriptFlowGenerator(SchemaParser, BaseGenerator):
         deconstruct_entry = ast.VariableDeclaration(
             [
                 ast.VariableDeclarator(
-                    id_=ast.ArrayPattern(
+                    id=ast.ArrayPattern(
                         [
                             ast.Identifier(
                                 "key",
-                                type_annotation=ast.TypeAnnotation(ast.StringTypeAnnotation()),
+                                type_annotation_value=ast.TypeAnnotation(
+                                    ast.StringTypeAnnotation()
+                                ),
                             ),
                             ast.Identifier(
                                 "value",
-                                type_annotation=ast.TypeAnnotation(
+                                type_annotation_value=ast.TypeAnnotation(
                                     ast.GenericTypeAnnotation(ast.Identifier("Object"))
                                 ),
                             ),
@@ -349,9 +351,10 @@ class JavaScriptFlowGenerator(SchemaParser, BaseGenerator):
             body.append(klass_property)
 
         # Build constructor parameters
-        param_type = ast.TypeAnnotation(ast.GenericTypeAnnotation(id_=ast.Identifier("Object")))
+        param_type = ast.TypeAnnotation(ast.GenericTypeAnnotation(id=ast.Identifier("Object")))
         param = ast.AssignmentPattern(
-            left=ast.Identifier("data", type_annotation=param_type), right=ast.ObjectExpression()
+            left=ast.Identifier("data", type_annotation_value=param_type),
+            right=ast.ObjectExpression(),
         )
 
         params = [param]
