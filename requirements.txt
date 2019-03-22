@@ -1,2 +1,0 @@
-astor==0.7.1
-setuptools>=40.1.0
