@@ -1,5 +1,4 @@
 from pathlib import Path
-import ast
 
 import pytest
 import astor
@@ -11,7 +10,6 @@ from json_codegen.generators.python3 import Python3Generator
 SCHEMAS_DIR = Path(__file__).parent / "fixtures" / "schemas"
 FIXTURES_DIR = Path(__file__).parent / "fixtures" / "python3"
 
-expected_init_py = astor.dump_tree(ast.Module(body=[]))
 
 test_params = sorted(pytest.param(f, id=f.name) for f in SCHEMAS_DIR.glob("*.schema.json"))
 
