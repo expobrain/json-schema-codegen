@@ -4,7 +4,7 @@ from typing import List
 import astor
 
 from json_codegen.astlib import python as ast
-from json_codegen.core import SchemaParser, BaseGenerator
+from json_codegen.core import JSONSchema, BaseGenerator
 from json_codegen.types import PropertyType
 from json_codegen.generators.python3_marshmallow.object_generator import ObjectGenerator
 from json_codegen.generators.python3_marshmallow.utils import (
@@ -14,7 +14,7 @@ from json_codegen.generators.python3_marshmallow.utils import (
 )
 
 
-class Python3MarshmallowGenerator(SchemaParser, BaseGenerator):
+class Python3MarshmallowGenerator(JSONSchema, BaseGenerator):
     def generate(self):
         # Add module imports
         self._body = []

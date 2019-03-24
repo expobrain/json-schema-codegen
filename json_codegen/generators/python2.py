@@ -1,11 +1,11 @@
 import astor
 
 from json_codegen.astlib import python as ast
-from json_codegen.core import SchemaParser, BaseGenerator
+from json_codegen.core import JSONSchema, BaseGenerator
 from json_codegen.types import PropertyType, PropertiesType, RequiredType
 
 
-class Python2Generator(SchemaParser, BaseGenerator):
+class Python2Generator(JSONSchema, BaseGenerator):
     def generate(self):
         # Add module imports
         self._body = []

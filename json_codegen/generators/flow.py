@@ -1,11 +1,11 @@
 import json
 
-from json_codegen.core import SchemaParser, BaseGenerator
+from json_codegen.core import JSONSchema, BaseGenerator
 from json_codegen.astlib import javascript as ast
 from json_codegen.js_utils import get_type_annotation
 
 
-class FlowGenerator(SchemaParser, BaseGenerator):
+class FlowGenerator(JSONSchema, BaseGenerator):
     def generate(self):
         # Generates type aliases
         self._body = []

@@ -1,12 +1,12 @@
 import json
 
 from json_codegen.astlib import javascript as ast
-from json_codegen.core import SchemaParser, BaseGenerator
+from json_codegen.core import JSONSchema, BaseGenerator
 from json_codegen.js_utils import get_type_annotation
 from json_codegen.types import DefinitionType, PropertiesType, PropertyType, RequiredType
 
 
-class JavaScriptFlowGenerator(SchemaParser, BaseGenerator):
+class JavaScriptFlowGenerator(JSONSchema, BaseGenerator):
     def generate(self):
         # Generates definitions first
         self._body = []
