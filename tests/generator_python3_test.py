@@ -11,8 +11,7 @@ SCHEMAS_DIR = Path(__file__).parent / "fixtures" / "schemas"
 FIXTURES_DIR = Path(__file__).parent / "fixtures" / "python3"
 
 
-# test_params = sorted(pytest.param(f, id=f.name) for f in SCHEMAS_DIR.glob("*.schema.json"))
-test_params = [SCHEMAS_DIR / "simple.schema.json"]
+test_params = sorted(pytest.param(f, id=f.name) for f in SCHEMAS_DIR.glob("*.schema.json"))
 
 
 def load_fixture(name):
