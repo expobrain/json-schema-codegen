@@ -11,7 +11,7 @@ class TestSchema(Schema):
         return Test(test)
 
 
-class Test(object):
+class Test:
     def __init__(self, test: dict):
         self.id: int = test["id"]
         self.name: Optional[str] = test.get("name")

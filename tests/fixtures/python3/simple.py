@@ -1,5 +1,5 @@
 from typing import Dict, Optional, List, Any
 
 
-class Test(object):
+class Test:
     pass

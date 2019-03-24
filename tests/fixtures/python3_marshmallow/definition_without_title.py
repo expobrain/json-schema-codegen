@@ -6,7 +6,7 @@ class NoTitleSchema(Schema):
     x = fields_.String()
 
 
-class NoTitle(object):
+class NoTitle:
     def __init__(self, notitle: dict):
         self.x: Optional[str] = notitle.get("x")
 

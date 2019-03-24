@@ -6,7 +6,7 @@ class NestedSchema(Schema):
     x = fields_.String()
 
 
-class Nested(object):
+class Nested:
     def __init__(self, nested: dict):
         self.x: Optional[str] = nested.get("x")
 
@@ -29,7 +29,7 @@ class TestSchema(Schema):
         return Test(test)
 
 
-class Test(object):
+class Test:
     def __init__(self, test: dict):
         self.nested: Optional[dict] = test.get("nested")
 

@@ -10,7 +10,7 @@ class TestSchema(Schema):
         return Test(test)
 
 
-class Test(object):
+class Test:
     def __init__(self, test: dict):
         self.x: dict = test.get("x", {"x": 42})
 

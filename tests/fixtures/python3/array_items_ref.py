@@ -1,14 +1,14 @@
 from typing import Dict, Optional, List, Any
 
 
-class MyType(object):
+class MyType:
     def __init__(self, data: Optional[Dict] = None):
         data = data or {}
 
         self.v: Optional[float] = data.get("v")
 
 
-class Test(object):
+class Test:
     def __init__(self, data: Optional[Dict] = None):
         data = data or {}
 

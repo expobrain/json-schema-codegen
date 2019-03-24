@@ -6,7 +6,7 @@ class MyTypeSchema(Schema):
     v = fields_.Number()
 
 
-class MyType(object):
+class MyType:
     def __init__(self, mytype: dict):
         self.v: Optional[float] = mytype.get("v")
 
@@ -29,7 +29,7 @@ class TestSchema(Schema):
         return Test(test)
 
 
-class Test(object):
+class Test:
     def __init__(self, test: dict):
         self.x: List[MyType] = [MyType(el) for el in test.get("x", {})]
 

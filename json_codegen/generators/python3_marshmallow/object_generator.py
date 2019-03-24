@@ -155,13 +155,7 @@ class ObjectGenerator(object):
             ObjectGenerator.construct_from_json(schema),
         ]
 
-        return ast.ClassDef(
-            name=name,
-            bases=[ast.Name(id="object")],
-            body=class_body,
-            decorator_list=[],
-            keywords=[],
-        )
+        return ast.ClassDef(name=name, bases=[], body=class_body, decorator_list=[], keywords=[])
 
     @staticmethod
     def _construct_to_(output):
