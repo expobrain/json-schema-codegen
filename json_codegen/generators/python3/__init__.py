@@ -11,6 +11,10 @@ class Python3Generator(BaseGenerator):
         # Add module imports
         body.extend(make_imports())
 
+        # Generates definitions first
+        for definition in self.json_schema.get_klass_definitions():
+            body.append(make_klass(self.json_schema, definition))
+
         # Generate root definition
         root_definition = self.json_schema.get_root_definition()
 

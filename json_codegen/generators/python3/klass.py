@@ -18,11 +18,7 @@ def make_klass(json_schema: SchemaType, definition: DefinitionType) -> ast.Class
 
     # Create class definition
     class_def = ast.ClassDef(
-        name=definition["title"],
-        bases=[ast.Name(id="object")],
-        body=class_body,
-        decorator_list=[],
-        keywords=[],
+        name=definition["title"], bases=[], body=class_body, decorator_list=[], keywords=[]
     )
 
     # Add to module's body

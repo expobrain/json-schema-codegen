@@ -59,7 +59,7 @@ def make_coerce_to_obj(
     return value
 
 
-def make_map(json_schema, SchemaType, property_: PropertyType, value: ast.AST) -> ast.ListComp:
+def make_map(json_schema: SchemaType, property_: PropertyType, value: ast.AST) -> ast.ListComp:
     """
     If array has `items` as 'object' type with `$ref`
     wrap it into a list comprehension and map array's elements

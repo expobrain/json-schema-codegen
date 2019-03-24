@@ -30,7 +30,7 @@ def resolve_annotation(json_schema: SchemaType, property_: PropertyType) -> ast.
             ref = json_schema.definitions[property_["oneOf"][0]["$ref"]]
 
             if json_schema.definition_is_primitive_alias(ref):
-                annotation = resolve_annotation(ref)
+                annotation = resolve_annotation(json_schema, ref)
             else:
                 annotation = ast.Name(id=ref["title"])
         elif "additionalProperties" in property_:
@@ -53,7 +53,7 @@ def resolve_annotation(json_schema: SchemaType, property_: PropertyType) -> ast.
 
         if isinstance(items, dict):
 
-            item_annotation = resolve_annotation(items)
+            item_annotation = resolve_annotation(json_schema, items)
         elif isinstance(items, list):
             raise NotImplementedError("Tuple for 'array' is not supported: {}".format(property_))
         else:
