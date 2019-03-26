@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Trivial/internal changes
+
+- In the generated code for Python 3 classes don't inherit from `object`
+
 ## v0.4.5
 
 ### Bug fixes
