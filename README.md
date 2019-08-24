@@ -146,14 +146,3 @@ and generating the code from the AST:
 ```shell
 bin/ast_to_js <output_ast_json> <output_js_file>
 ```
-
-# Contribute
-
-Clone the repository, install packages and setup git hooks:
-
-```shell
-git clone https://github.com/expobrain/json-schema-codegen
-pip install -r requirements_dev.txt
-yarn install
-git config core.hooksPath .githooks
-```
