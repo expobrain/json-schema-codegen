@@ -22,7 +22,8 @@
   },
   "scripts": {
     "build:test:js": "babel-node scripts/build_js_ast.js && npm run code:format tests/**/*.json",
-    "code:format": "prettier --write",
+    "code:format": "prettier --write * **/*",
+    "code:format:check": "prettier --check * **/*",
     "build:bin": "webpack --config config/ast_to_js.webpack.config.js && chmod +x bin/ast_to_js"
   }
 }
