@@ -34,4 +34,3 @@ script:
   - pytest -xvv tests
   - black --check .
   - yarn run code:format:check
-  - safety check
