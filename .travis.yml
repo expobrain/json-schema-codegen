@@ -15,8 +15,6 @@ env:
 
 matrix:
   fast_finish: true
-  allow_failures:
-    - python: "3.8"
 
 before_install:
   - pip uninstall -y numpy
