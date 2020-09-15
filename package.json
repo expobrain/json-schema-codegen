@@ -19,7 +19,7 @@
     "flow-bin": "^0.74.0",
     "prettier": "^1.18.2",
     "progress-bar-webpack-plugin": "^1.11.0",
-    "webpack": "^4.12.0",
+    "webpack": "^4.44.1",
     "webpack-cli": "^3.3.7"
   },
   "scripts": {
