@@ -12,6 +12,6 @@ class Test:
     def __init__(self, data: Optional[Dict] = None):
         data = data or {}
 
-        self.nested: Optional[Nested] = None if data.get("nested") is None else Nested(
-            data.get("nested")
+        self.nested: Optional[Nested] = (
+            None if data.get("nested") is None else Nested(data.get("nested"))
         )
