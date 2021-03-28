@@ -8,7 +8,7 @@ const path = require("path");
 
 const webpack = require("webpack");
 const ProgressBarPlugin = require("progress-bar-webpack-plugin");
-const CaseSensitivePathsPlugin = require("case-sensitive-paths-webpack-plugin");
+// const CaseSensitivePathsPlugin = require("case-sensitive-paths-webpack-plugin");
 
 const basedir = path.join(__dirname, "..");
 
@@ -40,7 +40,7 @@ module.exports = {
       }
     }),
     new ProgressBarPlugin(),
-    new CaseSensitivePathsPlugin(),
+    // new CaseSensitivePathsPlugin(),
     new webpack.BannerPlugin({
       banner: "#!/usr/bin/env node",
       raw: true
