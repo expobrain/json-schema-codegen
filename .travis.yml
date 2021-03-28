@@ -21,6 +21,8 @@ matrix:
     - python: "3.9"
 
 before_install:
+  - sudo apt update
+  - sudo apt install nodejs
   - pip uninstall -y numpy
 
 install:
