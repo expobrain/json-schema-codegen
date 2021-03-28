@@ -12,7 +12,7 @@ const AST_LOCATION_KEYS = ["loc", "start", "end", "parenStart"];
 
 const parserOptions = {
   sourceType: "module",
-  plugins: ["flow"]
+  plugins: ["flow"],
 };
 
 const removeLocationData = (obj: Object) => {
@@ -46,8 +46,8 @@ const buildAst = (astDir: string) => {
     }
 
     filenames
-      .map(filename => path.join(astDir, filename))
-      .filter(filename => filename.endsWith(TEMPLATE_EXT) && fs.statSync(filename).isFile())
+      .map((filename) => path.join(astDir, filename))
+      .filter((filename) => filename.endsWith(TEMPLATE_EXT) && fs.statSync(filename).isFile())
       .forEach((filename: string) => {
         fs.readFile(filename, "utf8", (er: ?Error, sourceCode: string) => {
           const parsedAst = babylon.parse(sourceCode, parserOptions);
@@ -69,4 +69,4 @@ const buildAst = (astDir: string) => {
   });
 };
 
-["javascript_flow", "flow"].map(v => path.join(BASE_AST_DIR, v)).forEach(buildAst);
+["javascript_flow", "flow"].map((v) => path.join(BASE_AST_DIR, v)).forEach(buildAst);

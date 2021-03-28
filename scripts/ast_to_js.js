@@ -5,7 +5,7 @@ import fs from "fs";
 import generate from "@babel/generator";
 
 const generateOptions = {
-  compact: false
+  compact: false,
 };
 
 const generateCode = (s: string): string => {
