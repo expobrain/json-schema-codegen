@@ -7,12 +7,6 @@ exclude = '''
 )/
 '''
 
-[tool.isort]
-profile = "black"
-float_to_top = true
-line_length = 79
-skip_glob = ".venv,venv"
-
 [tool.poetry]
 name = "json_codegen"
 description = ''
