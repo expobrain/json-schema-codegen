@@ -24,7 +24,7 @@ astor = ">=0.7.1"
 setuptools = ">=40.1.0"
 
 [tool.poetry.dev-dependencies]
-black = "^18.6b4"
+black = "^20.8b1"
 flake8 = "^3.7.7"
 pytest = "^6.2.5"
 
