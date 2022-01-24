@@ -13,7 +13,7 @@
     "babel-loader": "^8.2.3",
     "babylon": "7.0.0-beta.47",
     "case-sensitive-paths-webpack-plugin": "^2.4.0",
-    "eslint": "^6.2.2",
+    "eslint": "^8.7.0",
     "eslint-plugin-flowtype": "^4.2.0",
     "eslint-plugin-react": "^7.28.0",
     "flow-bin": "^0.169.0",
