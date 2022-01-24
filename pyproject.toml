@@ -19,7 +19,7 @@ packages = [{ include = "json_codegen" }]
 include = ["bin/ast_to_js"]
 
 [tool.poetry.dependencies]
-python = "^3.6.2"
+python = ">=3.6.2,<3.8"
 astor = ">=0.7.1"
 
 [tool.poetry.dev-dependencies]

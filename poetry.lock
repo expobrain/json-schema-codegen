@@ -44,10 +44,7 @@ pathspec = ">=0.9.0,<1"
 platformdirs = ">=2"
 tomli = ">=0.2.6,<2.0.0"
 typed-ast = {version = ">=1.4.2", markers = "python_version < \"3.8\" and implementation_name == \"cpython\""}
-typing-extensions = [
-    {version = ">=3.10.0.0", markers = "python_version < \"3.10\""},
-    {version = "!=3.10.0.1", markers = "python_version >= \"3.10\""},
-]
+typing-extensions = ">=3.10.0.0"
 
 [package.extras]
 colorama = ["colorama (>=0.4.3)"]
@@ -287,8 +284,8 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 
 [metadata]
 lock-version = "1.1"
-python-versions = "^3.6.2"
-content-hash = "cabd95fca9f192b14b15645fe0fd1613aa171dc6cca284e4fae9019c79501342"
+python-versions = ">=3.6.2,<3.8"
+content-hash = "6248d7b812bd19f49900a84295ae9991a69fc62eacd1c3bb48fd82452e9e9f36"
 
 [metadata.files]
 astor = [
