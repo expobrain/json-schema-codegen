@@ -14,7 +14,7 @@
     "babylon": "7.0.0-beta.47",
     "case-sensitive-paths-webpack-plugin": "^2.4.0",
     "eslint": "^8.7.0",
-    "eslint-plugin-flowtype": "^4.2.0",
+    "eslint-plugin-flowtype": "^8.0.2",
     "eslint-plugin-react": "^7.28.0",
     "flow-bin": "^0.169.0",
     "prettier": "^2.5.1",
