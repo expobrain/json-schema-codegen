@@ -1,8 +1,42 @@
 [tool.black]
 line-length = 99
-target-version = ["py36", "py37"]
+target-version = ["py36", "py37", "py38", "py39", "py310"]
 exclude = '''
 /(
     \.git|node_modules
 )/
 '''
+
+[tool.isort]
+profile = "black"
+float_to_top = true
+line_length = 79
+skip_glob = ".venv,venv"
+
+[tool.poetry]
+name = "json_codegen"
+description = ''
+keywords = ["python", "javascript", "json-schema", "codegen"]
+version = "0.4.6"
+authors = ["Daniele Esposti <daniele.esposti@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{ include = "json_codegen" }]
+include = ["bin/ast_to_js"]
+
+[tool.poetry.dependencies]
+python = "^3.6"
+astor = ">=0.7.1"
+setuptools = ">=40.1.0"
+
+[tool.poetry.dev-dependencies]
+black = "^18.6b4"
+flake8 = "^3.7.7"
+pytest = "^4.1.0"
+
+[tool.poetry.scripts]
+json_codegen = "json_codegen.cli.main:cli"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
