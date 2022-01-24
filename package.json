@@ -10,7 +10,7 @@
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-flow": "^7.0.0",
     "babel-eslint": "^10.0.2",
-    "babel-loader": "^8.0.6",
+    "babel-loader": "^8.2.3",
     "babylon": "7.0.0-beta.44",
     "case-sensitive-paths-webpack-plugin": "^2.4.0",
     "eslint": "^6.2.2",
