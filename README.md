@@ -76,8 +76,8 @@ List of currently supported languages:
 
 # Requirements
 
-- Python 3.x
-- Node v8.4+
+- Python 3.6 / 3.7
+- Node v12
 
 # Installation
 

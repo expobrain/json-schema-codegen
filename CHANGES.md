@@ -1,10 +1,11 @@
 # Changelog
 
-## Unreleased
+## v0.4.6
 
 ### Trivial/internal changes
 
 - In the generated code for Python 3 classes don't inherit from `object`
+- Migrated to Poetry as package management
 
 ## v0.4.5
 

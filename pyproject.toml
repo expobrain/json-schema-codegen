@@ -9,7 +9,7 @@ exclude = '''
 
 [tool.poetry]
 name = "json_codegen"
-description = ''
+description = "Generate code from JSON schema files."
 keywords = ["python", "javascript", "json-schema", "codegen"]
 version = "0.4.6"
 authors = ["Daniele Esposti <daniele.esposti@gmail.com>"]
