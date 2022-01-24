@@ -25,7 +25,7 @@ setuptools = ">=40.1.0"
 
 [tool.poetry.dev-dependencies]
 black = "^18.6b4"
-flake8 = "^3.7.7"
+flake8 = "^4.0.1"
 pytest = "^6.2.5"
 
 [tool.poetry.scripts]
