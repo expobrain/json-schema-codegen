@@ -7,7 +7,7 @@
     "@babel/core": "^7.17.10",
     "@babel/generator": "^7.18.2",
     "@babel/node": "^7.17.10",
-    "@babel/preset-env": "^7.17.10",
+    "@babel/preset-env": "^7.18.2",
     "@babel/preset-flow": "^7.17.12",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.2.5",
