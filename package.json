@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "license": "MIT",
   "devDependencies": {
-    "@babel/cli": "^7.18.10",
+    "@babel/cli": "^7.19.3",
     "@babel/core": "^7.18.13",
     "@babel/generator": "^7.18.9",
     "@babel/node": "^7.18.10",
