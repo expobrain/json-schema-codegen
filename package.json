@@ -16,7 +16,7 @@
     "eslint": "^8.24.0",
     "eslint-plugin-flowtype": "^8.0.2",
     "eslint-plugin-react": "^7.31.8",
-    "flow-bin": "^0.188.1",
+    "flow-bin": "^0.191.0",
     "prettier": "^2.7.1",
     "progress-bar-webpack-plugin": "^2.1.0",
     "webpack": "^5.74.0",
