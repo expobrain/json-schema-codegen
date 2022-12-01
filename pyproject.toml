@@ -1,6 +1,6 @@
 [tool.black]
 line-length = 99
-target-version = ["py36", "py37", "py38", "py39", "py310"]
+target-version = ["py37", "py38", "py39", "py310"]
 exclude = '''
 /(
     \.git|node_modules|\.venv
@@ -19,7 +19,7 @@ packages = [{ include = "json_codegen" }]
 include = ["bin/ast_to_js"]
 
 [tool.poetry.dependencies]
-python = ">=3.6.2,<3.8"
+python = ">=3.7,<3.8"
 astor = ">=0.7.1"
 
 [tool.poetry.dev-dependencies]
