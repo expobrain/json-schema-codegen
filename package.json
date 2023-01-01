@@ -20,7 +20,7 @@
     "prettier": "^2.7.1",
     "progress-bar-webpack-plugin": "^2.1.0",
     "webpack": "^5.74.0",
-    "webpack-cli": "^5.0.0"
+    "webpack-cli": "^5.0.1"
   },
   "scripts": {
     "build:test:js": "babel-node scripts/build_js_ast.js && npm run code:format tests/**/*.json",
