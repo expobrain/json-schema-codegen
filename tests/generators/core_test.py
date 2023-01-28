@@ -2,10 +2,13 @@ from pathlib import Path
 
 import pytest
 
-from json_codegen.core import BaseGenerator, GeneratorNotFoundException, load_external_generator
+from json_codegen.core import (
+    BaseGenerator,
+    GeneratorNotFoundException,
+    load_external_generator,
+)
 
-
-fixture_dir = Path(__file__).parent / "fixtures"
+fixture_dir = Path(__file__).parents[1] / "fixtures" / "generators"
 
 
 def test_load_external_generator():

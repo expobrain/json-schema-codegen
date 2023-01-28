@@ -1,184 +1,184 @@
 {
-  "type": "File",
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " @flow"
+    }
+  ],
   "program": {
-    "type": "Program",
-    "sourceType": "module",
     "body": [
       {
-        "type": "DeclareTypeAlias",
         "id": {
-          "type": "Identifier",
-          "name": "MyType"
-        },
-        "typeParameters": null,
-        "right": {
-          "type": "ObjectTypeAnnotation",
-          "callProperties": [],
-          "properties": [
-            {
-              "type": "ObjectTypeProperty",
-              "key": {
-                "type": "Identifier",
-                "name": "v"
-              },
-              "static": false,
-              "kind": "init",
-              "method": false,
-              "value": {
-                "type": "NullableTypeAnnotation",
-                "typeAnnotation": {
-                  "type": "NumberTypeAnnotation"
-                }
-              },
-              "variance": null,
-              "optional": false
-            },
-            {
-              "type": "ObjectTypeProperty",
-              "key": {
-                "type": "Identifier",
-                "name": "constructor"
-              },
-              "static": false,
-              "kind": "init",
-              "method": true,
-              "value": {
-                "type": "FunctionTypeAnnotation",
-                "params": [
-                  {
-                    "type": "FunctionTypeParam",
-                    "name": {
-                      "type": "Identifier",
-                      "name": "data"
-                    },
-                    "optional": false,
-                    "typeAnnotation": {
-                      "type": "NullableTypeAnnotation",
-                      "typeAnnotation": {
-                        "type": "GenericTypeAnnotation",
-                        "typeParameters": null,
-                        "id": {
-                          "type": "Identifier",
-                          "name": "Object"
-                        }
-                      }
-                    }
-                  }
-                ],
-                "rest": null,
-                "typeParameters": null,
-                "returnType": {
-                  "type": "VoidTypeAnnotation"
-                }
-              },
-              "optional": false
-            }
-          ],
-          "indexers": [],
-          "exact": false
+          "name": "MyType",
+          "type": "Identifier"
         },
         "leadingComments": [
           {
             "type": "CommentLine",
             "value": " @flow"
           }
-        ]
-      },
-      {
-        "type": "DeclareTypeAlias",
-        "id": {
-          "type": "Identifier",
-          "name": "Test"
-        },
-        "typeParameters": null,
+        ],
         "right": {
-          "type": "ObjectTypeAnnotation",
           "callProperties": [],
+          "exact": false,
+          "indexers": [],
           "properties": [
             {
-              "type": "ObjectTypeProperty",
               "key": {
-                "type": "Identifier",
-                "name": "x"
+                "name": "v",
+                "type": "Identifier"
               },
-              "static": false,
               "kind": "init",
               "method": false,
+              "optional": false,
+              "static": false,
+              "type": "ObjectTypeProperty",
               "value": {
-                "type": "GenericTypeAnnotation",
-                "typeParameters": {
-                  "type": "TypeParameterInstantiation",
-                  "params": [
-                    {
-                      "type": "GenericTypeAnnotation",
-                      "typeParameters": null,
-                      "id": {
-                        "type": "Identifier",
-                        "name": "MyType"
-                      }
-                    }
-                  ]
-                },
-                "id": {
-                  "type": "Identifier",
-                  "name": "Array"
+                "type": "NullableTypeAnnotation",
+                "typeAnnotation": {
+                  "type": "NumberTypeAnnotation"
                 }
               },
-              "variance": null,
-              "optional": false
+              "variance": null
             },
             {
-              "type": "ObjectTypeProperty",
               "key": {
-                "type": "Identifier",
-                "name": "constructor"
+                "name": "constructor",
+                "type": "Identifier"
               },
-              "static": false,
               "kind": "init",
               "method": true,
+              "optional": false,
+              "static": false,
+              "type": "ObjectTypeProperty",
               "value": {
-                "type": "FunctionTypeAnnotation",
                 "params": [
                   {
-                    "type": "FunctionTypeParam",
                     "name": {
-                      "type": "Identifier",
-                      "name": "data"
+                      "name": "data",
+                      "type": "Identifier"
                     },
                     "optional": false,
+                    "type": "FunctionTypeParam",
                     "typeAnnotation": {
                       "type": "NullableTypeAnnotation",
                       "typeAnnotation": {
-                        "type": "GenericTypeAnnotation",
-                        "typeParameters": null,
                         "id": {
-                          "type": "Identifier",
-                          "name": "Object"
-                        }
+                          "name": "Object",
+                          "type": "Identifier"
+                        },
+                        "type": "GenericTypeAnnotation",
+                        "typeParameters": null
                       }
                     }
                   }
                 ],
                 "rest": null,
-                "typeParameters": null,
                 "returnType": {
                   "type": "VoidTypeAnnotation"
-                }
-              },
-              "optional": false
+                },
+                "type": "FunctionTypeAnnotation",
+                "typeParameters": null
+              }
             }
           ],
+          "type": "ObjectTypeAnnotation"
+        },
+        "type": "DeclareTypeAlias",
+        "typeParameters": null
+      },
+      {
+        "id": {
+          "name": "Test",
+          "type": "Identifier"
+        },
+        "right": {
+          "callProperties": [],
+          "exact": false,
           "indexers": [],
-          "exact": false
-        }
+          "properties": [
+            {
+              "key": {
+                "name": "x",
+                "type": "Identifier"
+              },
+              "kind": "init",
+              "method": false,
+              "optional": false,
+              "static": false,
+              "type": "ObjectTypeProperty",
+              "value": {
+                "id": {
+                  "name": "Array",
+                  "type": "Identifier"
+                },
+                "type": "GenericTypeAnnotation",
+                "typeParameters": {
+                  "params": [
+                    {
+                      "id": {
+                        "name": "MyType",
+                        "type": "Identifier"
+                      },
+                      "type": "GenericTypeAnnotation",
+                      "typeParameters": null
+                    }
+                  ],
+                  "type": "TypeParameterInstantiation"
+                }
+              },
+              "variance": null
+            },
+            {
+              "key": {
+                "name": "constructor",
+                "type": "Identifier"
+              },
+              "kind": "init",
+              "method": true,
+              "optional": false,
+              "static": false,
+              "type": "ObjectTypeProperty",
+              "value": {
+                "params": [
+                  {
+                    "name": {
+                      "name": "data",
+                      "type": "Identifier"
+                    },
+                    "optional": false,
+                    "type": "FunctionTypeParam",
+                    "typeAnnotation": {
+                      "type": "NullableTypeAnnotation",
+                      "typeAnnotation": {
+                        "id": {
+                          "name": "Object",
+                          "type": "Identifier"
+                        },
+                        "type": "GenericTypeAnnotation",
+                        "typeParameters": null
+                      }
+                    }
+                  }
+                ],
+                "rest": null,
+                "returnType": {
+                  "type": "VoidTypeAnnotation"
+                },
+                "type": "FunctionTypeAnnotation",
+                "typeParameters": null
+              }
+            }
+          ],
+          "type": "ObjectTypeAnnotation"
+        },
+        "type": "DeclareTypeAlias",
+        "typeParameters": null
       }
     ],
-    "directives": []
+    "directives": [],
+    "sourceType": "module",
+    "type": "Program"
   },
-  "comments": [
-    {
-      "type": "CommentLine",
-      "value": " @flow"
-    }
-  ]
+  "type": "File"
 }

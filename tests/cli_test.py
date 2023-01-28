@@ -6,7 +6,7 @@ from json_codegen.core import BaseGenerator
 
 def test_langages():
     languages = set(cli.LANGUAGES.keys())
-    expected = set(["python3", "python3+marshmallow", "javascript+flow", "flow"])
+    expected = {"python3", "python3+marshmallow", "javascript+flow", "flow"}
 
     assert languages == expected
 

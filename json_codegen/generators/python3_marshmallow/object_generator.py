@@ -3,7 +3,7 @@ import ast
 from json_codegen.generators.python3_marshmallow.utils import Annotations, class_name
 
 
-class ObjectGenerator(object):
+class ObjectGenerator:
     @staticmethod
     def _get_property_name(node_assign):
         name = node_assign.targets[0]
@@ -95,7 +95,7 @@ class ObjectGenerator(object):
         Required property         -> self.prop  = parent_dict["prop"]
         Optional property         -> self.prop  = parent_dict.get("prop")
         Primative nested list     -> self.prop  = parent_dict.get("prop")
-        Non-primative nested list -> self.props = [PropertyClass(el) for el in parent_dict.get('props', {})]
+        Non-primative nested list -> self.props = [PropertyClass(el) for el in parent_dict.get('props', {})]  # noqa: E501
         """
         prop = ObjectGenerator._get_property_name(node_assign)
 

@@ -1,9 +1,14 @@
 import json
 
 from json_codegen.astlib import javascript as ast
-from json_codegen.core import SchemaParser, BaseGenerator
+from json_codegen.core import BaseGenerator, SchemaParser
 from json_codegen.js_utils import get_type_annotation
-from json_codegen.types import DefinitionType, PropertiesType, PropertyType, RequiredType
+from json_codegen.types import (
+    DefinitionType,
+    PropertiesType,
+    PropertyType,
+    RequiredType,
+)
 
 
 class JavaScriptFlowGenerator(SchemaParser, BaseGenerator):
@@ -74,9 +79,7 @@ class JavaScriptFlowGenerator(SchemaParser, BaseGenerator):
             one_of = items["oneOf"][0]
 
             if "$ref" not in one_of:
-                raise NotImplementedError(
-                    "Only 'oneOf' with '$ref's are supported: {}".format(one_of)
-                )
+                raise NotImplementedError(f"Only 'oneOf' with '$ref's are supported: {one_of}")
 
             ref_key = one_of["$ref"]
             ref = self.definitions[ref_key]
@@ -94,7 +97,7 @@ class JavaScriptFlowGenerator(SchemaParser, BaseGenerator):
                     ],
                 )
         elif isinstance(items, list) and len(items):
-            raise NotImplementedError("Tuples not implemented yet: {}".format(items))
+            raise NotImplementedError(f"Tuples not implemented yet: {items}")
 
         # Alternate expression
         alternate = ast.ArrayExpression(
@@ -189,7 +192,7 @@ class JavaScriptFlowGenerator(SchemaParser, BaseGenerator):
         elif type_ == "object":
             return self._get_default_for_object(name, definition)
         else:
-            raise NotImplementedError("{}: {} => {}".format(self, name, definition))
+            raise NotImplementedError(f"{self}: {name} => {definition}")
 
     def _get_reducer_for_property(self, key, property_):
         # Object.entries()

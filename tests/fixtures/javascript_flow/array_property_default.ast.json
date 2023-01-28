@@ -1,188 +1,188 @@
 {
-  "type": "File",
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " @flow"
+    }
+  ],
   "program": {
-    "type": "Program",
-    "sourceType": "module",
     "body": [
       {
-        "type": "ExportNamedDeclaration",
-        "specifiers": [],
-        "source": null,
         "declaration": {
-          "type": "ClassDeclaration",
-          "id": {
-            "type": "Identifier",
-            "name": "Test"
-          },
-          "superClass": null,
           "body": {
-            "type": "ClassBody",
             "body": [
               {
-                "type": "ClassProperty",
-                "static": false,
-                "key": {
-                  "type": "Identifier",
-                  "name": "x"
-                },
                 "computed": false,
-                "variance": null,
+                "key": {
+                  "name": "x",
+                  "type": "Identifier"
+                },
+                "static": false,
+                "type": "ClassProperty",
                 "typeAnnotation": {
                   "type": "TypeAnnotation",
                   "typeAnnotation": {
+                    "id": {
+                      "name": "Array",
+                      "type": "Identifier"
+                    },
                     "type": "GenericTypeAnnotation",
                     "typeParameters": {
-                      "type": "TypeParameterInstantiation",
                       "params": [
                         {
                           "type": "AnyTypeAnnotation"
                         }
-                      ]
-                    },
-                    "id": {
-                      "type": "Identifier",
-                      "name": "Array"
+                      ],
+                      "type": "TypeParameterInstantiation"
                     }
                   }
                 },
-                "value": null
+                "value": null,
+                "variance": null
               },
               {
-                "type": "ClassMethod",
-                "static": false,
-                "key": {
-                  "type": "Identifier",
-                  "name": "constructor"
-                },
-                "computed": false,
-                "kind": "constructor",
-                "id": null,
-                "generator": false,
                 "async": false,
-                "params": [
-                  {
-                    "type": "AssignmentPattern",
-                    "left": {
-                      "type": "Identifier",
-                      "name": "data",
-                      "typeAnnotation": {
-                        "type": "TypeAnnotation",
-                        "typeAnnotation": {
-                          "type": "GenericTypeAnnotation",
-                          "typeParameters": null,
-                          "id": {
-                            "type": "Identifier",
-                            "name": "Object"
-                          }
-                        }
-                      }
-                    },
-                    "right": {
-                      "type": "ObjectExpression",
-                      "properties": []
-                    }
-                  }
-                ],
                 "body": {
-                  "type": "BlockStatement",
                   "body": [
                     {
-                      "type": "ExpressionStatement",
                       "expression": {
-                        "type": "AssignmentExpression",
-                        "operator": "=",
                         "left": {
-                          "type": "MemberExpression",
+                          "computed": false,
                           "object": {
                             "type": "ThisExpression"
                           },
                           "property": {
-                            "type": "Identifier",
-                            "name": "x"
+                            "name": "x",
+                            "type": "Identifier"
                           },
-                          "computed": false
+                          "type": "MemberExpression"
                         },
+                        "operator": "=",
                         "right": {
-                          "type": "ConditionalExpression",
-                          "test": {
-                            "type": "CallExpression",
-                            "callee": {
-                              "type": "MemberExpression",
-                              "object": {
-                                "type": "Identifier",
-                                "name": "Array"
-                              },
-                              "property": {
-                                "type": "Identifier",
-                                "name": "isArray"
-                              },
-                              "computed": false
-                            },
-                            "arguments": [
-                              {
-                                "type": "MemberExpression",
-                                "object": {
-                                  "type": "Identifier",
-                                  "name": "data"
-                                },
-                                "property": {
-                                  "type": "Identifier",
-                                  "name": "x"
-                                },
-                                "computed": false
-                              }
-                            ]
-                          },
-                          "consequent": {
-                            "type": "MemberExpression",
-                            "object": {
-                              "type": "Identifier",
-                              "name": "data"
-                            },
-                            "property": {
-                              "type": "Identifier",
-                              "name": "x"
-                            },
-                            "computed": false
-                          },
                           "alternate": {
-                            "type": "ArrayExpression",
                             "elements": [
                               {
-                                "type": "NumericLiteral",
                                 "extra": {
-                                  "rawValue": 42,
-                                  "raw": "42"
+                                  "raw": "42",
+                                  "rawValue": 42
                                 },
+                                "type": "NumericLiteral",
                                 "value": 42
                               }
-                            ]
-                          }
-                        }
-                      }
+                            ],
+                            "type": "ArrayExpression"
+                          },
+                          "consequent": {
+                            "computed": false,
+                            "object": {
+                              "name": "data",
+                              "type": "Identifier"
+                            },
+                            "property": {
+                              "name": "x",
+                              "type": "Identifier"
+                            },
+                            "type": "MemberExpression"
+                          },
+                          "test": {
+                            "arguments": [
+                              {
+                                "computed": false,
+                                "object": {
+                                  "name": "data",
+                                  "type": "Identifier"
+                                },
+                                "property": {
+                                  "name": "x",
+                                  "type": "Identifier"
+                                },
+                                "type": "MemberExpression"
+                              }
+                            ],
+                            "callee": {
+                              "computed": false,
+                              "object": {
+                                "name": "Array",
+                                "type": "Identifier"
+                              },
+                              "property": {
+                                "name": "isArray",
+                                "type": "Identifier"
+                              },
+                              "type": "MemberExpression"
+                            },
+                            "type": "CallExpression"
+                          },
+                          "type": "ConditionalExpression"
+                        },
+                        "type": "AssignmentExpression"
+                      },
+                      "type": "ExpressionStatement"
                     }
                   ],
-                  "directives": []
-                }
+                  "directives": [],
+                  "type": "BlockStatement"
+                },
+                "computed": false,
+                "generator": false,
+                "id": null,
+                "key": {
+                  "name": "constructor",
+                  "type": "Identifier"
+                },
+                "kind": "constructor",
+                "params": [
+                  {
+                    "left": {
+                      "name": "data",
+                      "type": "Identifier",
+                      "typeAnnotation": {
+                        "type": "TypeAnnotation",
+                        "typeAnnotation": {
+                          "id": {
+                            "name": "Object",
+                            "type": "Identifier"
+                          },
+                          "type": "GenericTypeAnnotation",
+                          "typeParameters": null
+                        }
+                      }
+                    },
+                    "right": {
+                      "properties": [],
+                      "type": "ObjectExpression"
+                    },
+                    "type": "AssignmentPattern"
+                  }
+                ],
+                "static": false,
+                "type": "ClassMethod"
               }
-            ]
-          }
+            ],
+            "type": "ClassBody"
+          },
+          "id": {
+            "name": "Test",
+            "type": "Identifier"
+          },
+          "superClass": null,
+          "type": "ClassDeclaration"
         },
+        "exportKind": "value",
         "leadingComments": [
           {
             "type": "CommentLine",
             "value": " @flow"
           }
         ],
-        "exportKind": "value"
+        "source": null,
+        "specifiers": [],
+        "type": "ExportNamedDeclaration"
       }
     ],
-    "directives": []
+    "directives": [],
+    "sourceType": "module",
+    "type": "Program"
   },
-  "comments": [
-    {
-      "type": "CommentLine",
-      "value": " @flow"
-    }
-  ]
+  "type": "File"
 }

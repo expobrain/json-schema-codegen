@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 
+import sys
 from argparse import ArgumentParser
 from pathlib import Path
-import sys
-
-sys.path.append((Path(__file__).parent.resolve() / "..").as_posix())
 
 from json_codegen import generators
-from json_codegen.core import load_schema, load_external_generator
+from json_codegen.core import load_external_generator, load_schema
+
+sys.path.append((Path(__file__).parent.resolve() / "..").as_posix())
 
 
 LANGUAGES = {
@@ -22,7 +22,7 @@ def get_generator(language):
     try:
         return LANGUAGES[language]
     except KeyError:
-        raise ValueError("Language {} not supported".format(language))
+        raise ValueError(f"Language {language} not supported")
 
 
 def main():

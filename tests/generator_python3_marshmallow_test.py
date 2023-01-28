@@ -1,14 +1,13 @@
-from pathlib import Path
 import ast
-
-import pytest
-import astor
-import warnings
 import os
+import warnings
+from pathlib import Path
+
+import astor
+import pytest
 
 from json_codegen import load_schema
 from json_codegen.generators.python3_marshmallow import Python3MarshmallowGenerator
-
 
 SCHEMAS_DIR = Path(__file__).parent / "fixtures" / "schemas"
 FIXTURES_DIR = Path(__file__).parent / "fixtures" / "python3_marshmallow"

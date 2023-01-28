@@ -1,9 +1,8 @@
-from typing import Iterable
-
-from pathlib import Path
-from collections import OrderedDict
 import importlib.util
 import json
+from collections import OrderedDict
+from pathlib import Path
+from typing import Iterable
 
 
 class GeneratorNotFoundException(Exception):
@@ -22,14 +21,14 @@ def load_external_generator(filename: Path):
     try:
         return getattr(module, klass_name)
     except AttributeError:
-        raise GeneratorNotFoundException("Class {} not found in {}".format(klass_name, filename))
+        raise GeneratorNotFoundException(f"Class {klass_name} not found in {filename}")
 
 
 def load_schema(schema_str):
     return json.loads(schema_str, object_pairs_hook=OrderedDict)
 
 
-class SchemaParser(object):
+class SchemaParser:
     def __init__(self, schema, *args, **kwds):
         self.schema = schema
         self.prefix = kwds.get("prefix") or ""
@@ -41,7 +40,7 @@ class SchemaParser(object):
         definitions = self.schema.get("definitions", {})
 
         for key, definition in definitions.items():
-            new_key = "#/definitions/{}".format(key)
+            new_key = f"#/definitions/{key}"
             new_definition = dict(definition)
 
             if "title" not in new_definition:
@@ -77,7 +76,7 @@ class SchemaParser(object):
         return (d for d in self.definitions.values() if self.definition_is_primitive_alias(d))
 
 
-class BaseGenerator(object):
+class BaseGenerator:
     _body = None
 
     def generate(self):

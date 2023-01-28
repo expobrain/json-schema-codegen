@@ -1,12 +1,11 @@
-from pathlib import Path
 import ast
+from pathlib import Path
 
-import pytest
 import astor
+import pytest
 
 from json_codegen import load_schema
 from json_codegen.generators.python3 import Python3Generator
-
 
 SCHEMAS_DIR = Path(__file__).parent / "fixtures" / "schemas"
 FIXTURES_DIR = Path(__file__).parent / "fixtures" / "python3"

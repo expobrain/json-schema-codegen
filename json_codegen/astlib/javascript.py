@@ -1,6 +1,5 @@
-from typing import NewType, Dict
 import json
-
+from typing import Dict, NewType
 
 AST = NewType("AST", Dict)
 

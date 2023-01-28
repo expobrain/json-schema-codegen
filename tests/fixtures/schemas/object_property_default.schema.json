@@ -1,11 +1,13 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Test",
-  "type": "object",
   "properties": {
     "x": {
-      "type": "object",
-      "default": { "x": 42 }
+      "default": {
+        "x": 42
+      },
+      "type": "object"
     }
-  }
+  },
+  "title": "Test",
+  "type": "object"
 }

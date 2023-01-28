@@ -1,10 +1,10 @@
 {
-  "type": "File",
+  "comments": [],
   "program": {
-    "type": "Program",
-    "sourceType": "module",
     "body": [],
-    "directives": []
+    "directives": [],
+    "sourceType": "module",
+    "type": "Program"
   },
-  "comments": []
+  "type": "File"
 }

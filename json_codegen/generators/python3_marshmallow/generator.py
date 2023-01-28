@@ -4,14 +4,14 @@ from typing import List
 import astor
 
 from json_codegen.astlib import python as ast
-from json_codegen.core import SchemaParser, BaseGenerator
-from json_codegen.types import PropertyType
+from json_codegen.core import BaseGenerator, SchemaParser
 from json_codegen.generators.python3_marshmallow.object_generator import ObjectGenerator
 from json_codegen.generators.python3_marshmallow.utils import (
     class_name,
     marshmallow_type_map,
     upper_first_letter,
 )
+from json_codegen.types import PropertyType
 
 
 class Python3MarshmallowGenerator(SchemaParser, BaseGenerator):
@@ -221,7 +221,7 @@ class Python3MarshmallowGenerator(SchemaParser, BaseGenerator):
 
         # Only support one custom type for now
         if len(refs) > 1:
-            raise NotImplementedError("{}: we only support one $ref per array".format(self))
+            raise NotImplementedError(f"{self}: we only support one $ref per array")
 
         # Don't wrap if type is a primitive
         ref = self.definitions[refs[0]]
