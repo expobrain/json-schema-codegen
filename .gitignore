@@ -113,3 +113,6 @@ flow-typed
 
 # VSCode
 .vscode
+
+# testmon
+.testmondata
