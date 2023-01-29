@@ -6,11 +6,11 @@
 version: 2
 updates:
   - package-ecosystem: "pip"
-    directory: "/" 
+    directory: "/"
     schedule:
       interval: "monthly"
-  - package-ecosystem: "npm" 
-    directory: "/" 
+  - package-ecosystem: "npm"
+    directory: "/"
     schedule:
       interval: "monthly"
   - package-ecosystem: "github-actions"

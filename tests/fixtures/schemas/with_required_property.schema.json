@@ -1,9 +1,13 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Test",
-  "type": "object",
-  "required": ["id"],
   "properties": {
-    "id": { "type": "integer" }
-  }
+    "id": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "id"
+  ],
+  "title": "Test",
+  "type": "object"
 }

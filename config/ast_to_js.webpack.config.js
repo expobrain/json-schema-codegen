@@ -16,7 +16,7 @@ const basedir = path.join(__dirname, "..");
 // files on the user's system. See constants.js
 const nodeOptions = {
   __filename: false,
-  __dirname: false
+  __dirname: false,
 };
 
 module.exports = {
@@ -29,26 +29,26 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: "babel-loader"
-      }
-    ]
+        loader: "babel-loader",
+      },
+    ],
   },
   plugins: [
     new webpack.LoaderOptionsPlugin({
       options: {
-        minimize: true
-      }
+        minimize: true,
+      },
     }),
     new ProgressBarPlugin(),
     new CaseSensitivePathsPlugin(),
     new webpack.BannerPlugin({
       banner: "#!/usr/bin/env node",
-      raw: true
-    })
+      raw: true,
+    }),
   ],
   output: {
     filename: `[name]`,
     path: path.join(basedir, "bin"),
-    libraryTarget: "commonjs2"
-  }
+    libraryTarget: "commonjs2",
+  },
 };

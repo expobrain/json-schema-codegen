@@ -1,21 +1,27 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Test",
-  "type": "object",
-  "required": ["x"],
-  "properties": {
-    "x": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "oneOf": [{ "$ref": "#/definitions/MyType" }]
-      },
-      "default": []
-    }
-  },
   "definitions": {
     "MyType": {
       "type": "string"
     }
-  }
+  },
+  "properties": {
+    "x": {
+      "default": [],
+      "items": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/MyType"
+          }
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "x"
+  ],
+  "title": "Test",
+  "type": "object"
 }

@@ -1,5 +1,5 @@
-from json_codegen.types import DefinitionType, PropertyType
 from json_codegen.astlib import javascript as ast
+from json_codegen.types import DefinitionType, PropertyType
 
 
 def get_object_type_annotation(definitions: DefinitionType, property_: PropertyType) -> ast.AST:
@@ -56,7 +56,7 @@ def get_single_type_annotation(definitions: DefinitionType, property_: PropertyT
         return ast.GenericTypeAnnotation(ast.Identifier(definition["title"]))
 
     # Nothing matches
-    raise NotImplementedError("{}: {}".format(definitions, property_))
+    raise NotImplementedError(f"{definitions}: {property_}")
 
 
 def get_union_type_annotation(definitions, types):

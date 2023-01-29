@@ -1,12 +1,11 @@
+import json
 from pathlib import Path
 
-import pytest
 import astor
-import json
+import pytest
 
 from json_codegen import load_schema
 from json_codegen.generators.javascript_flow import JavaScriptFlowGenerator
-
 
 SCHEMAS_DIR = Path(__file__).parent / "fixtures" / "schemas"
 FIXTURES_DIR = Path(__file__).parent / "fixtures" / "javascript_flow"

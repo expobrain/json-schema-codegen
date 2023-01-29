@@ -1,1 +1,5 @@
-from .core import GeneratorNotFoundException, load_schema, load_external_generator
+from json_codegen.core import (  # noqa: F401
+    GeneratorNotFoundException,
+    load_external_generator,
+    load_schema,
+)

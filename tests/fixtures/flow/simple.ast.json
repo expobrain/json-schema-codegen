@@ -1,37 +1,37 @@
 {
-  "type": "File",
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " @flow"
+    }
+  ],
   "program": {
-    "type": "Program",
-    "sourceType": "module",
     "body": [
       {
-        "type": "DeclareTypeAlias",
         "id": {
-          "type": "Identifier",
-          "name": "Test"
-        },
-        "typeParameters": null,
-        "right": {
-          "type": "ObjectTypeAnnotation",
-          "callProperties": [],
-          "properties": [],
-          "indexers": [],
-          "exact": false
+          "name": "Test",
+          "type": "Identifier"
         },
         "leadingComments": [
           {
             "type": "CommentLine",
             "value": " @flow"
           }
-        ]
+        ],
+        "right": {
+          "callProperties": [],
+          "exact": false,
+          "indexers": [],
+          "properties": [],
+          "type": "ObjectTypeAnnotation"
+        },
+        "type": "DeclareTypeAlias",
+        "typeParameters": null
       }
     ],
-    "directives": []
+    "directives": [],
+    "sourceType": "module",
+    "type": "Program"
   },
-  "comments": [
-    {
-      "type": "CommentLine",
-      "value": " @flow"
-    }
-  ]
+  "type": "File"
 }

@@ -1,32 +1,24 @@
 {
-  "type": "File",
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " @flow"
+    }
+  ],
   "program": {
-    "type": "Program",
-    "sourceType": "module",
     "body": [
       {
-        "type": "ExportNamedDeclaration",
-        "specifiers": [],
-        "source": null,
         "declaration": {
-          "type": "ClassDeclaration",
-          "id": {
-            "type": "Identifier",
-            "name": "Test"
-          },
-          "superClass": null,
           "body": {
-            "type": "ClassBody",
             "body": [
               {
-                "type": "ClassProperty",
-                "static": false,
-                "key": {
-                  "type": "Identifier",
-                  "name": "id"
-                },
                 "computed": false,
-                "variance": null,
+                "key": {
+                  "name": "id",
+                  "type": "Identifier"
+                },
+                "static": false,
+                "type": "ClassProperty",
                 "typeAnnotation": {
                   "type": "TypeAnnotation",
                   "typeAnnotation": {
@@ -36,99 +28,107 @@
                     }
                   }
                 },
-                "value": null
+                "value": null,
+                "variance": null
               },
               {
-                "type": "ClassMethod",
-                "static": false,
-                "key": {
-                  "type": "Identifier",
-                  "name": "constructor"
-                },
-                "computed": false,
-                "kind": "constructor",
-                "id": null,
-                "generator": false,
                 "async": false,
-                "params": [
-                  {
-                    "type": "AssignmentPattern",
-                    "left": {
-                      "type": "Identifier",
-                      "name": "data",
-                      "typeAnnotation": {
-                        "type": "TypeAnnotation",
-                        "typeAnnotation": {
-                          "type": "GenericTypeAnnotation",
-                          "typeParameters": null,
-                          "id": {
-                            "type": "Identifier",
-                            "name": "Object"
-                          }
-                        }
-                      }
-                    },
-                    "right": {
-                      "type": "ObjectExpression",
-                      "properties": []
-                    }
-                  }
-                ],
                 "body": {
-                  "type": "BlockStatement",
                   "body": [
                     {
-                      "type": "ExpressionStatement",
                       "expression": {
-                        "type": "AssignmentExpression",
-                        "operator": "=",
                         "left": {
-                          "type": "MemberExpression",
+                          "computed": false,
                           "object": {
                             "type": "ThisExpression"
                           },
                           "property": {
-                            "type": "Identifier",
-                            "name": "id"
+                            "name": "id",
+                            "type": "Identifier"
                           },
-                          "computed": false
+                          "type": "MemberExpression"
                         },
+                        "operator": "=",
                         "right": {
-                          "type": "MemberExpression",
+                          "computed": false,
                           "object": {
-                            "type": "Identifier",
-                            "name": "data"
+                            "name": "data",
+                            "type": "Identifier"
                           },
                           "property": {
-                            "type": "Identifier",
-                            "name": "id"
+                            "name": "id",
+                            "type": "Identifier"
                           },
-                          "computed": false
-                        }
-                      }
+                          "type": "MemberExpression"
+                        },
+                        "type": "AssignmentExpression"
+                      },
+                      "type": "ExpressionStatement"
                     }
                   ],
-                  "directives": []
-                }
+                  "directives": [],
+                  "type": "BlockStatement"
+                },
+                "computed": false,
+                "generator": false,
+                "id": null,
+                "key": {
+                  "name": "constructor",
+                  "type": "Identifier"
+                },
+                "kind": "constructor",
+                "params": [
+                  {
+                    "left": {
+                      "name": "data",
+                      "type": "Identifier",
+                      "typeAnnotation": {
+                        "type": "TypeAnnotation",
+                        "typeAnnotation": {
+                          "id": {
+                            "name": "Object",
+                            "type": "Identifier"
+                          },
+                          "type": "GenericTypeAnnotation",
+                          "typeParameters": null
+                        }
+                      }
+                    },
+                    "right": {
+                      "properties": [],
+                      "type": "ObjectExpression"
+                    },
+                    "type": "AssignmentPattern"
+                  }
+                ],
+                "static": false,
+                "type": "ClassMethod"
               }
-            ]
-          }
+            ],
+            "type": "ClassBody"
+          },
+          "id": {
+            "name": "Test",
+            "type": "Identifier"
+          },
+          "superClass": null,
+          "type": "ClassDeclaration"
         },
+        "exportKind": "value",
         "leadingComments": [
           {
             "type": "CommentLine",
             "value": " @flow"
           }
         ],
-        "exportKind": "value"
+        "source": null,
+        "specifiers": [],
+        "type": "ExportNamedDeclaration"
       }
     ],
-    "directives": []
+    "directives": [],
+    "sourceType": "module",
+    "type": "Program"
   },
-  "comments": [
-    {
-      "type": "CommentLine",
-      "value": " @flow"
-    }
-  ]
+  "type": "File"
 }

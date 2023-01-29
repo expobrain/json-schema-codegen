@@ -1,7 +1,4 @@
 {
-  "name": "hfc_codegen",
-  "version": "0.1.0",
-  "license": "MIT",
   "devDependencies": {
     "@babel/cli": "^7.20.7",
     "@babel/core": "^7.20.5",
@@ -22,10 +19,13 @@
     "webpack": "^5.74.0",
     "webpack-cli": "^5.0.1"
   },
+  "license": "MIT",
+  "name": "json_codegen",
   "scripts": {
+    "build:bin": "webpack --config config/ast_to_js.webpack.config.js && chmod +x bin/ast_to_js",
     "build:test:js": "babel-node scripts/build_js_ast.js && npm run code:format tests/**/*.json",
     "code:format": "prettier --write *.md **/*.js",
-    "code:format:check": "prettier --check *.md **/*.js",
-    "build:bin": "webpack --config config/ast_to_js.webpack.config.js && chmod +x bin/ast_to_js"
-  }
+    "code:format:check": "prettier --check *.md **/*.js"
+  },
+  "version": "0.1.0"
 }

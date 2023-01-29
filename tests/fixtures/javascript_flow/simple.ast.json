@@ -1,40 +1,40 @@
 {
-  "type": "File",
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " @flow"
+    }
+  ],
   "program": {
-    "type": "Program",
-    "sourceType": "module",
     "body": [
       {
-        "type": "ExportNamedDeclaration",
-        "specifiers": [],
-        "source": null,
         "declaration": {
-          "type": "ClassDeclaration",
+          "body": {
+            "body": [],
+            "type": "ClassBody"
+          },
           "id": {
-            "type": "Identifier",
-            "name": "Test"
+            "name": "Test",
+            "type": "Identifier"
           },
           "superClass": null,
-          "body": {
-            "type": "ClassBody",
-            "body": []
-          }
+          "type": "ClassDeclaration"
         },
+        "exportKind": "value",
         "leadingComments": [
           {
             "type": "CommentLine",
             "value": " @flow"
           }
         ],
-        "exportKind": "value"
+        "source": null,
+        "specifiers": [],
+        "type": "ExportNamedDeclaration"
       }
     ],
-    "directives": []
+    "directives": [],
+    "sourceType": "module",
+    "type": "Program"
   },
-  "comments": [
-    {
-      "type": "CommentLine",
-      "value": " @flow"
-    }
-  ]
+  "type": "File"
 }

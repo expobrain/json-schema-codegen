@@ -1,10 +1,9 @@
-from typing import NewType, Dict, List
+from typing import Dict, List, NewType
 
 import astor
 
 from json_codegen.astlib import python as ast
-from json_codegen.core import SchemaParser, BaseGenerator
-
+from json_codegen.core import BaseGenerator, SchemaParser
 
 DefinitionType = NewType("DefinitionType", Dict)
 PropertyType = NewType("PropertyType", Dict)
@@ -104,7 +103,7 @@ class Python3Generator(SchemaParser, BaseGenerator):
         elif type_ == "object":
             body = ast_from_dict(definition["default"])
         else:
-            raise NotImplementedError("{}: {} => {}".format(self, name, definition))
+            raise NotImplementedError(f"{self}: {name} => {definition}")
 
         # Return ternary expression
         test = ast.Compare(
@@ -128,7 +127,7 @@ class Python3Generator(SchemaParser, BaseGenerator):
             one_of = items.get("oneOf")
             ref = one_of[0]["$ref"] if one_of else None
         elif isinstance(items, list):
-            raise NotImplementedError("Tuple for 'array' non supported: {}".format(property_))
+            raise NotImplementedError(f"Tuple for 'array' non supported: {property_}")
         else:
             ref = None
 
@@ -280,9 +279,7 @@ class Python3Generator(SchemaParser, BaseGenerator):
 
                 item_annotation = self.get_partial_annotation_from_definition(items)
             elif isinstance(items, list):
-                raise NotImplementedError(
-                    "Tuple for 'array' is not supported: {}".format(property_)
-                )
+                raise NotImplementedError(f"Tuple for 'array' is not supported: {property_}")
             else:
                 item_annotation = ast.Name(id="Any")
 

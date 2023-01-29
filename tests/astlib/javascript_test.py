@@ -1,14 +1,14 @@
 import pytest
 
 from json_codegen.astlib.javascript import (
-    Identifier,
-    CommentLine,
     AnyTypeAnnotation,
+    CommentLine,
+    Identifier,
+    NumericLiteral,
     ObjectTypeProperty,
+    StringLiteral,
     TypeCastExpression,
     UnaryExpression,
-    NumericLiteral,
-    StringLiteral,
 )
 
 

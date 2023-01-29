@@ -1,10 +1,21 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "definitions": {
-    "MyString": { "type": "string" },
-    "MyNumber": { "type": "number" },
+    "MyNumber": {
+      "type": "number"
+    },
+    "MyString": {
+      "type": "string"
+    },
     "MyUnion": {
-      "oneOf": [{ "type": "string" }, { "type": "boolean" }]
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "boolean"
+        }
+      ]
     }
   }
 }

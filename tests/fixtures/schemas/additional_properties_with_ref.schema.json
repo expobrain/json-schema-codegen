@@ -1,23 +1,25 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Test",
-  "type": "object",
+  "definitions": {
+    "Value": {
+      "properties": {
+        "v": {
+          "type": "integer"
+        }
+      },
+      "title": "Value",
+      "type": "object"
+    }
+  },
   "properties": {
     "x": {
-      "type": "object",
       "additionalProperties": {
         "$ref": "#/definitions/Value"
       },
-      "default": {}
+      "default": {},
+      "type": "object"
     }
   },
-  "definitions": {
-    "Value": {
-      "title": "Value",
-      "type": "object",
-      "properties": {
-        "v": { "type": "integer" }
-      }
-    }
-  }
+  "title": "Test",
+  "type": "object"
 }
