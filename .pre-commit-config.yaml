@@ -67,7 +67,7 @@ repos:
           - "--exclude"
           - "tests"
   - repo: https://github.com/pycqa/bandit
-    rev: 1.7.4
+    rev: 1.7.0
     hooks:
       - id: bandit
         args:
