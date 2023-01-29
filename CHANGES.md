@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.6.0
+
+### Backward incompatible changes
+
+- dropped generatino of Python 2 code
+
 ## v0.4.6
 
 ### Trivial/internal changes
