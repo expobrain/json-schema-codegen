@@ -11,7 +11,6 @@ from json_codegen.core import load_schema, load_external_generator
 
 
 LANGUAGES = {
-    "python2": generators.Python2Generator,
     "python3": generators.Python3Generator,
     "python3+marshmallow": generators.Python3MarshmallowGenerator,
     "javascript+flow": generators.JavaScriptFlowGenerator,
@@ -49,7 +48,7 @@ def main():
         help=(
             "Output language. "
             "This option will be ignored if the --generator option is used. "
-            "Default is python2"
+            "Default is python3"
         ),
     )
 
