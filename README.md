@@ -12,7 +12,6 @@ Generate code from JSON schema files.
 - [Installation](#installation)
 - [Usage](#usage)
 - [Code generation](#code-generation)
-  - [Python2](#python-2)
   - [Python3](#python-3)
   - [Python3+Marshmallow](#python-3marshmallow)
   - [JavaScript+Flow and Flow](#javascriptflow-and-flow)
@@ -70,7 +69,7 @@ This allows the tool to be language agnostic, that is it just needs to generate 
 
 List of currently supported languages:
 
-- Python 2.7+
+- Python 3.7+
 - JavaScript ES7+ with Flow annotations
 - pure Flow annotations
 
@@ -108,14 +107,6 @@ optional arguments:
 ```
 
 # Code generation
-
-## Python 2
-
-The generation of Python's code is integrated into the tool so it needs just a single invocation:
-
-```shell
-json_codegen --language python --output <output_py_file> <json-schema>
-```
 
 ## Python 3
 
