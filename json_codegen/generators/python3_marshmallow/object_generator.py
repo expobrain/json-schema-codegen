@@ -72,7 +72,6 @@ class ObjectGenerator:
 
     @staticmethod
     def _get_default_for_property(node_assign, value, object_, prop):
-
         for node in ast.walk(node_assign):
             if isinstance(node, ast.keyword) and node.arg == "required":
                 return value
@@ -159,7 +158,6 @@ class ObjectGenerator:
 
     @staticmethod
     def _construct_to_(output):
-
         if output == "json":
             method = "dumps"
         elif output == "dict":
@@ -168,7 +166,6 @@ class ObjectGenerator:
             raise NotImplementedError("Only deserialisation to json or dict supported")
 
         def _construct_to_helper(schema):
-
             fn_args = ast.arguments(
                 args=[ast.arg(arg="self", annotation=None)],
                 vararg=None,
@@ -210,7 +207,6 @@ class ObjectGenerator:
 
     @staticmethod
     def construct_from_json(schema):
-
         fn_args = ast.arguments(
             args=[
                 ast.arg(arg="json", annotation=ast.Name(id="str")),

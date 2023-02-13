@@ -276,7 +276,6 @@ class Python3Generator(SchemaParser, BaseGenerator):
             items = property_.get("items")
 
             if isinstance(items, dict):
-
                 item_annotation = self.get_partial_annotation_from_definition(items)
             elif isinstance(items, list):
                 raise NotImplementedError(f"Tuple for 'array' is not supported: {property_}")

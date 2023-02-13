@@ -147,7 +147,6 @@ class Python3MarshmallowGenerator(SchemaParser, BaseGenerator):
                 raise NotImplementedError("Default type not handled (List)")
 
         def _dict_default_helper(d):
-
             keys = []
             values = []
 
