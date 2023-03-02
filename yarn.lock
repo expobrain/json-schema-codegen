@@ -2170,10 +2170,10 @@ flatted@^3.1.0:
   resolved "https://registry.yarnpkg.com/flatted/-/flatted-3.2.4.tgz#28d9969ea90661b5134259f312ab6aa7929ac5e2"
   integrity sha512-8/sOawo8tJ4QOBX8YlQBMxL8+RLZfxMQOif9o0KUKTNTjMYElWPE0r/m5VNFxTRd0NSw8qSy8dajrwX4RYI1Hw==
 
-flow-bin@^0.198.2:
-  version "0.198.2"
-  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.198.2.tgz#e601121a411b4ec5889cc3567d2706369cc510a9"
-  integrity sha512-PML2zhAZVd8EgzDqS9oSJF+OxUtJ+YLEdVVsVO7d1BwnrXCgiVrLjxiQP8/hur820grzC51Xb2CI3J+ohH/bMg==
+flow-bin@^0.200.1:
+  version "0.200.1"
+  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.200.1.tgz#6d32ef92972709ab7c06b27cb7fa4137c6e2c9eb"
+  integrity sha512-0VCo3uZb0XIYF/sNFuLsGRpsUWnXbPi27MQ3AW7F1n7yAy2FEgMxDS/XQ3ubh5ga4M+yKrdeDsZ3IXwYyRNXMQ==
 
 foreach@^2.0.5:
   version "2.0.5"
