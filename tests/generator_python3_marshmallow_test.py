@@ -32,7 +32,9 @@ def test_generate(schema_filename):
     try:
         fixture = astor.parse_file(fixture_filename)
     except FileNotFoundError:
-        warnings.warn(f"Fixture not implemented yet: {os.path.basename(fixture_filename)}")
+        warnings.warn(
+            f"Fixture not implemented yet: {os.path.basename(fixture_filename)}", stacklevel=2
+        )
         return
 
     generator = Python3MarshmallowGenerator(schema)
