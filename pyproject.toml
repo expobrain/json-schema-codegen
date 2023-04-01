@@ -32,7 +32,7 @@ bandit = "^1.7.4"
 pytest-testmon = "^1.4.5"
 pytest-timeout = "^2.1.0"
 pytest-cov = "^4.0.0"
-mypy = "^0.991"
+mypy = ">=0.991,<1.2"
 marshmallow = "^2"
 black = "^22.12.0"
 
