@@ -34,7 +34,7 @@ pytest-timeout = "^2.1.0"
 pytest-cov = "^4.0.0"
 mypy = ">=0.991,<1.2"
 marshmallow = ">=2,<4"
-black = "^22.12.0"
+black = ">=22.12,<24.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0", "setuptools>=40.1.0"]
