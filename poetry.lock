@@ -562,14 +562,14 @@ testing = ["fields", "hunter", "process-tests", "pytest-xdist", "six", "virtuale
 
 [[package]]
 name = "pytest-testmon"
-version = "1.4.5"
+version = "2.0.2"
 description = "selects tests affected by changed files and methods"
 category = "dev"
 optional = false
-python-versions = "<3.12,>=3.7"
+python-versions = ">=3.7"
 files = [
-    {file = "pytest-testmon-1.4.5.tar.gz", hash = "sha256:6fbbc63fb2d56b64d70197cae2ecbcf8074f81a1a174944a829b29f24ca2603d"},
-    {file = "pytest_testmon-1.4.5-py3-none-any.whl", hash = "sha256:313424d868c0924596f710d49506c554dce78be85b96553a433141626e870ef1"},
+    {file = "pytest-testmon-2.0.2.tar.gz", hash = "sha256:cd364f6fdc446b0d94b1efe7b1bea0919348177e1dca0d3b06123ece621bffec"},
+    {file = "pytest_testmon-2.0.2-py3-none-any.whl", hash = "sha256:500d24a498460f421d6dfb13c722764c3079ac9f72a916e86701f025b7dc6d37"},
 ]
 
 [package.dependencies]
@@ -766,4 +766,4 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=4.6)", "pytest-black (
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.7,<3.8"
-content-hash = "a2c7657198046e669cf361ef53306b0415e9e2486ba67171d81533fd627214b9"
+content-hash = "cd966faea74ce55bda9dca580747f12ce077e175f2ef158e72d2f10427545066"
