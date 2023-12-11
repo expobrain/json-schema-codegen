@@ -54,11 +54,11 @@ repos:
     hooks:
       - id: check-hooks-apply
   - repo: https://github.com/pycqa/isort
-    rev: 5.12.0
+    rev: 5.13.0
     hooks:
       - id: isort
   - repo: https://github.com/pycqa/bandit
-    rev: 1.7.5
+    rev: 1.7.6
     hooks:
       - id: bandit
         args:
@@ -67,7 +67,7 @@ repos:
           - "--exclude"
           - "tests"
   - repo: https://github.com/pycqa/bandit
-    rev: 1.7.5
+    rev: 1.7.6
     hooks:
       - id: bandit
         args:
