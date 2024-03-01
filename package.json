@@ -16,7 +16,7 @@
     "flow-bin": "^0.225.1",
     "prettier": "^3.2.4",
     "progress-bar-webpack-plugin": "^2.1.0",
-    "webpack": "^5.90.0",
+    "webpack": "^5.90.3",
     "webpack-cli": "^5.1.4"
   },
   "license": "MIT",
