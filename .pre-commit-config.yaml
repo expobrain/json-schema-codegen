@@ -25,7 +25,7 @@ repos:
           - --autofix
       - id: trailing-whitespace
   - repo: https://github.com/myint/autoflake
-    rev: v2.3.0
+    rev: v2.3.1
     hooks:
       - id: autoflake
         args:
@@ -76,7 +76,7 @@ repos:
           - "-lll"
           - "tests"
   - repo: https://github.com/psf/black
-    rev: 24.2.0
+    rev: 24.3.0
     hooks:
       - id: black
   - repo: https://github.com/pre-commit/pygrep-hooks
