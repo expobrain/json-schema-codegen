@@ -2,7 +2,7 @@
   "devDependencies": {
     "@babel/cli": "^7.23.9",
     "@babel/core": "^7.24.0",
-    "@babel/generator": "^7.23.6",
+    "@babel/generator": "^7.24.1",
     "@babel/node": "^7.23.9",
     "@babel/preset-env": "^7.24.0",
     "@babel/preset-flow": "^7.24.0",
