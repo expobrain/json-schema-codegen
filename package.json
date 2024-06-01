@@ -3,7 +3,7 @@
     "@babel/cli": "^7.23.9",
     "@babel/core": "^7.24.5",
     "@babel/generator": "^7.24.5",
-    "@babel/node": "^7.23.9",
+    "@babel/node": "^7.24.6",
     "@babel/preset-env": "^7.24.5",
     "@babel/preset-flow": "^7.24.1",
     "babel-eslint": "^10.1.0",
