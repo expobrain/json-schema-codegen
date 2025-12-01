@@ -392,12 +392,12 @@
     js-tokens "^4.0.0"
     picocolors "^1.0.0"
 
-"@babel/node@^7.24.7":
-  version "7.24.7"
-  resolved "https://registry.yarnpkg.com/@babel/node/-/node-7.24.7.tgz#e3aa97630655234764c19a54f6a974ef81bd9b64"
-  integrity sha512-BCYNLxUQjGTgy8bAq12jy+Lt8soGWa/5u3s7U3aTVXxviIp0YVS+/Wm0b4eaitLVvetYrEoAiRF0QOk4WKsHAQ==
+"@babel/node@^7.28.0":
+  version "7.28.0"
+  resolved "https://registry.yarnpkg.com/@babel/node/-/node-7.28.0.tgz#fe52d05121ca064e6919215ffe54fea480a8746f"
+  integrity sha512-6u1Mmn3SIMUH8uwTq543L062X3JDgms9HPf06o/pIGdDjeD/zNQ+dfZPQD27sCyvtP0ZOlJtwnl2RIdPe9bHeQ==
   dependencies:
-    "@babel/register" "^7.24.6"
+    "@babel/register" "^7.27.1"
     commander "^6.2.0"
     core-js "^3.30.2"
     node-environment-flags "^1.0.5"
@@ -1085,10 +1085,10 @@
     "@babel/types" "^7.4.4"
     esutils "^2.0.2"
 
-"@babel/register@^7.24.6":
-  version "7.24.6"
-  resolved "https://registry.yarnpkg.com/@babel/register/-/register-7.24.6.tgz#59e21dcc79e1d04eed5377633b0f88029a6bef9e"
-  integrity sha512-WSuFCc2wCqMeXkz/i3yfAAsxwWflEgbVkZzivgAmXl/MxrXeoYFZOOPllbC8R8WTF7u61wSRQtDVZ1879cdu6w==
+"@babel/register@^7.27.1":
+  version "7.28.3"
+  resolved "https://registry.yarnpkg.com/@babel/register/-/register-7.28.3.tgz#abd8a3753480c799bdaf9c9092d6745d16e052c2"
+  integrity sha512-CieDOtd8u208eI49bYl4z1J22ySFw87IGwE+IswFEExH7e3rLgKb0WNQeumnacQ1+VoDJLYI5QFA3AJZuyZQfA==
   dependencies:
     clone-deep "^4.0.1"
     find-cache-dir "^2.0.0"
